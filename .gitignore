@@ -1,0 +1,13 @@
+# secrets
+.env
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# extraction output — regenerable, and currently unused by the site
+corpus/data/extracted/
+corpus/data/validated/
+corpus/data/rejected/
+corpus/data/validation_report.json

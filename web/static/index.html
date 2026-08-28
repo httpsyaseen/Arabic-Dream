@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تعبير الرؤيا — من كتب أهل التعبير</title>
+<style>
+  :root{
+    --bg:#0e1014; --panel:#161920; --panel2:#1b1f28; --line:#272c37; --ink:#eae7e1;
+    --muted:#98a0ac; --gold:#cfa93a; --green:#5aa06a; --red:#c96a6a; --blue:#6a8fc9; --purple:#9b7bc9;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#faf7f1; --panel:#fff; --panel2:#f5f1e8; --line:#e4ddd0; --ink:#1b1916;
+           --muted:#6a6358; --gold:#8a6b1c; --green:#3f7a4d; --red:#a34a4a; --blue:#3f5f96; --purple:#6f4fa3; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Naskh Arabic","Amiri","Scheherazade New","Segoe UI",system-ui,sans-serif;
+    line-height:1.95;padding:1.6rem 1rem 5rem;font-size:17px}
+  .wrap{max-width:820px;margin:0 auto}
+  header{text-align:center;margin-bottom:1.6rem}
+  h1{font-size:1.75rem;margin:0 0 .35rem;font-weight:700;letter-spacing:.5px}
+  .tagline{color:var(--muted);font-size:.93rem;max-width:620px;margin:0 auto}
+  .stats{color:var(--muted);font-size:.82rem;margin-top:.6rem}
+
+  textarea{width:100%;min-height:120px;padding:1rem 1.1rem;border-radius:14px;
+    border:1px solid var(--line);background:var(--panel);color:var(--ink);
+    font:inherit;line-height:1.9;resize:vertical}
+  textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .row{display:flex;gap:.7rem;align-items:center;margin-top:.85rem;flex-wrap:wrap}
+  button{background:var(--gold);color:#14161b;border:0;padding:.72rem 1.7rem;
+    border-radius:11px;font:inherit;font-weight:700;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  .ghost{background:transparent;color:var(--muted);border:1px solid var(--line);font-weight:400;
+    padding:.5rem 1rem;font-size:.88rem}
+  .examples{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.7rem}
+  .ex{background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    padding:.3rem .8rem;border-radius:999px;font-size:.84rem;cursor:pointer}
+  .ex:hover{color:var(--ink);border-color:var(--gold)}
+
+  .ctx{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:.85rem 1.1rem;margin-top:.8rem}
+  .ctx-head{color:var(--muted);font-size:.84rem;margin-bottom:.6rem}
+  .ctx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem}
+  .ctx-grid label{display:flex;flex-direction:column;gap:.25rem;font-size:.82rem;color:var(--muted)}
+  .ctx-grid select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:.4rem .5rem;font:inherit;font-size:.9rem}
+  .meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem;margin-top:.3rem}
+  .meter .lbl{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:.25rem}
+  .bar{height:8px;background:var(--panel2);border-radius:999px;overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:999px}
+  .manhaj{background:var(--panel2);border-radius:10px;padding:.5rem .8rem;margin-top:.45rem;
+    font-size:.88rem;border-right:3px solid var(--blue);color:var(--muted)}
+  .manhaj b{color:var(--blue)}
+  .hal{background:var(--panel2);border-radius:10px;padding:.5rem .8rem;margin-top:.4rem;
+    font-size:.9rem;border-right:3px solid var(--green)}
+  .qira{border-top:1px solid var(--line);padding:.8rem 0}
+  .qira:first-of-type{border-top:0;padding-top:.2rem}
+  .qira h4{margin:0 0 .3rem;font-size:.97rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .nasihah{background:var(--panel2);border-right:3px solid var(--gold);border-radius:12px;
+    padding:.9rem 1.1rem;margin-top:.4rem;line-height:2}
+  .badge.psych{color:var(--purple);border-color:var(--purple)}
+  .actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+  .actions button{background:transparent;border:1px solid var(--line);color:var(--muted);
+    font-weight:400;font-size:.85rem;padding:.45rem 1rem;border-radius:9px}
+  .actions button:hover{color:var(--ink);border-color:var(--gold)}
+  .journal{margin-top:1.1rem}
+  .jrow{display:flex;justify-content:space-between;gap:.8rem;align-items:flex-start;
+    border-top:1px solid var(--line);padding:.65rem 0;font-size:.9rem}
+  .jrow:first-child{border-top:0}
+  .jrow .jtext{flex:1;color:var(--ink)}
+  .jrow .jmeta{color:var(--muted);font-size:.78rem;white-space:nowrap}
+  .jrow button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:.9rem;padding:0 .3rem}
+  .recur{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem}
+  .recur .r{background:var(--panel2);border:1px solid var(--gold);color:var(--gold);
+    padding:.25rem .75rem;border-radius:999px;font-size:.83rem}
+  .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.9rem}
+  .tab{background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+    padding:.35rem .95rem;border-radius:999px;font-size:.86rem;cursor:pointer}
+  .tab.on{color:var(--ink);border-color:var(--gold);background:transparent}
+  .skel{height:14px;background:linear-gradient(90deg,var(--panel2),var(--line),var(--panel2));
+    background-size:200% 100%;animation:sk 1.2s linear infinite;border-radius:6px;margin:.5rem 0}
+  @keyframes sk{to{background-position:-200% 0}}
+  @media print{
+    .ctx,.examples,.actions,textarea,.row,header .stats,.tabs{display:none!important}
+    body{background:#fff;color:#000;font-size:13px;padding:0}
+    .card{border:1px solid #ccc;break-inside:avoid}
+  }
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:1.15rem 1.35rem;margin-top:1.1rem}
+  .card h2{font-size:1.02rem;margin:0 0 .75rem;color:var(--gold);
+    display:flex;align-items:center;gap:.5rem}
+  .badge{display:inline-block;padding:.2rem .7rem;border-radius:999px;font-size:.78rem;
+    border:1px solid var(--line);background:var(--panel2);color:var(--muted)}
+  .badge.good{color:var(--green);border-color:var(--green)}
+  .badge.warn{color:var(--red);border-color:var(--red)}
+  .badge.neutral{color:var(--blue);border-color:var(--blue)}
+  .badge.book{color:var(--gold);border-color:var(--gold)}
+
+  .why{color:var(--muted);font-size:.9rem;margin-top:.4rem}
+  .sym{border-top:1px solid var(--line);padding:.95rem 0}
+  .sym:first-of-type{border-top:0;padding-top:.2rem}
+  .sym h3{margin:0 0 .35rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .cond{background:var(--panel2);border-radius:10px;padding:.55rem .85rem;margin:.4rem 0;
+    font-size:.94rem;border-right:3px solid var(--gold)}
+  .cond b{color:var(--gold);font-weight:700}
+  .srcs{color:var(--muted);font-size:.82rem;margin-top:.45rem}
+
+  .adab li{margin:.35rem 0}
+  .dua{background:var(--panel2);border-radius:12px;padding:.85rem 1.1rem;margin-top:.6rem;
+    border-right:3px solid var(--green);font-size:1.02rem}
+  .tanbih{color:var(--muted);font-size:.88rem;margin-top:.9rem;border-top:1px dashed var(--line);
+    padding-top:.75rem}
+
+  details{border-top:1px solid var(--line);padding:.7rem 0}
+  details:first-of-type{border-top:0}
+  summary{cursor:pointer;font-weight:700}
+  .cite{border-right:2px solid var(--line);padding-right:.9rem;margin:.75rem 0 1rem}
+  .cite .txt{white-space:pre-wrap;font-size:.95rem}
+  .cite .meta{color:var(--muted);font-size:.8rem;margin-top:.35rem}
+  .cite .meta a{color:var(--muted)}
+
+  .alert{border-right:3px solid var(--red);background:var(--panel2);border-radius:10px;
+    padding:.8rem 1.05rem;margin-bottom:.8rem}
+  .note{border-right:3px solid var(--blue);background:var(--panel2);border-radius:10px;
+    padding:.7rem 1.05rem;font-size:.9rem;color:var(--muted);margin-top:.8rem}
+  .err{color:var(--red)}
+  .foot{color:var(--muted);font-size:.82rem;margin-top:2.2rem;text-align:center;line-height:1.8}
+  .spin{display:inline-block;width:1em;height:1em;border:2px solid currentColor;
+    border-left-color:transparent;border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px}
+  @keyframes s{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>تعبير الرؤيا</h1>
+    <div class="tagline">
+      اكتب رؤياك، فيُبحث عن رموزها في خمسة من كتب أهل التعبير، ويُعرض لك ما ورد فيها
+      بنصّه ومصدره وصفحته. وما لم تذكره الكتب يُبيَّن لك أنه من المعروف المستقر لا من نصٍّ بعينه.
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <textarea id="dream" placeholder="اكتب رؤياك هنا…"></textarea>
+  <div class="ctx" id="ctx">
+    <div class="ctx-head">حالك (اختياري — يُغيّر التأويل، فالكتب تفرّق بين الرجل والمرأة والمتزوج والأعزب)</div>
+    <div class="ctx-grid">
+      <label>الجنس<select id="jins"><option value="">—</option><option>ذكر</option><option>أنثى</option></select></label>
+      <label>الحالة<select id="hala"><option value="">—</option><option>أعزب</option><option>متزوج</option><option>مطلق</option><option>أرمل</option></select></label>
+      <label>العمر<select id="umr"><option value="">—</option><option>أقل من ٢٠</option><option>٢٠-٣٠</option><option>٣٠-٤٠</option><option>٤٠-٦٠</option><option>أكثر من ٦٠</option></select></label>
+      <label>حالك النفسية<select id="shuur"><option value="">—</option><option>مطمئن</option><option>قلق</option><option>حزن</option><option>خوف</option><option>فرح</option></select></label>
+      <label>ألم في الرؤيا<select id="alam"><option value="">—</option><option>نعم</option><option>لا</option></select></label>
+      <label>تتكرر الرؤيا<select id="takrar"><option value="">—</option><option>نعم</option><option>لا</option></select></label>
+    </div>
+  </div>
+
+  <div class="row">
+    <button id="go">فسّر الرؤيا</button>
+    <button class="ghost" id="clear">مسح</button>
+  </div>
+  <div class="examples" id="examples"></div>
+
+  <div id="out"></div>
+
+  <div class="card journal" id="journalCard" style="display:none">
+    <h2>دفتر رؤاك <span class="badge" id="jcount"></span></h2>
+    <div id="recur"></div>
+    <div id="jlist"></div>
+    <div class="actions"><button id="jclear">حذف الدفتر</button></div>
+    <div class="why" style="margin-top:.5rem">محفوظ في متصفحك وحده، لا يُرسل إلى أي خادم.</div>
+  </div>
+
+  <div class="foot">
+    هذا عرضٌ لما ورد في كتب التعبير، وليس فتوى ولا حكماً شرعياً ولا علماً بالغيب.<br>
+    التعبير ظنّي يختلف باختلاف حال الرائي، والمرجع في ذلك أهل العلم.
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const out = $('#out'), btn = $('#go');
+
+const EXAMPLES = [
+  'رأيت حية',
+  'رأيت في المنام حية كبيرة دخلت بيتي وكنت خائفاً',
+  'حلمت أن أسناني تسقط في يدي',
+  'رأيت أبي المتوفى حياً يبتسم لي',
+  'رأيت أني أطير فوق البحر',
+  'رأيت الكعبة وأنا أصلي'
+];
+
+$('#examples').innerHTML = EXAMPLES.map(e=>`<span class="ex">${e}</span>`).join('');
+document.querySelectorAll('.ex').forEach(el=>el.addEventListener('click',()=>{
+  $('#dream').value = el.textContent; go();
+}));
+$('#clear').addEventListener('click',()=>{ $('#dream').value=''; out.innerHTML=''; });
+
+fetch('/api/health').then(r=>r.json()).then(d=>{
+  const n = x => x.toLocaleString('ar-EG');
+  $('#stats').textContent =
+    `${n(d.symbols)} رمزاً · ${n(d.passages)} نصاً · ${n(d.adab)} حديثاً في آداب الرؤيا · من ${n(d.books)} كتب`;
+}).catch(()=>{});
+
+function ctxValues(){
+  const ids=['jins','hala','umr','shuur','alam','takrar'], o={};
+  ids.forEach(i=>{ const v=$('#'+i).value; if(v) o[i]=v; });
+  return o;
+}
+
+const esc = s => (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function go(){
+  const dream = $('#dream').value.trim();
+  if (dream.length < 3){ out.innerHTML='<div class="card err">اكتب رؤياك أولاً.</div>'; return; }
+  btn.disabled = true;
+  out.innerHTML = '<div class="card"><span class="spin"></span> يُبحث في كتب التعبير…</div>';
+  try{
+    const r = await fetch('/api/interpret',{method:'POST',
+      headers:{'Content-Type':'application/json'}, body:JSON.stringify({dream, ...ctxValues()})});
+    render(await r.json());
+  }catch(e){
+    out.innerHTML = `<div class="card err">تعذّر الاتصال: ${esc(e.message)}</div>`;
+  }finally{ btn.disabled=false; window.scrollTo({top:280,behavior:'smooth'}); }
+}
+
+function badgeFor(naw){
+  if (naw==='رؤيا صالحة') return 'good';
+  if (naw==='حلم من الشيطان') return 'warn';
+  return 'neutral';
+}
+
+function render(d){
+  const a = d.answer;
+  let h = '';
+
+  if (!a){
+    h += `<div class="card err">${esc(d.error||'تعذّر توليد الشرح.')}</div>`;
+  } else {
+    // التصنيف
+    h += `<div class="card">
+      <h2>تصنيف الرؤيا</h2>
+      <span class="badge ${badgeFor(a.tasnif.naw)}">${esc(a.tasnif.naw)}</span>
+      <div class="why">${esc(a.tasnif.sabab)}</div>
+      ${a.asas_aljawab ? `<div class="srcs" style="margin-top:.6rem">
+        <span class="badge ${a.asas_aljawab==='من الكتب المفهرسة'?'book':''}">أساس الجواب: ${esc(a.asas_aljawab)}</span></div>`:''}
+    </div>`;
+
+    // رؤيا مكروهة → الآداب أولاً
+    if (a.mukhifah){
+      h += `<div class="card">
+        <h2>رؤيا مكروهة — هدي السنة</h2>
+        <div class="alert">هذه الرؤيا فيها ما يُكره، ومن هدي النبي ﷺ ألّا تُفسَّر، وأن يفعل الرائي ما يلي.</div>
+        <ul class="adab">${(a.adab||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        ${a.dua?`<div class="dua">${esc(a.dua)}</div>`:''}
+      </div>`;
+    }
+
+    // الرموز
+    if (a.rumuz && a.rumuz.length){
+      h += `<div class="card"><h2>الرموز ودلالاتها</h2>`;
+      h += a.rumuz.map(r=>`
+        <div class="sym">
+          <h3>${esc(r.ramz)}
+            <span class="badge ${r.min_alkutub?'book':''}">${r.min_alkutub?'من الكتب':'من المعروف المستقر'}</span>
+          </h3>
+          <div>${esc(r.khulasah)}</div>
+          ${(r.tafsil||[]).map(c=>`<div class="cond"><b>${esc(c.halah)}</b> — ${esc(c.dalalah)}</div>`).join('')}
+          ${r.athar_hal_alraai?`<div class="hal">بحسب حالك: ${esc(r.athar_hal_alraai)}</div>`:''}
+          ${r.manhaj?`<div class="manhaj"><b>مسلك التأويل:</b> ${esc(r.manhaj)}${r.bayan_almanhaj?` — ${esc(r.bayan_almanhaj)}`:''}</div>`:''}
+          ${(r.masadir&&r.masadir.length)?`<div class="srcs">المصادر: ${r.masadir.map(esc).join(' · ')}</div>`:''}
+        </div>`).join('');
+      h += `</div>`;
+    }
+
+    // قراءات المسالك
+    if (a.qiraat && a.qiraat.length){
+      h += `<div class="card"><h2>الرؤيا على مسالك أهل التعبير</h2>`;
+      h += a.qiraat.map(q=>`
+        <div class="qira">
+          <h4>${esc(q.almanhaj)}
+            <span class="badge ${q.min_alkutub?'book':''}">${q.min_alkutub?'من الكتب':'قراءة مضافة'}</span>
+          </h4>
+          <div>${esc(q.nass)}</div>
+        </div>`).join('');
+      h += `</div>`;
+    }
+
+    // الخلاصة + المؤشرات
+    if (a.khulasah_ammah){
+      h += `<div class="card"><h2>الخلاصة</h2><div>${esc(a.khulasah_ammah)}</div>`;
+      const m = a.muashirat;
+      if (m){
+        const bar=(lbl,v,col)=>`<div class="meter"><div class="lbl"><span>${lbl}</span>
+          <span>${v}٪</span></div><div class="bar"><i style="width:${Math.max(0,Math.min(100,v))}%;background:${col}"></i></div></div>`;
+        h += `<div class="meters" style="margin-top:1rem">
+          ${bar('التفاؤل', m.tafaul, 'var(--green)')}
+          ${bar('الرجاء', m.raja, 'var(--gold)')}
+          ${bar('القلق', m.qalaq, 'var(--red)')}
+        </div>`;
+        if (m.bayan) h += `<div class="why" style="margin-top:.6rem">${esc(m.bayan)}</div>`;
+      }
+      h += `${a.tanbih?`<div class="tanbih">${esc(a.tanbih)}</div>`:''}</div>`;
+    }
+
+    // الآداب (لغير المكروهة)
+    if (!a.mukhifah && a.adab && a.adab.length){
+      h += `<div class="card"><h2>آداب الرؤيا</h2>
+        <ul class="adab">${a.adab.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        ${a.dua?`<div class="dua">${esc(a.dua)}</div>`:''}</div>`;
+    }
+
+    if (a.nasihah){
+      h += `<div class="card"><h2>نصيحة</h2><div class="nasihah">${esc(a.nasihah)}</div></div>`;
+    }
+
+    if (a.asas_aljawab === 'من المعرفة العامة'){
+      h += `<div class="note">لم يُعثر على رموز هذه الرؤيا في الكتب المفهرسة لدينا،
+        فالجواب أعلاه مبنيّ على ما استقرّ عند أهل التعبير، لا على نصٍّ بعينه من كتاب.</div>`;
+    }
+  }
+
+  // النصوص الأصلية
+  if (d.symbols && d.symbols.length){
+    h += `<div class="card"><h2>النصوص الأصلية من الكتب</h2>`;
+    h += d.symbols.map(s=>`
+      <details>
+        <summary>${esc(s.symbol_ar)} <span class="badge">${s.citations.length} نص</span></summary>
+        ${s.citations.map(c=>`
+          <div class="cite">
+            <div class="txt">${esc(c.text_ar)}</div>
+            <div class="meta">
+              <span class="badge ${c.lens==='psych'?'psych':'book'}">${c.lens==='psych'?'قراءة نفسية':'من كتب التعبير'}</span>
+              ${esc(c.book_ar)} — ${esc(c.author)}${c.printed_page?` (ص ${esc(c.printed_page)})`:''}
+              ${c.url?`· <a href="${esc(c.url)}" target="_blank" rel="noopener">المصدر</a>`:''}</div>
+          </div>`).join('')}
+      </details>`).join('');
+    h += `</div>`;
+  }
+
+  // مصادر الآداب
+  if (d.adab_sources && d.adab_sources.length){
+    h += `<div class="card"><h2>من أحاديث الرؤيا وآدابها</h2>`;
+    h += d.adab_sources.slice(0,4).map(a=>`
+      <div class="cite">
+        <div class="txt">${esc(a.text_ar)}</div>
+        <div class="meta">${esc(a.book_ar)}${a.chapter_ar?` — ${esc(a.chapter_ar)}`:''}${a.printed_page?` (ص ${esc(a.printed_page)})`:''}
+          · <a href="${esc(a.url)}" target="_blank" rel="noopener">المصدر</a></div>
+      </div>`).join('');
+    h += `</div>`;
+  }
+
+  h += `<div class="actions">
+    <button id="copyBtn">نسخ التعبير</button>
+    <button id="printBtn">طباعة</button>
+    <button id="saveBtn">حفظ في دفتري</button>
+  </div>`;
+
+  out.innerHTML = h;
+  lastResult = d;
+  $('#copyBtn').onclick = copyResult;
+  $('#printBtn').onclick = ()=>window.print();
+  $('#saveBtn').onclick = ()=>{ saveToJournal(d); $('#saveBtn').textContent='حُفظت ✓'; };
+}
+
+// ---------- دفتر الرؤى: محفوظ محلياً، لا يغادر المتصفح ----------
+let lastResult = null;
+const JKEY = 'ruya_journal_v1';
+const jload = () => { try{ return JSON.parse(localStorage.getItem(JKEY)||'[]'); }catch{ return []; } };
+const jsave = a => localStorage.setItem(JKEY, JSON.stringify(a.slice(0,50)));
+
+function saveToJournal(d){
+  const a = jload();
+  a.unshift({
+    t: Date.now(),
+    dream: $('#dream').value.trim(),
+    naw: d.answer?.tasnif?.naw || '',
+    rumuz: (d.symbols||[]).map(s=>s.symbol_ar),
+  });
+  jsave(a); renderJournal();
+}
+
+function renderJournal(){
+  const a = jload();
+  const card = $('#journalCard');
+  if (!a.length){ card.style.display='none'; return; }
+  card.style.display='';
+  $('#jcount').textContent = `${a.length.toLocaleString('ar-EG')} رؤيا`;
+
+  // الرموز المتكررة — القيمة الحقيقية للدفتر: أن يرى المرء ما يتردد في رؤاه
+  const counts = {};
+  a.forEach(x => (x.rumuz||[]).forEach(r => counts[r]=(counts[r]||0)+1));
+  const rec = Object.entries(counts).filter(([,n])=>n>1).sort((x,y)=>y[1]-x[1]).slice(0,10);
+  $('#recur').innerHTML = rec.length
+    ? `<div class="why">رموز تتكرر في رؤاك:</div><div class="recur">${
+        rec.map(([r,n])=>`<span class="r">${esc(r)} · ${n.toLocaleString('ar-EG')}</span>`).join('')}</div>`
+    : '';
+
+  $('#jlist').innerHTML = a.slice(0,12).map((x,i)=>`
+    <div class="jrow">
+      <div class="jtext">${esc(x.dream.slice(0,110))}${x.dream.length>110?'…':''}
+        ${x.rumuz&&x.rumuz.length?`<div class="why">${x.rumuz.map(esc).join(' · ')}</div>`:''}</div>
+      <div class="jmeta">${new Date(x.t).toLocaleDateString('ar-EG')}
+        <button data-i="${i}" class="jdel">✕</button></div>
+    </div>`).join('');
+  document.querySelectorAll('.jdel').forEach(b=>b.onclick=()=>{
+    const a2=jload(); a2.splice(+b.dataset.i,1); jsave(a2); renderJournal();
+  });
+}
+
+$('#jclear').onclick = ()=>{ localStorage.removeItem(JKEY); renderJournal(); };
+renderJournal();
+
+function copyResult(){
+  const a = lastResult?.answer; if(!a) return;
+  const L = [];
+  L.push('الرؤيا: ' + $('#dream').value.trim());
+  L.push('التصنيف: ' + a.tasnif.naw + ' — ' + a.tasnif.sabab);
+  (a.rumuz||[]).forEach(r=>{
+    L.push('\n• ' + r.ramz + (r.min_alkutub?' [من الكتب]':' [من المعروف المستقر]'));
+    L.push('  ' + r.khulasah);
+    (r.tafsil||[]).forEach(c=>L.push('  - ' + c.halah + ' => ' + c.dalalah));
+    if(r.masadir?.length) L.push('  المصادر: ' + r.masadir.join(' · '));
+  });
+  if(a.khulasah_ammah) L.push('\nالخلاصة: ' + a.khulasah_ammah);
+  if(a.nasihah) L.push('\nنصيحة: ' + a.nasihah);
+  L.push('\n' + a.tanbih);
+  navigator.clipboard.writeText(L.join('\n')).then(()=>{
+    $('#copyBtn').textContent = 'نُسخ ✓';
+    setTimeout(()=>$('#copyBtn').textContent='نسخ التعبير', 1600);
+  });
+}
+
+btn.addEventListener('click', go);
+$('#dream').addEventListener('keydown', e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) go(); });
+</script>
+</body>
+</html>
