@@ -28,6 +28,83 @@ The Ibn Sirin dictionary is popularly attributed to him but the attribution is
 rejected by scholars — including Shamela's own editors. That note ships with
 every citation from it. See `corpus/books.py`.
 
+## References — المصادر
+
+Every text below is cited in the app itself with book, author, printed page and a
+link back to the scan it was taken from, so any claim shown to a reader can be
+checked against the source.
+
+### Classical Arabic — al-Maktaba al-Shamela
+
+Public-domain classical texts, scraped page by page from
+[shamela.ws](https://shamela.ws).
+
+**١. تعطير الأنام في تعبير المنام**
+عبد الغني بن إسماعيل النابلسي (ت ١١٤٣هـ / 1731 CE)
+[shamela.ws/book/1217](https://shamela.ws/book/1217) — 378 pages (printed ٤–٣٨١)
+Alphabetical dictionary. Supplies all **2,317 headwords**, i.e. the entire symbol
+vocabulary the other books are searched against.
+
+**٢. تفسير الأحلام = منتخب الكلام في تفسير الأحلام**
+منسوب إلى محمد بن سيرين (ت ١١٠هـ / 728 CE)
+[shamela.ws/book/21615](https://shamela.ws/book/21615) — 830 pages (printed ٢–٤١٦)
+**6,129 passages.**
+⚠️ *On the attribution:* the ascription to Ibn Sirin is rejected — Shamela's own
+editors say so — since the book quotes authorities who lived more than a century
+after his death. It is carried as the received tradition circulating under his
+name, not as his writing, and that note accompanies every citation from it.
+
+**٣. الإشارات في علم العبارات**
+غرس الدين خليل بن شاهين الظاهري (ت ٨٧٣هـ / 1468 CE)
+[shamela.ws/book/9968](https://shamela.ws/book/9968) — 273 pages (printed ٦٠٣–٨٧٧)
+**2,412 passages.**
+
+**٤. تعبير الرؤيا**
+[shamela.ws/book/10696](https://shamela.ws/book/10696) — 333 pages (printed ٢–٣٣٩)
+**1,201 passages.** Alphabetically arranged, but its headwords are inline
+(`البول في الرؤيا:`) rather than marked up, so it contributes passages rather
+than vocabulary.
+
+**٥. الرؤيا** — *adab and classification layer, not interpretation*
+[shamela.ws/book/20824](https://shamela.ws/book/20824) — 194 pages (printed ٠–١٩٧)
+**44 hadith**: the types of dream, the good dream as part of prophethood, the
+instruction to spit to the left after a distressing one, the prohibition on
+relating it. This is what grounds the classification and adab layer that the
+interpretation books assume but never state.
+
+### Psychological — Internet Archive
+
+**٦. تفسير الأحلام** and **الحلم وتأويله** — سيغموند فرويد, Arabic translations
+[archive.org/details/elshandawily6168](https://archive.org/details/elshandawily6168) ·
+[archive.org/details/elshandawily6176](https://archive.org/details/elshandawily6176)
+**1,806 passages.** Freud is used because the Arabic literature on dream
+psychology rests on him, and because he treats the dreams people actually ask
+about: falling, flying, teeth, nakedness, the death of a relative.
+
+### Totals
+
+| | |
+|---|---|
+| Books | **6** (5 classical Arabic + 1 psychological) |
+| Headwords | **2,317** |
+| Indexed passages | **11,548** |
+| Adab hadith | **44** |
+| Pages scraped | **2,008** |
+
+### Downloaded but unused
+
+Muhammad M. al-Akili's English translation of the Ibn Sirin dictionary
+([archive.org/details/IbnSirinDictionaryOfDreams](https://archive.org/details/IbnSirinDictionaryOfDreams),
+2.04M chars) parses into 2,129 English symbols with 2,317 cross-reference
+aliases. Held for an English version; the Arabic site does not touch it.
+
+### A note on rights
+
+The five Shamela texts are public-domain classical works and freely citable. The
+Freud translations and the al-Akili translation are modern copyrighted works —
+cite them as sources, do not redistribute the text, and keep this repository
+private.
+
 ## Running it
 
 ```bash
@@ -121,5 +198,5 @@ Load the index at module scope, not per request.
 
 ## Sources
 
-All texts are from [al-Maktaba al-Shamela](https://shamela.ws) except the
-psychological corpus, which is from the Internet Archive.
+See **References — المصادر** above for the full source list with links, page
+ranges and per-book contribution counts.
