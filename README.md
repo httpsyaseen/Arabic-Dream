@@ -1,5 +1,9 @@
 # تعبير الرؤيا — Arabic dream interpretation
 
+> **New here, or do not read Arabic?** Start with **[PROJECT-GUIDE.md](PROJECT-GUIDE.md)** —
+> a full walkthrough in English of the tradition, the six books, and every stage
+> of the pipeline.
+
 An Arabic dream-interpretation site grounded in five source texts. A dream is
 typed in Arabic, its symbols are looked up **in code** against a corpus built
 from those texts, and the model's only job is to explain what the lookup found.
