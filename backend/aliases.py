@@ -81,6 +81,30 @@ ALIASES: dict[str, str] = {
     "احترق": "حريق", "احترقت": "حريق", "اشتعل": "نار",
     "ولدت": "ولاده", "حلقت": "حلق", "ضاع": "ضياع", "ضعت": "ضياع",
 
+    # --- the classical books use older words than people type today ----------
+    # Surfaced by index/arabic_symbol_dict.json: an English symbol list was
+    # translated into modern Arabic, and these translations found nothing in the
+    # corpus because the books name the same thing differently.
+    "اسد": "سبع",       # asad = lion -> the books say sab' (beast of prey)
+    "قطه": "سنور",      # qitta = cat -> sinnawr
+    "قط": "سنور",
+    "ملابس": "ثوب",     # malabis = clothes -> thawb (garment)
+    "لباس": "ثوب",
+    "منزل": "بيت",      # manzil = house -> bayt
+    "نجوم": "نجم",      # nujum = stars -> najm
+    "دموع": "دمع",      # dumu' = tears -> dam'
+    "ملائكه": "ملك",    # mala'ika = angels -> malak
+    "زفاف": "عرس",      # zifaf = wedding -> 'urs
+    "حذاء": "نعل",      # hidha' = shoe -> na'l (sandal)
+    "ساعه": "ساعه",
+    "مطبخ": "طبخ",      # matbakh = kitchen -> tabkh (cooking)
+    "ركض": "عدو",       # rakd = running -> 'adw
+    "شفاء": "شفا",
+    "لص": "سارق",       # liss = thief -> sariq
+    "عطر": "طيب",       # 'itr = perfume -> tib
+    "قمح": "حنطه",      # qamh = wheat -> hinta
+    "جمل": "بعير",      # jamal = camel -> ba'ir
+
     # --- modern words for classical entries ----------------------------------
     "بنايه": "بناء", "عماره": "بناء", "مبني": "بناء", "برج": "بناء",
     "سياره": "مركب",   # sayyara = car -> markab = vehicle/mount

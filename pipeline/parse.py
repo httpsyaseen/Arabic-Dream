@@ -44,10 +44,19 @@ CONTEXT = ROOT / "context"
 
 PASSAGE_MIN = 80      # shorter than this is a fragment, not a ruling
 PASSAGE_MAX = 700     # longer buries the relevant sentence in the prompt
-HEADWORD_MIN = 3
+# Two-letter headwords are real symbols — دم (dam = blood), يد (yad = hand),
+# سن (sinn = tooth), جن (jinn), فم (fam = mouth) — and dropping them lost 88
+# entries. They are only safe because matching demands whole-word boundaries;
+# the exception is Arabic function words, which would otherwise match in almost
+# every sentence.
+HEADWORD_MIN = 2
+STOPWORDS = {
+    "من", "في", "ما", "لا", "ان", "او", "ثم", "قد", "هل", "بل", "لم", "لن",
+    "هو", "هي", "به", "له", "مع", "عن", "على", "الي", "كل", "اي", "ذو", "ذا",
+}
 HEADWORD_MAX = 30
 HEADWORD_MAX_WORDS = 4
-BODY_MIN = 30
+BODY_MIN = 18   # جمل (jamal = camel) has a 25-character entry; 30 excluded it
 
 # Classical prose is barely punctuated. These are the phrases that actually begin
 # a new ruling, so they are the cut points rather than full stops.
@@ -141,6 +150,11 @@ def parse_shamela_dictionary(src: sources.Source, pages: list[dict]) -> list[dic
 
             key = normalize(strip_parens(head))
             if not (HEADWORD_MIN <= len(key) <= HEADWORD_MAX):
+                continue
+            if key in STOPWORDS:
+                continue
+            # Shamela sometimes tags a sentence opener rather than a headword.
+            if key.startswith(("ومن راي", "من راي", "وان راي")):
                 continue
             # Shamela sometimes wraps a whole sentence in a headword span
             # ("وقد ضمن الحسن بن الحسين الخلال…"). Those are not symbols.

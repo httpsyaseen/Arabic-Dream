@@ -1,5 +1,9 @@
 {
   "slug": "nabulsi",
+  "display": {
+    "ar": "النابلسي",
+    "en": "Al-Nabulsi"
+  },
   "name": {
     "ar": "تعطير الأنام في تعبير المنام",
     "en": "Ta'tir al-Anam — Perfuming Mankind in the Interpretation of Dreams"
@@ -16,5 +20,5 @@
   "note": null,
   "parser": "shamela_dictionary",
   "raw_pages": 378,
-  "chunks": 2317
+  "chunks": 2415
 }

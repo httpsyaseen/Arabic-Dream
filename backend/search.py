@@ -25,10 +25,11 @@ INDEX = Path(__file__).resolve().parent.parent / "index"
 # Arabic writes the article and some conjunctions joined to the word, so a
 # headword must be allowed to carry them:
 #   الحية (al-hayya = "the snake") · وحية (wa-hayya = "and a snake")
-# The bare prepositions ب/ك/ل are deliberately excluded: allowing them let
-# بير match inside كبيرة (kabira = "big") and report a "well" for a dream with
-# no well in it. They cost more in false hits than they earn in recall.
-_PREFIX = r"(?:وال|بال|كال|فال|لل|ال|و|ف)?"
+# ب is allowed because dreams are constantly described with it — حلمت بقطة
+# ("I dreamed of a cat") — and excluding it silently lost those. ك and ل stay
+# out: ك is what let بير match inside كبيرة (kabira = "big") and report a well
+# for a dream containing none.
+_PREFIX = r"(?:وال|بال|كال|فال|لل|ال|وب|فب|و|ف|ب)?"
 # Possessives and sound plurals attach at the end:
 #   بيتي (bayti = "my house") · أسنانه (asnanuhu = "his teeth")
 # The bare ا matters more than it looks: Arabic marks an indefinite noun in the
