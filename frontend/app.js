@@ -210,19 +210,22 @@ async function boot() {
 function setLang(l) {
   lang = l;
   localStorage.setItem("taweel_lang", l);
+  shellBuilt = false;          // its labels are in the other language now
   route();
 }
 
-/* ---------------------------------------------------------------- layout */
-function chrome(inner) {
+/* ---------------------------------------------------------------- layout
+ * The shell is built once. Rewriting the whole body on every render tore down
+ * the topbar and footer each time — and since one submit renders three times
+ * (skeleton, then citations, then the reading), the chrome flashed three times
+ * and the page read as though it had reloaded.
+ *
+ * Only #main is replaced now; the nav has its active state updated in place.
+ */
+let shellBuilt = false;
+
+function buildShell() {
   const L = t();
-  const here = location.hash || "#/";
-  const link = (href, key) =>
-    `<a href="${href}" class="${here === href || (href !== "#/" && here.startsWith(href)) ? "active" : ""}">${L.nav[key]}</a>`;
-
-  document.documentElement.lang = L.dir === "rtl" ? "ar" : "en";
-  document.documentElement.dir = L.dir;
-
   document.body.innerHTML = `
     <a class="skip" href="#main">${L.skip}</a>
     <div class="topbar"><div class="topbar-inner">
@@ -232,28 +235,63 @@ function chrome(inner) {
         <span>${L.brand}</span>
       </a>
       <nav class="nav-links">
-        ${link("#/", "home")}${link("#/result", "result")}${link("#/interpreters", "interpreters")}
-        ${link("#/about", "about")}${link("#/faq", "faq")}${link("#/journal", "journal")}
+        <a href="#/" data-route="#/">${L.nav.home}</a>
+        <a href="#/result" data-route="#/result">${L.nav.result}</a>
+        <a href="#/interpreters" data-route="#/interpreters">${L.nav.interpreters}</a>
+        <a href="#/about" data-route="#/about">${L.nav.about}</a>
+        <a href="#/faq" data-route="#/faq">${L.nav.faq}</a>
+        <a href="#/journal" data-route="#/journal">${L.nav.journal}</a>
         <span class="lang-switch">
-          <button class="${lang === "ar" ? "active" : ""}" onclick="setLang('ar')">AR</button>
-          <button class="${lang === "en" ? "active" : ""}" onclick="setLang('en')">EN</button>
+          <button data-lang="ar" onclick="setLang('ar')">AR</button>
+          <button data-lang="en" onclick="setLang('en')">EN</button>
         </span>
       </nav>
     </div></div>
-    <main id="main">${inner}</main>
+    <main id="main"></main>
     <footer class="site-foot"><div class="wrap">${L.footer}</div></footer>`;
+  shellBuilt = true;
+}
+
+function chrome(inner) {
+  const L = t();
+  document.documentElement.lang = L.dir === "rtl" ? "ar" : "en";
+  document.documentElement.dir = L.dir;
+
+  if (!shellBuilt) buildShell();
+
+  const here = location.hash || "#/";
+  document.querySelectorAll(".nav-links a[data-route]").forEach(a => {
+    const r = a.dataset.route;
+    a.classList.toggle("active", here === r || (r !== "#/" && here.startsWith(r)));
+  });
+  document.querySelectorAll(".lang-switch button").forEach(bt =>
+    bt.classList.toggle("active", bt.dataset.lang === lang));
+
+  document.getElementById("main").innerHTML = inner;
 }
 
 /* ---------------------------------------------------------------- router */
+let lastRoute = null;
+
 function route() {
   const h = location.hash || "#/";
-  if (h.startsWith("#/lens/")) return viewLens(decodeURIComponent(h.slice(7)));
-  if (h.startsWith("#/note/")) return viewNonSource(decodeURIComponent(h.slice(7)));
+  const moved = h !== lastRoute;
+  if (h.startsWith("#/lens/") || h.startsWith("#/note/")) {
+    (h.startsWith("#/lens/") ? viewLens : viewNonSource)(decodeURIComponent(h.slice(7)));
+    if (moved) { window.scrollTo(0, 0); lastRoute = h; }
+    return;
+  }
   ({
     "#/": viewHome, "#/result": viewResult, "#/interpreters": viewInterpreters,
     "#/about": viewAbout, "#/faq": viewFaq, "#/journal": viewJournal,
   }[h] || viewHome)();
-  window.scrollTo(0, 0);
+
+  // Jumping to the top on every render would yank the reader back up each time
+  // the pending view refreshes with new content. Only a real move does that.
+  if (h !== lastRoute) {
+    window.scrollTo(0, 0);
+    lastRoute = h;
+  }
 }
 
 /* ------------------------------------------------------------ components */
