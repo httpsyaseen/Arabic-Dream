@@ -18,10 +18,15 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True)
 class Source:
     slug: str                 # folder name under context/ and id in the API
-    name_ar: str
+    name_ar: str              # the book's full title
     name_en: str
-    author_ar: str
+    author_ar: str            # how the authorship is stated, with any caveat
     author_en: str
+    # The name a reader actually recognises — "Ibn Sirin", not "Muntakhab
+    # al-Kalam" and not "attributed to Ibn Sirin". This is what labels the
+    # source picker and the cards; the full title stays as secondary detail.
+    display_ar: str
+    display_en: str
 
     # "classical" | "psychological" | "adab"
     kind: str
@@ -57,6 +62,8 @@ SOURCES: dict[str, Source] = {
     # ---------------------------------------------------------------- classical
     "nabulsi": Source(
         slug="nabulsi",
+        display_ar="النابلسي",
+        display_en="Al-Nabulsi",
         name_ar="تعطير الأنام في تعبير المنام",
         name_en="Ta'tir al-Anam — Perfuming Mankind in the Interpretation of Dreams",
         author_ar="عبد الغني النابلسي",
@@ -70,6 +77,8 @@ SOURCES: dict[str, Source] = {
     ),
     "ibn_sirin": Source(
         slug="ibn_sirin",
+        display_ar="ابن سيرين",
+        display_en="Ibn Sirin",
         name_ar="تفسير الأحلام (منتخب الكلام)",
         name_en="Muntakhab al-Kalam — Selected Discourse on the Interpretation of Dreams",
         author_ar="منسوب إلى ابن سيرين",
@@ -93,6 +102,8 @@ SOURCES: dict[str, Source] = {
     ),
     "ibn_shaheen": Source(
         slug="ibn_shaheen",
+        display_ar="ابن شاهين",
+        display_en="Ibn Shahin",
         name_ar="الإشارات في علم العبارات",
         name_en="al-Isharat — The Indications in the Science of Interpretation",
         author_ar="ابن شاهين الظاهري",
@@ -106,6 +117,8 @@ SOURCES: dict[str, Source] = {
     ),
     "tabir": Source(
         slug="tabir",
+        display_ar="كتاب تعبير الرؤيا",
+        display_en="Ta'bir al-Ru'ya",
         name_ar="تعبير الرؤيا",
         name_en="Ta'bir al-Ru'ya — The Interpretation of Visions",
         author_ar="كتاب تعبير الرؤيا",
@@ -120,6 +133,8 @@ SOURCES: dict[str, Source] = {
     # ------------------------------------------------------------- Shia tradition
     "sadiq": Source(
         slug="sadiq",
+        display_ar="الإمام الصادق",
+        display_en="Imam Al-Sadiq",
         name_ar="تفسير الأحلام الكبير برواية الإمام علي وأهل البيت",
         name_en="The Great Book of Dream Interpretation, narrated from Imam Ali and the Ahl al-Bayt",
         author_ar="منسوب إلى الإمام جعفر الصادق وأهل البيت",
@@ -151,6 +166,8 @@ SOURCES: dict[str, Source] = {
     # ------------------------------------------------------------- psychological
     "freud": Source(
         slug="freud",
+        display_ar="سيغموند فرويد",
+        display_en="Sigmund Freud",
         name_ar="تفسير الأحلام / الحلم وتأويله",
         name_en="The Interpretation of Dreams / On Dreams",
         author_ar="سيغموند فرويد",
@@ -171,6 +188,8 @@ SOURCES: dict[str, Source] = {
     # --------------------------------------------------------------------- adab
     "ruya": Source(
         slug="ruya",
+        display_ar="أحاديث الرؤيا وآدابها",
+        display_en="Hadith on dreams",
         name_ar="الرؤيا",
         name_en="al-Ru'ya — hadith on dreams and their etiquette",
         author_ar="كتاب الرؤيا",
@@ -246,6 +265,7 @@ def as_dict(s: Source) -> dict:
     """Public shape returned by the API."""
     return {
         "slug": s.slug,
+        "display": {"ar": s.display_ar, "en": s.display_en},
         "name": {"ar": s.name_ar, "en": s.name_en},
         "author": {"ar": s.author_ar, "en": s.author_en},
         "kind": s.kind,

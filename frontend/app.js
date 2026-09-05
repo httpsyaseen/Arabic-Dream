@@ -219,7 +219,7 @@ function dreamForm(fixedSource) {
       <select id="f-source">
         <option value="">${L.sourceAll}</option>
         ${STATE.sources.filter(s => s.role !== "hadith")
-          .map(s => `<option value="${s.slug}">${esc(s.name[lang])}</option>`).join("")}
+          .map(s => `<option value="${s.slug}">${esc(s.display[lang])}</option>`).join("")}
       </select>
     </label>`;
 
@@ -257,9 +257,10 @@ function sourceCard(s) {
     <a class="hub-card" href="#/lens/${s.slug}">
       <div class="hub-head">
         <span class="dot dot-${s.color}"></span>
-        <h3>${esc(s.name[lang])}</h3>
+        <h3>${esc(s.display[lang])}</h3>
       </div>
-      <div class="hub-author">${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</div>
+      <div class="hub-author">«${esc(s.name[lang])}»</div>
+      <div class="hub-role">${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</div>
       <div class="hub-role">${L.kinds[s.kind] || s.kind} · ${L.roles[s.role] || s.role}</div>
       <span class="arrow">${L.readMore}</span>
     </a>`;
@@ -318,8 +319,8 @@ function viewLens(slug) {
   chrome(`
     <div class="wrap page">
       <a class="home-link" href="#/interpreters">← ${L.nav.interpreters}</a>
-      <h1>${esc(s.name[lang])}</h1>
-      <p class="sub">${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</p>
+      <h1>${esc(s.display[lang])}</h1>
+      <p class="sub">«${esc(s.name[lang])}» · ${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</p>
 
       <div class="card meta-card">
         <div class="meta-row"><span>${L.role}</span><b>${L.kinds[s.kind] || s.kind} · ${L.roles[s.role] || s.role}</b></div>
@@ -330,7 +331,7 @@ function viewLens(slug) {
       ${s.note ? `<div class="note caution"><b>${L.notSourceH}:</b> ${esc(s.note[lang])}</div>` : ""}
 
       ${isHadith ? "" : `
-        <h2 class="section-label">${L.interpretWith} ${esc(s.name[lang])}</h2>
+        <h2 class="section-label">${L.interpretWith} ${esc(s.display[lang])}</h2>
         ${dreamForm(s.slug)}`}
       <div id="pending"></div>
     </div>`);
@@ -433,7 +434,7 @@ function viewResult() {
 
   const a = d.answer, meta = d.meta || {};
   const srcName = meta.source
-    ? (STATE.sources.find(s => s.slug === meta.source) || {}).name?.[lang]
+    ? (STATE.sources.find(s => s.slug === meta.source) || {}).display?.[lang]
     : null;
 
   let h = `<div class="wrap page">
@@ -451,11 +452,7 @@ function viewResult() {
     const citedCount = (d.symbols || []).reduce((n, s) => n + s.citations.length, 0);
     const classicalNames = citedSlugs
       .filter(sl => (STATE.sources.find(x => x.slug === sl) || {}).kind !== "psychological")
-      .map(sl => {
-        const s = STATE.sources.find(x => x.slug === sl) || {};
-        const author = s.author?.[lang];
-        return author ? `${s.name?.[lang]} — ${author}` : s.name?.[lang];
-      })
+      .map(sl => (STATE.sources.find(x => x.slug === sl) || {}).display?.[lang])
       .filter(Boolean);
     const hasPsych = citedSlugs.some(sl => (STATE.sources.find(x => x.slug === sl) || {}).kind === "psychological");
 
