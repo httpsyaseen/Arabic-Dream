@@ -17,6 +17,11 @@
  * lookup matches Arabic headwords. Only the interface switches language.
  */
 
+/* Bumped on every commit. `window.TAWEEL` in the console tells you at a glance
+ * whether the browser is running current code or something it cached earlier —
+ * a question that cost real time to answer the hard way. */
+const BUILD = "5dd90b9-1788624242";
+
 const API_BASE = (() => {
   const q = new URLSearchParams(location.search).get("api");
   if (q) return q.replace(/\/$/, "");
@@ -248,7 +253,8 @@ function buildShell() {
       </nav>
     </div></div>
     <main id="main"></main>
-    <footer class="site-foot"><div class="wrap">${L.footer}</div></footer>`;
+    <footer class="site-foot"><div class="wrap">${L.footer}
+      <div class="build">build ${BUILD}</div></div></footer>`;
   shellBuilt = true;
 }
 
@@ -797,6 +803,23 @@ function copyResult() {
     setTimeout(() => $("#copyBtn").textContent = L.copy, 1600);
   });
 }
+
+// Diagnostics. Type `TAWEEL` in the console.
+window.TAWEEL = {
+  build: BUILD,
+  api: API,
+  get state() {
+    return { hash: location.hash, pending: STATE.pending?.phase ?? null,
+             hasLast: !!STATE.last, lang, shellBuilt };
+  },
+  async ping() {
+    const t0 = performance.now();
+    const r = await fetch(API + "/health").then(r => r.json());
+    return { ok: true, ms: Math.round(performance.now() - t0), symbols: r.counts.symbols };
+  },
+};
+console.info(`%cتأويل build ${BUILD}%c  API: ${API}`,
+  "background:#122B2A;color:#A9782E;padding:2px 6px;border-radius:3px", "");
 
 window.setLang = setLang;
 window.submitDream = submitDream;

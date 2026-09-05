@@ -406,3 +406,4 @@ textarea{padding:var(--s4) var(--s4);min-height:9.5rem}
    Balanced wrapping evens the lines out; pretty avoids orphans in body copy. */
 .verdict-title,h1,.hero h1,.symbol-name,.card h2{text-wrap:balance}
 .verdict-sub,.sub,.quote-box p,.personal-note{text-wrap:pretty}
+.build{opacity:.35;font-size:.7rem;margin-top:var(--s3);font-family:ui-monospace,monospace}
