@@ -13,6 +13,7 @@ rather than dressed up as a citation.
 
 | Document | What it covers |
 |---|---|
+| **[docs/CASE-STUDY.md](docs/CASE-STUDY.md)** | Plain-English walkthrough for someone new to the project: the problem, why the obvious solution fails, one dream traced end to end with real output, and the five bugs worth learning from. English only, no Arabic assumed. |
 | **[docs/OVERVIEW.md](docs/OVERVIEW.md)** | Start here. What the project is, the tradition behind it, and how a request flows end to end. Written for a reader who does not know Arabic. |
 | **[docs/PARSING.md](docs/PARSING.md)** | How the books become structured data — the four parsers, the OCR rescue, and the matching rules. |
 | **[docs/SOURCES.md](docs/SOURCES.md)** | Every book, with links, page ranges and what it contributes. |
