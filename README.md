@@ -69,8 +69,10 @@ matching rules means rebuilding from it.
 
 | File | Contents |
 |---|---|
-| `arabic_symbols.json` | 2,573 Arabic symbols with their interpretations, same shape as the English `symbols.json`. Built by `python -m pipeline.build_arabic_symbols`. |
-| `index/arabic_symbol_dict.json` | English↔Arabic symbol mapping, and which of them the corpus actually covers. `python -m pipeline.build_symbol_dict`. |
+| `symbols_ar.json` | `symbols.json` with Arabic symbol names. Same 1,323 entries, same shape, interpretations untouched — only the `symbol` field differs. `python -m pipeline.translate_symbol_names` |
+| `symbols.txt` | The English→Arabic name pairs behind it, 1,234 rows. Grows whenever the translator fills a gap, so the same name is never translated twice. |
+| `index/corpus_symbols_ar.json` | The same idea built from our own books instead: 2,573 Arabic symbols with verbatim interpretations, printed pages and source links. `python -m pipeline.build_arabic_symbols` |
+| `index/arabic_symbol_dict.json` | English↔Arabic mapping with which names the corpus actually covers. `python -m pipeline.build_symbol_dict` |
 
 ## Adding a book
 

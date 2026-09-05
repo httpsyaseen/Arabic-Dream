@@ -138,7 +138,7 @@ def build() -> list[dict]:
 
     out.sort(key=lambda e: (-len(e["interpretations"]), e["symbol"]))
 
-    path = ROOT / "arabic_symbols.json"
+    path = INDEX / "corpus_symbols_ar.json"
     path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 
     total = sum(len(e["interpretations"]) for e in out)
