@@ -29,6 +29,11 @@ class DreamRequest(BaseModel):
     takrar: str | None = Field(None, max_length=20, description="does it recur — نعم / لا")
     waqt: str | None = Field(None, max_length=30, description="time of the dream")
 
+    # Which interpreter to answer as. Omit for all sources together. When set,
+    # only that source's text is shown and the fallback answers in its manner.
+    source: str | None = Field(None, max_length=40,
+                               description="lens slug, e.g. ibn_sirin — see GET /sources")
+
     def context(self) -> dict[str, str]:
         keys = ("jins", "hala", "umr", "shuur", "alam", "takrar", "waqt")
         return {k: v for k in keys if (v := getattr(self, k))}
@@ -58,6 +63,8 @@ class AdabSource(BaseModel):
 
 
 class InterpretMeta(BaseModel):
+    source: str | None = None          # the lens asked for, if any
+    used_corpus: bool = True           # False when the answer fell back to general knowledge
     model: str | None = None
     elapsed_ms: int
     matched: int

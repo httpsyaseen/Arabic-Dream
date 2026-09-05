@@ -65,8 +65,15 @@ class Corpus:
 
     # -- symbols ------------------------------------------------------------
 
-    def match(self, dream: str, limit: int = MAX_SYMBOLS) -> list[dict]:
-        """Symbols occurring in the dream, longest headword first."""
+    def match(self, dream: str, limit: int = MAX_SYMBOLS,
+              source: str | None = None) -> list[dict]:
+        """Symbols occurring in the dream, longest headword first.
+
+        `source` restricts which book's passages are attached. The vocabulary
+        itself always comes from the dictionary source — that is the plumbing
+        that finds symbols at all — but when a reader has chosen one interpreter,
+        only that interpreter's text is shown to them and to the model.
+        """
         text = normalize(dream)
         hits: list[dict] = []
         claimed: list[str] = []
@@ -93,19 +100,30 @@ class Corpus:
             claimed.append(key)
             hits.append(entry)
 
-        return [self._with_passages(e) for e in hits[:limit]]
+        return [self._with_passages(e, source) for e in hits[:limit]]
 
-    def _with_passages(self, entry: dict) -> dict:
+    def _with_passages(self, entry: dict, source: str | None = None) -> dict:
         """Attach supporting passages, keeping the lenses balanced.
 
         Without a per-kind cap the classical books (about 11,000 passages
         between them) would crowd out the psychological source entirely and that
         lens would silently vanish from every answer.
+
+        When one source is selected the cap is irrelevant — the reader asked for
+        that book, so they get up to six passages from it and nothing else. The
+        headword entry is only included when it belongs to the chosen source,
+        otherwise picking "Ibn Sirin" would still show al-Nabulsi's definition.
         """
         pool = self.passages.get(entry["key"]) or []
+
+        if source:
+            picked = [p for p in pool if p["source"] == source][:CLASSICAL_PER_SYMBOL + PSYCH_PER_SYMBOL]
+            return {**entry, "passages": picked,
+                    "own_text_applies": entry["source"] == source}
+
         classical = [p for p in pool if p.get("kind") != "psychological"][:CLASSICAL_PER_SYMBOL]
         psych = [p for p in pool if p.get("kind") == "psychological"][:PSYCH_PER_SYMBOL]
-        return {**entry, "passages": classical + psych}
+        return {**entry, "passages": classical + psych, "own_text_applies": True}
 
     # -- etiquette ----------------------------------------------------------
 
@@ -142,9 +160,9 @@ class Corpus:
             pool = sorted(self.symbols, key=lambda e: e["key"])
         return len(pool), pool[offset:offset + limit]
 
-    def symbol(self, key: str) -> dict | None:
+    def symbol(self, key: str, source: str | None = None) -> dict | None:
         entry = self._by_key.get(normalize(key))
-        return self._with_passages(entry) if entry else None
+        return self._with_passages(entry, source) if entry else None
 
 
 def looks_distressing(dream: str) -> bool:

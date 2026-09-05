@@ -200,8 +200,21 @@ CONTEXT_LABELS = {
 
 
 def build_prompt(dream: str, matches: list[dict], adab: list[dict],
-                 context: dict | None, source_names: dict[str, str]) -> str:
+                 context: dict | None, source_names: dict[str, str],
+                 source: str | None = None) -> str:
     parts = [f"رؤيا السائل:\n{dream}\n"]
+
+    # When the reader picks one interpreter, every reading must be that
+    # interpreter's — including the fallback. Answering "generally" under a
+    # named authority's heading would misrepresent them, so the instruction is
+    # explicit about staying within the known manner of that school and saying
+    # when it is doing so from general knowledge rather than a supplied text.
+    if source:
+        parts.append(
+            f"اختار السائل مرجعية واحدة: **{source_names.get(source, source)}**.\n"
+            "فاقصر الجواب على مسلك هذه المرجعية وحدها، ولا تخلط معها غيرها،\n"
+            "واجعل اسمها في `qiraat[].almanhaj`.\n"
+        )
 
     lines = [
         f"  - {CONTEXT_LABELS[k][0]}: {v}"
@@ -214,12 +227,13 @@ def build_prompt(dream: str, matches: list[dict], adab: list[dict],
     if matches:
         parts.append(f"\nالنصوص الموجودة في الكتب المفهرسة ({len(matches)} رمزاً):\n")
         for m in matches:
-            block = [
-                f"■ الرمز: {m['symbol_ar']}",
-                f"  [{source_names.get(m['source'], m['source'])}"
-                + (f"، ص {m['printed_page']}]" if m.get("printed_page") else "]"),
-                f"  {m['text_ar']}",
-            ]
+            block = [f"■ الرمز: {m['symbol_ar']}"]
+            if m.get("own_text_applies", True):
+                block += [
+                    f"  [{source_names.get(m['source'], m['source'])}"
+                    + (f"، ص {m['printed_page']}]" if m.get("printed_page") else "]"),
+                    f"  {m['text_ar']}",
+                ]
             for p in m.get("passages") or []:
                 kind = "قراءة نفسية" if p.get("kind") == "psychological" else "من كتب التعبير"
                 page = f"، ص {p['printed_page']}" if p.get("printed_page") else ""
@@ -227,11 +241,16 @@ def build_prompt(dream: str, matches: list[dict], adab: list[dict],
                 block.append(f"  [{kind} — {name}{page}]\n  {p['text_ar']}")
             parts.append("\n".join(block))
     else:
+        who = f"على مسلك {source_names.get(source, source)}" if source else "عند أهل التعبير"
         parts.append(
-            "\nلم يُعثر على أي رمز من رموز هذه الرؤيا في الكتب المفهرسة.\n"
-            "فأجب السائل مما استقرّ عند أهل التعبير، واجعل `asas_aljawab` = "
-            "«من المعرفة العامة» و`min_alkutub` = false في كل رمز، ولا تنسب شيئاً "
-            "إلى كتاب بعينه، ولا تدع السائل بغير جواب."
+            "\nلم يُعثر على نصّ لهذه الرؤيا في الكتب المفهرسة.\n"
+            f"فأجب السائل بما هو معروف مستقر {who}، معتمداً على ما تعرفه من "
+            "منهج هذه المرجعية وأصولها، بشرط:\n"
+            "  - `asas_aljawab` = «من المعرفة العامة»\n"
+            "  - `min_alkutub` = false في كل رمز\n"
+            "  - ألّا تخترع نصاً ولا تنسب قولاً إلى كتاب أو صفحة بعينها\n"
+            "  - أن تقتصر على المشهور دون الشاذ\n"
+            "**ولا تدع السائل بغير جواب.**"
         )
 
     if adab:
@@ -251,13 +270,14 @@ def client() -> genai.Client:
 
 
 def generate(dream: str, matches: list[dict], adab: list[dict], model: str,
-             context: dict | None, source_names: dict[str, str], cli=None) -> dict:
+             context: dict | None, source_names: dict[str, str],
+             source: str | None = None, cli=None) -> dict:
     """One call. `response_mime_type` is deliberately not passed — setting it
     alongside `response_format` is rejected; the mime type belongs inside it."""
     cli = cli or client()
     interaction = cli.interactions.create(
         model=model,
-        input=build_prompt(dream, matches, adab, context, source_names),
+        input=build_prompt(dream, matches, adab, context, source_names, source),
         system_instruction=SYSTEM,
         response_format={
             "type": "text",

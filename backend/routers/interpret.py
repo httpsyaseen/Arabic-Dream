@@ -36,8 +36,10 @@ def _citations(match: dict) -> list[dict]:
             "url": url or None,
         }
 
-    out = [cite(match["text_ar"], match["source"], "classical",
-                match.get("printed_page"), match.get("url"))]
+    out = []
+    if match.get("own_text_applies", True):
+        out.append(cite(match["text_ar"], match["source"], "classical",
+                        match.get("printed_page"), match.get("url")))
     out += [
         cite(p["text_ar"], p["source"], p.get("kind", "classical"),
              p.get("printed_page"), p.get("url"))
@@ -52,7 +54,7 @@ def interpret(payload: DreamRequest):
     dream = payload.dream.strip()
     context = payload.context()
 
-    matches = CORPUS.match(dream)
+    matches = CORPUS.match(dream, source=payload.source)
     distressing = looks_distressing(dream) or payload.alam == "نعم" or \
         payload.shuur in ("قلق", "خوف", "حزن")
     adab = CORPUS.adab_for(dream, distressing)
@@ -61,6 +63,9 @@ def interpret(payload: DreamRequest):
         {"symbol_ar": m["symbol_ar"], "key": m["key"], "citations": _citations(m)}
         for m in matches
     ]
+    # A symbol with no citations left after filtering to one source is not
+    # corpus-backed for this reader, even though the lookup found it.
+    cited = sum(len(s["citations"]) for s in symbols)
     adab_sources = [
         {"text_ar": a["text_ar"], "source": a["source"],
          "chapter_ar": a.get("chapter_ar"), "printed_page": a.get("printed_page"),
@@ -72,7 +77,8 @@ def interpret(payload: DreamRequest):
     for model in config.MODELS:
         try:
             result = answer_mod.generate(
-                dream, matches, adab, model, context, source_names_ar()
+                dream, matches, adab, model, context, source_names_ar(),
+                payload.source,
             )
         except Exception as e:            # quota, transport, malformed JSON
             last_error = e
@@ -83,6 +89,8 @@ def interpret(payload: DreamRequest):
             "adab_sources": adab_sources,
             "context": context,
             "meta": {
+                "source": payload.source,
+                "used_corpus": cited > 0,
                 "model": model,
                 "elapsed_ms": int((time.time() - started) * 1000),
                 "matched": len(matches),
@@ -101,6 +109,8 @@ def interpret(payload: DreamRequest):
             "adab_sources": adab_sources,
             "context": context,
             "meta": {
+                "source": payload.source,
+                "used_corpus": cited > 0,
                 "model": None,
                 "elapsed_ms": int((time.time() - started) * 1000),
                 "matched": len(matches),

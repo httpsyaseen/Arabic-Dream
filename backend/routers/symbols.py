@@ -33,8 +33,8 @@ def list_symbols(
 
 
 @router.get("/{key}")
-def get_symbol(key: str) -> dict:
-    entry = CORPUS.symbol(key)
+def get_symbol(key: str, source: str | None = Query(None)) -> dict:
+    entry = CORPUS.symbol(key, source)
     if entry is None:
         raise HTTPException(404, f"no symbol matching {key!r}")
     return {
