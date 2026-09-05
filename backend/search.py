@@ -107,17 +107,42 @@ class Corpus:
 
         return [self._with_passages(e, source) for e in hits[:limit]]
 
+    @staticmethod
+    def _round_robin(passages: list[dict], cap: int) -> list[dict]:
+        """Take up to `cap` passages, one per source in turn.
+
+        Taking the first `cap` of the list instead lets whichever book is
+        indexed first swallow every slot: with four classical sources and a cap
+        of four, Ibn Sirin's three passages plus one of Ibn Shahin's filled the
+        quota and Ta'bir al-Ru'ya and the Shia volume were never sent at all,
+        despite being indexed. Two of five lenses were silently dead.
+        """
+        by_source: dict[str, list[dict]] = {}
+        for p in passages:
+            by_source.setdefault(p["source"], []).append(p)
+
+        picked, depth = [], 0
+        while len(picked) < cap and any(len(v) > depth for v in by_source.values()):
+            for group in by_source.values():
+                if len(picked) >= cap:
+                    break
+                if len(group) > depth:
+                    picked.append(group[depth])
+            depth += 1
+        return picked
+
     def _with_passages(self, entry: dict, source: str | None = None) -> dict:
         """Attach supporting passages, keeping the lenses balanced.
 
-        Without a per-kind cap the classical books (about 11,000 passages
-        between them) would crowd out the psychological source entirely and that
-        lens would silently vanish from every answer.
+        Two separate balances. Classical and psychological are capped
+        independently, or the ~11,000 classical passages would crowd the
+        psychological source out of every answer. And within the classical
+        share, sources are taken round-robin so every book gets a voice.
 
-        When one source is selected the cap is irrelevant — the reader asked for
-        that book, so they get up to six passages from it and nothing else. The
-        headword entry is only included when it belongs to the chosen source,
-        otherwise picking "Ibn Sirin" would still show al-Nabulsi's definition.
+        When one source is selected neither applies — the reader asked for that
+        book, so they get more of it and nothing else. The headword definition is
+        included only when it belongs to the chosen source; otherwise picking
+        "Ibn Sirin" would still show al-Nabulsi's definition of the symbol.
         """
         pool = self.passages.get(entry["key"]) or []
 
@@ -126,8 +151,10 @@ class Corpus:
             return {**entry, "passages": picked,
                     "own_text_applies": entry["source"] == source}
 
-        classical = [p for p in pool if p.get("kind") != "psychological"][:CLASSICAL_PER_SYMBOL]
-        psych = [p for p in pool if p.get("kind") == "psychological"][:PSYCH_PER_SYMBOL]
+        classical = self._round_robin(
+            [p for p in pool if p.get("kind") != "psychological"], CLASSICAL_PER_SYMBOL)
+        psych = self._round_robin(
+            [p for p in pool if p.get("kind") == "psychological"], PSYCH_PER_SYMBOL)
         return {**entry, "passages": classical + psych, "own_text_applies": True}
 
     # -- etiquette ----------------------------------------------------------
