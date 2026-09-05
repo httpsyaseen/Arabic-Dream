@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تأويل — نموذج المفهوم / Ta'weel — Concept Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&family=Lora:wght@400;600;700&family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#122B2A;
+    --bg-page:#FBF7EE;
+    --bg-parchment:#F5EEDA;
+    --ink:#1C2B26;
+    --ink-soft:#4A554E;
+    --gold:#A9782E;
+    --gold-deep:#8A611F;
+    --teal:#2F6F63;
+    --teal-deep:#1E4B42;
+    --caution:#95583F;
+    --line:#DED2AC;
+    --line-soft:#E7DEC2;
+    --white:#FFFDF7;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;}
+  body{background:var(--bg-page);color:var(--ink);font-family:'Tajawal',sans-serif;line-height:1.9;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4,.serif{font-family:'Amiri',serif;}
+  #root-en, #root-en h1,#root-en h2,#root-en h3,#root-en h4,#root-en .serif{font-family:'Inter',sans-serif;}
+  #root-en h1,#root-en h2,#root-en h3,#root-en h4{font-family:'Lora',serif;}
+  .app{max-width:760px;margin:0 auto;padding:0 20px 80px;}
+  ::selection{background:var(--gold);color:var(--white);}
+  .lang-root{display:none;}
+  #root-ar{display:block;}
+  #root-en{direction:ltr;}
+
+  .topbar{background:var(--bg-deep);color:var(--white);padding:16px 0;}
+  .topbar-inner{max-width:760px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .brand{font-family:'Amiri',serif;font-weight:700;font-size:1.5rem;color:var(--white);display:flex;align-items:center;gap:10px;}
+  .nav-links{display:flex;gap:16px;font-size:.9rem;align-items:center;flex-wrap:wrap;}
+  .nav-links a{color:#CFE0DA;text-decoration:none;cursor:pointer;padding:6px 2px;border-bottom:2px solid transparent;transition:border-color .2s;}
+  .nav-links a.active,.nav-links a:hover{border-color:var(--gold);color:var(--white);}
+  .lang-switch{display:flex;gap:6px;}
+  .lang-switch button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#CFE0DA;padding:5px 12px;border-radius:20px;font-size:.78rem;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;}
+  .lang-switch button.active{background:var(--gold);color:white;border-color:var(--gold);}
+
+  .hero{background:var(--bg-deep);background-image:radial-gradient(circle at 15% 20%, rgba(169,120,46,.12), transparent 45%),radial-gradient(circle at 85% 80%, rgba(47,111,99,.25), transparent 50%);color:var(--white);padding:36px 0 46px;text-align:center;}
+  .hero-inner{max-width:760px;margin:0 auto;padding:0 20px;}
+  .hero h1{font-size:1.9rem;margin:0 0 10px;font-weight:700;line-height:1.5;}
+  .hero p.sub{color:#CFE0DA;font-size:1rem;margin:0 0 18px;}
+  .trust-line{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;font-size:.85rem;color:#EADFC0;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(255,255,255,.15);padding:10px 18px;}
+  .trust-line b{color:var(--gold);font-weight:700;}
+
+  .panel{background:var(--white);border:1px solid var(--line-soft);border-radius:6px;margin-top:-26px;padding:22px;box-shadow:0 12px 30px -18px rgba(18,43,42,.35);}
+  textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:5px;padding:14px;font-family:inherit;font-size:1.02rem;color:var(--ink);background:#FEFCF6;resize:vertical;}
+  textarea:focus{outline:none;border-color:var(--teal);}
+
+  .fields-toggle{margin-top:14px;font-size:.9rem;color:var(--teal-deep);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-weight:700;user-select:none;}
+  .fields-toggle svg{transition:transform .2s;}
+  .fields-toggle.open svg{transform:rotate(180deg);}
+  .fields{display:none;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);}
+  .fields.show{display:grid;}
+  .field label{display:block;font-size:.82rem;color:var(--ink-soft);margin-bottom:5px;}
+  .field select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:5px;background:#FEFCF6;font-family:inherit;font-size:.92rem;color:var(--ink);}
+  .field.dynamic{grid-column:1 / -1;background:#FBF3E1;border:1px solid #E7D6A6;border-radius:6px;padding:12px 14px;}
+  .field.dynamic .flag{font-size:.78rem;color:var(--gold-deep);font-weight:700;margin-bottom:6px;display:flex;gap:6px;align-items:center;}
+
+  .cta-row{display:flex;justify-content:flex-end;margin-top:20px;}
+  #root-en .cta-row{justify-content:flex-end;}
+  .btn{font-family:inherit;font-weight:700;font-size:1rem;padding:13px 28px;border-radius:5px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .15s, box-shadow .15s;}
+  .btn-primary{background:var(--teal-deep);color:var(--white);}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(30,75,66,.6);}
+  .btn-gold{background:var(--gold);color:var(--white);}
+  .btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(169,120,46,.6);}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
+
+  .mode-row{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);}
+  .mode-title{font-size:.85rem;color:var(--ink-soft);margin-bottom:8px;font-weight:700;}
+  .mode-option{display:block;font-size:.9rem;margin-bottom:8px;cursor:pointer;color:var(--ink);}
+  .mode-option select{margin-inline-start:6px;padding:5px 8px;border-radius:4px;border:1px solid var(--line);font-family:inherit;font-size:.85rem;background:#FEFCF6;}
+  .mode-option select:disabled{opacity:.45;}
+  .compare-table-wrap.show{display:block !important;}
+  .compare-toggle.open svg{transform:rotate(180deg);}
+  .mode-banner{display:none;background:#F3E9DD;border:1px solid #E7D6A6;border-radius:6px;padding:10px 16px;margin-top:14px;font-size:.85rem;text-align:center;color:var(--gold-deep);}
+  .mode-banner.show{display:block;}
+  .examples{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;}
+  .example-chip{font-size:.8rem;background:var(--bg-parchment);border:1px solid var(--line-soft);padding:6px 12px;border-radius:20px;color:var(--ink-soft);}
+
+  .loading{display:none;text-align:center;padding:60px 0;color:var(--ink-soft);}
+  .loading.show{display:block;}
+  .spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--line-soft);border-top-color:var(--gold);margin:0 auto 16px;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .view-result,.view-premium,.view-dictionary,.view-history,.view-interpreters,.view-scholar-ibnsirin,.view-scholar-nabulsi,.view-scholar-ibnshaheen,.view-scholar-psychology,.view-scholar-imamsadiq,.view-scholar-ibnkathir,.view-scholar-alidrisi,.view-teeth-hub,.view-symbol-teeth-general,.view-symbol-teeth-single,.view-symbol-teeth-molar,.view-symbol-teeth-single-woman,.view-symbol-teeth-married-woman,.view-faq,.view-hijri,.view-symbol-snake,.view-symbol-gold,.view-symbol-death,.view-symbol-sea,.view-symbol-fishing,.view-symbol-milk,.view-symbol-blood,.view-common-dreams,.view-common-dream-chased,.view-methodology{display:none;}
+  .view-input{display:block;}
+
+  .verdict-card{background:linear-gradient(135deg,var(--teal-deep),var(--bg-deep));color:var(--white);border-radius:6px;padding:26px 24px;margin-top:22px;text-align:center;}
+  .verdict-card .tag{display:inline-block;font-size:.78rem;background:rgba(255,255,255,.12);padding:5px 14px;border-radius:20px;margin-bottom:12px;color:#DCEAE4;}
+  .verdict-card h2{margin:0 0 10px;font-size:1.55rem;}
+  .verdict-card p{margin:0;color:#D9E7E1;font-size:.95rem;max-width:520px;margin:0 auto;}
+  .verdict-mini-trust{margin-top:14px;font-size:.78rem;color:#B9CFC7;}
+
+  .section-label{display:flex;align-items:center;gap:10px;margin:34px 0 14px;}
+  .section-label .line{flex:1;height:1px;background:var(--line);}
+  .section-label h3{margin:0;font-size:1.1rem;color:var(--ink);white-space:nowrap;}
+
+  .symbol-card{background:var(--white);border:1px solid var(--line-soft);border-radius:6px;padding:20px;margin-bottom:18px;display:grid;grid-template-columns:64px 1fr;gap:16px;}
+  .symbol-icon{width:64px;height:64px;border-radius:50%;background:var(--bg-parchment);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .symbol-icon svg{width:30px;height:30px;stroke:var(--gold-deep);}
+  .symbol-name{font-size:1.15rem;font-weight:700;margin:0 0 8px;font-family:inherit;color:var(--teal-deep);}
+
+  .from-books{background:var(--bg-parchment);border-inline-start:3px solid var(--gold);border-radius:4px;padding:12px 14px;margin:10px 0;font-size:.95rem;}
+  .cite{display:block;margin-top:8px;font-size:.78rem;color:var(--gold-deep);}
+  .source-link{color:var(--gold-deep);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;}
+  .origin-badge{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-inline-start:6px;vertical-align:middle;}
+  .origin-yours{background:#E3EFE8;color:#1E5E45;}
+  .origin-competitor{background:#F3E4D6;color:#8A5A2E;}
+  .origin-new{background:#E4ECF5;color:#2A4E82;}
+  .personal-note{font-size:.9rem;color:var(--ink-soft);background:#F3F6F3;border-radius:4px;padding:10px 12px;margin:10px 0;}
+  .personal-note b{color:var(--teal-deep);}
+  .psych-read{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .psych-label{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--teal);background:#EAF3F0;padding:3px 10px;border-radius:20px;margin-bottom:8px;font-weight:700;}
+  .method-note{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .method-note b{color:var(--ink);}
+
+  .synth-card{background:var(--white);border:1px solid var(--line-soft);border-radius:6px;padding:20px;}
+  .synth-card h4{margin:0 0 8px;font-size:1rem;font-family:inherit;color:var(--teal-deep);}
+
+  .spectrum-wrap{margin-top:16px;}
+  .spectrum-bar{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--caution) 0 12%, var(--gold) 12% 45%, var(--teal) 45% 100%);position:relative;margin:10px 0 8px;}
+  #root-en .spectrum-bar{background:linear-gradient(90deg,var(--teal) 0 55%, var(--gold) 55% 88%, var(--caution) 88% 100%);}
+  .spectrum-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink-soft);}
+  .humility{margin-top:14px;font-size:.85rem;color:var(--ink-soft);background:#F7F3E7;border-radius:4px;padding:10px 12px;}
+
+  .adab-list{background:var(--white);border:1px solid var(--line-soft);border-radius:6px;padding:20px;}
+  .adab-list ul{margin:0;padding-inline-start:20px;font-size:.95rem;}
+  .adab-list li{margin-bottom:8px;}
+  .dua-box{margin-top:14px;background:var(--bg-parchment);border-radius:4px;padding:14px;text-align:center;font-family:inherit;font-size:1.05rem;color:var(--teal-deep);}
+
+  .hadith-card{background:var(--white);border:1px solid var(--line-soft);border-radius:6px;padding:18px 20px;margin-bottom:12px;font-size:.92rem;}
+  .hadith-grade{display:inline-block;font-size:.75rem;background:#EAF3F0;color:var(--teal-deep);padding:2px 10px;border-radius:20px;margin-top:8px;font-weight:700;}
+
+  .accordion{border:1px solid var(--line-soft);border-radius:6px;overflow:hidden;}
+  .acc-item{border-bottom:1px solid var(--line-soft);}
+  .acc-item:last-child{border-bottom:none;}
+  .acc-head{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:var(--white);font-weight:700;font-size:.95rem;}
+  .acc-head svg{transition:transform .2s;}
+  .acc-head.open svg{transform:rotate(180deg);}
+  .acc-body{display:none;padding:0 18px 16px;font-size:.88rem;color:var(--ink-soft);background:var(--white);}
+  .acc-body.show{display:block;}
+
+  .share-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+  .lock-card{margin-top:34px;background:var(--bg-deep);color:var(--white);border-radius:6px;padding:26px;text-align:center;position:relative;overflow:hidden;}
+  .lock-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%, rgba(169,120,46,.18), transparent 55%);}
+  .lock-card *{position:relative;}
+  .lock-icon{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .lock-card h4{margin:0 0 8px;font-size:1.15rem;}
+  .lock-card p{color:#D9E7E1;font-size:.9rem;max-width:440px;margin:0 auto 18px;}
+
+  .price-hero{background:var(--bg-deep);color:var(--white);text-align:center;padding:40px 0 34px;}
+  .price-toggle{display:inline-flex;background:rgba(255,255,255,.1);border-radius:30px;padding:4px;margin-top:16px;}
+  .price-toggle button{border:none;background:transparent;color:#CFE0DA;padding:8px 20px;border-radius:26px;font-family:inherit;font-weight:700;cursor:pointer;font-size:.88rem;}
+  .price-toggle button.active{background:var(--gold);color:var(--white);}
+  .save-badge{font-size:.7rem;background:var(--teal);color:white;padding:1px 8px;border-radius:10px;margin-inline-end:6px;}
+
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:-20px;}
+  @media(max-width:560px){.plans{grid-template-columns:1fr;}}
+  .plan-card{background:var(--white);border:1px solid var(--line-soft);border-radius:8px;padding:24px 20px;}
+  .plan-card.highlight{border:2px solid var(--gold);position:relative;}
+  .plan-card.highlight::before{content:attr(data-badge);position:absolute;top:-12px;inset-inline-end:20px;background:var(--gold);color:white;font-size:.72rem;padding:3px 12px;border-radius:20px;font-weight:700;}
+  .plan-name{font-family:inherit;font-size:1.25rem;margin:0 0 4px;color:var(--teal-deep);}
+  .plan-price{font-size:1.9rem;font-weight:800;margin:6px 0 2px;}
+  .plan-price span{font-size:.9rem;font-weight:400;color:var(--ink-soft);}
+  .plan-note{font-size:.8rem;color:var(--ink-soft);margin-bottom:16px;}
+  .plan-features{list-style:none;padding:0;margin:0 0 18px;font-size:.9rem;}
+  .plan-features li{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;}
+  .plan-features li svg{flex-shrink:0;margin-top:3px;}
+  .plan-features li.dim{color:var(--ink-soft);}
+  .plan-cta{width:100%;padding:12px;border-radius:5px;border:none;font-weight:700;cursor:pointer;font-family:inherit;}
+  .plan-cta.primary{background:var(--teal-deep);color:white;}
+  .plan-cta.ghost{background:var(--bg-parchment);color:var(--ink);}
+
+  .compare-table{width:100%;border-collapse:collapse;margin-top:34px;font-size:.9rem;}
+  .compare-table th,.compare-table td{padding:12px 10px;border-bottom:1px solid var(--line-soft);text-align:center;}
+  .compare-table th:first-child,.compare-table td:first-child{text-align:start;font-weight:500;}
+  .compare-table th{color:var(--teal-deep);font-family:inherit;font-size:1rem;}
+  .compare-table td svg{stroke:var(--teal);}
+  .compare-table td .no{color:#C9B79A;font-size:1.1rem;}
+
+  .faq-note{margin-top:30px;font-size:.85rem;color:var(--ink-soft);text-align:center;}
+
+  .dict-hero{background:var(--bg-deep);color:var(--white);padding:34px 0 26px;text-align:center;}
+  .dict-search{max-width:420px;margin:16px auto 0;position:relative;}
+  .dict-search input{width:100%;padding:12px 16px;border-radius:24px;border:none;font-family:inherit;font-size:.95rem;}
+  .letter-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:640px;margin:16px auto 0;}
+  .letter-nav a{
+    width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);color:#CFE0DA;
+    display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;
+    text-decoration:none;transition:background .15s;
+  }
+  .letter-nav a:hover{background:var(--gold);color:white;}
+  .letter-group{margin-top:30px;}
+  .letter-badge{
+    width:38px;height:38px;border-radius:8px;background:var(--teal-deep);color:white;
+    display:flex;align-items:center;justify-content:center;font-family:inherit;font-size:1.15rem;font-weight:700;
+    flex-shrink:0;
+  }
+  .letter-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .letter-row .line{flex:1;height:1px;background:var(--line);}
+  .dict-entry{
+    background:var(--white);border:1px solid var(--line-soft);border-radius:6px;
+    padding:16px 18px;margin-bottom:10px;cursor:pointer;
+  }
+  .dict-entry-head{display:flex;justify-content:space-between;align-items:center;}
+  .dict-entry-name{font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--teal-deep);margin:0;}
+  .dict-entry-teaser{font-size:.85rem;color:var(--ink-soft);margin-top:4px;}
+  .dict-entry-head svg{transition:transform .2s;flex-shrink:0;}
+  .dict-entry.open .dict-entry-head svg{transform:rotate(180deg);}
+  .dict-entry-body{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
+  .dict-entry.open .dict-entry-body{display:block;}
+  .dict-cta{
+    margin-top:12px;display:inline-flex;align-items:center;gap:6px;font-size:.85rem;
+    color:var(--teal-deep);font-weight:700;text-decoration:none;
+  }
+  .dict-note{
+    background:#F7F3E7;border-radius:6px;padding:12px 16px;font-size:.82rem;color:var(--ink-soft);
+    margin-top:26px;
+  }
+  .dict-row{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px dashed var(--line-soft);font-size:.9rem;}
+  .dict-row:last-child{border-bottom:none;}
+  .dict-row.full{cursor:pointer;color:var(--teal-deep);font-weight:700;}
+  .dict-row.full:hover{color:var(--gold-deep);}
+  .dict-row .vol{font-size:.72rem;color:var(--gold-deep);background:var(--bg-parchment);padding:2px 10px;border-radius:10px;white-space:nowrap;margin-inline-start:10px;}
+  .dict-summary{background:var(--bg-parchment);border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:.85rem;color:var(--ink-soft);}
+
+  .hist-hero{background:var(--bg-deep);color:var(--white);padding:34px 0 26px;text-align:center;}
+  .hist-filters{
+    display:flex;gap:10px;max-width:560px;margin:18px auto 0;flex-wrap:wrap;justify-content:center;
+  }
+  .hist-filters select, .hist-filters input{
+    padding:10px 14px;border-radius:24px;border:none;font-family:inherit;font-size:.88rem;
+  }
+  .hist-filters select{flex:0 0 auto;}
+  .hist-filters input{flex:1;min-width:180px;}
+  .hist-entry{
+    background:var(--white);border:1px solid var(--line-soft);border-radius:6px;
+    padding:16px 18px;margin-bottom:12px;
+  }
+  .hist-entry-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  .hist-date{font-size:.78rem;color:var(--ink-soft);}
+  .hist-interpreter-tag{
+    font-size:.72rem;background:var(--bg-parchment);color:var(--gold-deep);padding:2px 10px;
+    border-radius:20px;font-weight:700;
+  }
+  .hist-snippet{font-size:.9rem;color:var(--ink);margin:10px 0;line-height:1.7;}
+  .hist-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  .pattern-badge{
+    font-size:.72rem;background:#E4ECF5;color:#2A4E82;padding:3px 10px;border-radius:20px;font-weight:700;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+  .hist-view-btn{
+    font-size:.85rem;color:var(--teal-deep);font-weight:700;background:none;border:1px solid var(--line);
+    padding:7px 16px;border-radius:5px;cursor:pointer;font-family:inherit;
+  }
+  .hist-sync-banner{
+    background:var(--bg-deep);color:var(--white);border-radius:6px;padding:18px 22px;
+    display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px;
+  }
+  .hist-sync-banner p{margin:0;font-size:.88rem;color:#D9E7E1;}
+  .hist-local-note{font-size:.78rem;color:var(--ink-soft);text-align:center;margin-top:20px;}
+
+  .breadcrumb{font-size:.82rem;color:var(--ink-soft);margin-bottom:18px;}
+  .breadcrumb a{color:var(--teal-deep);text-decoration:none;cursor:pointer;font-weight:700;}
+  .breadcrumb a:hover{text-decoration:underline;}
+
+  .hub-hero{background:var(--bg-deep);color:var(--white);padding:34px 0 26px;text-align:center;}
+  .hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+  @media(max-width:560px){.hub-grid{grid-template-columns:1fr;}}
+  .hub-card{
+    background:var(--white);border:1px solid var(--line-soft);border-radius:6px;padding:18px;cursor:pointer;
+    transition:border-color .15s;
+  }
+  .hub-card:hover{border-color:var(--gold);}
+  .hub-card h4{margin:0 0 6px;font-family:inherit;font-size:1.05rem;color:var(--teal-deep);}
+  .hub-card p{margin:0;font-size:.85rem;color:var(--ink-soft);}
+  .hub-card .arrow{font-size:.8rem;color:var(--gold-deep);font-weight:700;margin-top:10px;display:inline-block;}
+
+  .related-box{background:var(--bg-parchment);border-radius:6px;padding:16px 18px;margin-top:20px;}
+  .related-box h5{margin:0 0 10px;font-size:.9rem;color:var(--ink);}
+  .related-links{display:flex;flex-wrap:wrap;gap:8px;}
+  .related-links a{
+    font-size:.82rem;background:var(--white);border:1px solid var(--line-soft);padding:5px 12px;
+    border-radius:20px;color:var(--teal-deep);text-decoration:none;font-weight:700;cursor:pointer;
+  }
+  .related-links a:hover{border-color:var(--gold);}
+
+  .seo-chip{
+    background:#F1EBDD;border:1px dashed var(--gold);border-radius:6px;padding:10px 14px;
+    font-size:.76rem;color:var(--ink-soft);margin-bottom:16px;font-family:monospace;line-height:1.8;
+  }
+  .seo-chip b{color:var(--gold-deep);}
+  .sibling-scholars{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .sibling-scholars a{
+    background:var(--white);border:1px solid var(--line-soft);padding:7px 16px;border-radius:20px;
+    font-size:.85rem;color:var(--teal-deep);font-weight:700;text-decoration:none;cursor:pointer;
+  }
+  .sibling-scholars a:hover{border-color:var(--gold);}
+
+  .big-cta{
+    margin-top:26px;background:var(--bg-deep);color:var(--white);border-radius:6px;padding:22px;text-align:center;
+  }
+  .big-cta p{color:#D9E7E1;font-size:.88rem;margin:6px 0 16px;}
+
+  .site-footer{background:var(--bg-deep);color:#CFE0DA;padding:40px 0 20px;margin-top:40px;}
+  .footer-grid{max-width:760px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  @media(max-width:560px){.footer-grid{grid-template-columns:1fr 1fr;}}
+  .footer-col h5{color:var(--white);font-size:.85rem;margin:0 0 12px;font-family:inherit;}
+  .footer-col a{display:block;color:#B9CFC7;font-size:.82rem;text-decoration:none;margin-bottom:8px;cursor:pointer;}
+  .footer-col a:hover{color:var(--gold);}
+  .footer-bottom{max-width:760px;margin:24px auto 0;padding:16px 20px 0;border-top:1px solid rgba(255,255,255,.12);font-size:.78rem;color:#8FA79E;text-align:center;}
+  footer{text-align:center;padding:40px 0 10px;font-size:.8rem;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A9782E" stroke-width="1.6"><path d="M12 3c-4 3-6 6-6 10a6 6 0 0 0 12 0c0-4-2-7-6-10Z"/></svg>
+      <span class="i18n" data-ar="تأويل" data-en="Ta'weel">تأويل</span>
+    </div>
+    <div class="nav-links">
+      <a onclick="showView('input')" id="nav-input" class="active i18n" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+      <a onclick="showView('result')" id="nav-result" class="i18n" data-ar="آخر تفسير" data-en="Last Reading">آخر تفسير</a>
+      <a onclick="showView('dictionary')" id="nav-dictionary" class="i18n" data-ar="القاموس" data-en="Dictionary">القاموس</a>
+      <a onclick="showView('teeth-hub')" id="nav-teeth-hub" class="i18n" data-ar="سقوط الأسنان" data-en="Teeth">سقوط الأسنان</a>
+      <a onclick="showView('interpreters')" id="nav-interpreters" class="i18n" data-ar="المفسّرون" data-en="Interpreters">المفسّرون</a>
+      <a onclick="showView('faq')" id="nav-faq" class="i18n" data-ar="الأسئلة الشائعة" data-en="FAQ">الأسئلة الشائعة</a>
+      <a onclick="showView('history')" id="nav-history" class="i18n" data-ar="سجل أحلامي" data-en="My Dreams">سجل أحلامي</a>
+      <a onclick="showView('premium')" id="nav-premium" class="i18n" data-ar="بريميوم" data-en="Premium">بريميوم</a>
+      <div class="lang-switch">
+        <button id="langArBtn" class="active" onclick="setLang('ar')">AR</button>
+        <button id="langEnBtn" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ARABIC ROOT -->
+<!-- ============================================================ -->
+<div id="root-ar" class="lang-root" dir="rtl" lang="ar">
+
+<div class="view view-input">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير</h1>
+      <p class="sub">تفسير مبني على نصوص أصلية، لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.</p>
+      <div class="trust-line">
+        <span><b>2,317</b> رمزًا</span>·<span><b>11,548</b> نصًا</span>·<span><b>44</b> حديثًا في آداب الرؤيا</span>·<span>من <b>5</b> كتب</span>
+      </div>
+    </div>
+  </div>
+  <div class="app">
+    <div class="seo-chip">معاينة SEO — الصفحة الرئيسية: <b>&lt;title&gt;</b> تفسير الاحلام — فسّر حلمك فورًا من 5 كتب أهل التعبير <b>&lt;h1&gt;</b> تفسير الاحلام</div>
+    <div class="panel">
+      <textarea>رأيتُ في المنام أنني أمشي في طريقٍ لا أعرفه، فرأيتُ بيتًا واسعًا وبابه مفتوح، فدخلتُ إليه ووجدتُ فيه رجلًا أعرفه جالسًا وبجانبه ثوبٌ أبيض جديد، ثم أعطاني إياه وقال لي: «هذا لك». ثم خرجتُ من البيت وأنا أشعر بالطمأنينة، فرأيتُ في الطريق ماءً صافياً يجري أمامي، فعبرتُه بسهولة واستيقظتُ.</textarea>
+      <div class="fields-toggle" onclick="toggleFields(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        حالك (اختياري) — يُغيّر التأويل، فالكتب تُفرّق بين الرجل والمرأة والمتزوج والأعزب
+      </div>
+      <div class="fields">
+        <div class="field"><label>الجنس</label><select><option>ذكر</option><option>أنثى</option></select></div>
+        <div class="field"><label>الحالة الاجتماعية</label><select><option>أعزب</option><option>متزوج</option><option>مطلق</option><option>أرمل</option></select></div>
+        <div class="field"><label>الفئة العمرية</label><select><option>18-25</option><option>26-35</option><option>36-50</option><option>أكثر من 50</option></select></div>
+        <div class="field"><label>حالتك النفسية قبل النوم</label><select><option>مرتاح/هادئ</option><option>قلق/متوتر</option><option>حزين/مكتئب</option></select></div>
+        <div class="field"><label>ألم أو خوف في الرؤيا؟</label><select><option>لا</option><option>نعم</option></select></div>
+        <div class="field"><label>هل تكررت الرؤيا من قبل؟</label><select><option>لا</option><option>نعم</option></select></div>
+        <div class="field"><label>وقت الرؤيا (إن تذكرته)</label><select><option>لا أعلم</option><option>قبل الفجر</option><option>بعد صلاة أو عبادة</option></select></div>
+        <div class="field"><label>هل تفاصيل الرؤيا واضحة في ذهنك؟</label><select><option>واضحة تمامًا</option><option>غامضة جزئيًا</option><option>مشوّشة جدًا</option></select></div>
+        <div class="field"><label>شعورك عند الاستيقاظ من هذه الرؤيا</label><select><option>مطمئن ومرتاح</option><option>خائف أو قلق</option><option>لا أتذكر جيدًا</option></select></div>
+        <div class="field"><label>حالك العامة قبل النوم</label><select><option>على طاعة وقراءة قرآن</option><option>أكلت شيئًا ثقيلًا</option><option>متوتر/تحت ضغط</option><option>حالة عادية</option></select></div>
+        <div class="field dynamic">
+          <div class="flag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8A611F" stroke-width="2"><path d="M12 2l1.8 5.6H20l-4.6 3.4 1.8 5.6L12 13.2 6.8 16.6l1.8-5.6L4 8h6.2z"/></svg> سؤال مهم كثيرًا ما يُهمل في أدوات التفسير الأخرى</div>
+          <label>هل كانت هذه الرؤيا بعد صلاة استخارة؟</label>
+          <select><option>لا</option><option>نعم</option></select>
+        </div>
+      </div>
+
+      <div class="fields show" style="border-top:1px dashed var(--line);margin-top:16px;padding-top:16px;">
+        <div style="grid-column:1/-1;font-size:.9rem;color:var(--teal-deep);font-weight:700;margin-bottom:2px;">تفاصيل عن عناصر رؤياك (اختياري) — إن ورد في رؤياك شخص تعرفه أو مكان معيّن</div>
+        <div class="field">
+          <label>علاقتك بالشخص (إن ورد)</label>
+          <select class="person-select">
+            <option value="unsure">—</option>
+            <option value="friend">معرفة عادية / صديق</option>
+            <option value="father">أبي أو أحد كبار العائلة</option>
+            <option value="relative">قريب (أخ، عم، خال...)</option>
+            <option value="deceased">شخص متوفى أعرفه</option>
+            <option value="teacher">شخصية دينية أو معلّم أثق به</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>المكان (إن ورد) هل كان مألوفًا؟</label>
+          <select>
+            <option value="">—</option>
+            <option>نعم، مألوف لي</option>
+            <option>لا، غير مألوف إطلاقًا</option>
+          </select>
+        </div>
+      </div>
+      <div class="mode-row">
+        <div class="mode-title">طريقة التفسير</div>
+        <label class="mode-option"><input type="radio" name="mode-ar" class="mode-radio" value="blend" checked onchange="toggleScholarSelect(this)"> المزيج الأمثل من المصادر لكل رمز (الافتراضي والموصى به)</label>
+        <label class="mode-option"><input type="radio" name="mode-ar" class="mode-radio" value="single" onchange="toggleScholarSelect(this)"> منهج مفسّر واحد فقط —
+          <select class="scholar-select" disabled>
+            <option value="ibnsirin">ابن سيرين</option>
+            <option value="nabulsi">النابلسي</option>
+            <option value="ibnshaheen">ابن شاهين</option>
+            <option value="psychology">علم النفس الحديث</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="examples">
+        <span class="example-chip">رأيت أفعى تطاردني</span>
+        <span class="example-chip">رأيت أسناني تتساقط</span>
+        <span class="example-chip">رأيت أبي المتوفى يبتسم لي</span>
+      </div>
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="interpret(this)">أوّل رؤياي
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="loading"><div class="spinner"></div>نتحقق من كل رمز ورد في رؤياك مقابل النصوص الأصلية...</div>
+  </div>
+</div>
+
+<div class="view view-result">
+  <div class="app" style="padding-top:26px;">
+    <div class="verdict-card">
+      <span class="tag">رؤيا صادقة على الأرجح · بُنيت على 4 نصوص أصلية</span>
+      <h2>رؤيا طيّبة تبشّر بانتقالك إلى حالٍ أفضل، بإذن الله</h2>
+      <p>ثلاثة من أقوى رموز الخير اجتمعت في رؤياك: السعة، الستر، والنجاة. التفصيل الكامل ومصادره في الأسفل.</p>
+      <div class="verdict-mini-trust">مبني على تعطير الأنام للنابلسي، ومنتخب الكلام المنسوب لابن سيرين، وقراءة نفسية مضافة</div>
+    </div>
+    <div class="mode-banner"></div>
+
+    <div class="section-label"><h3>الرموز ودلالاتها</h3><div class="line"></div></div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M9 4L5 20M15 4l4 16"/><path d="M12 5v3M12 11v3M12 17v2" stroke-dasharray="2 3"/></svg></div>
+      <div>
+        <h4 class="symbol-name">الطريق الذي لا تعرفه</h4>
+        <div class="from-books">دلالة على منهج في الحياة لم يتّضح بعد، والسير في طريق غير معروف قد يشير إلى بحث عن وجهة أو مرحلة جديدة. الطريق المستقيم يدل على الاهتداء والاستقامة.<span class="cite">من: تعطير الأنام في تعبير المنام — عبد الغني النابلسي (ص 233) · <a href="#" class="source-link" title="ضع هنا رابطًا حقيقيًا لصورة صفحة الكتاب أو صفحة تحقق من النص">المصدر</a></span></div>
+        <div class="personal-note"><b>بحسب حالك:</b> لكونك في الفئة العمرية 18-25 وأعزب، فقد يدل الطريق غير المألوف على بداية مرحلة انتقالية أو عملية في حياتك الشخصية، لا على ضلال أو حيرة.</div>
+        <div class="psych-read"><span class="psych-label">قراءة نفسية مضافة</span><div style="font-size:.9rem;">السير بثبات دون توقف في طريق مجهول يعكس استعدادًا داخليًا لمواجهة غموض قادم دون قلق ظاهر — وهذا يتّسق مع حالتك النفسية الهادئة قبل النوم.</div></div>
+        <div class="method-note"><b>مسلك التأويل:</b> أُخذ من دلالة الطريق في الشرع على المنهج، وربطه هنا بمرحلة عمرية انتقالية اجتهاد إضافي وليس نصًا مباشرًا.</div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 11l8-7 8 7M6 10v10h12V10"/></svg></div>
+      <div>
+        <h4 class="symbol-name">البيت الواسع وبابه المفتوح</h4>
+        <div class="from-books">البيت الواسع دلالة على السعة في الدنيا، وقد يشير إلى الزواج أو الرزق الواسع. والباب المفتوح دلالة على أبواب الرزق والخير المشرعة أمام الرائي.<span class="cite">من: تعطير الأنام في تعبير المنام — عبد الغني النابلسي (ص 33) · <a href="#" class="source-link" title="ضع هنا رابطًا حقيقيًا لصورة صفحة الكتاب أو صفحة تحقق من النص">المصدر</a></span></div>
+        <div class="personal-note"><b>بحسب حالك:</b> لكونك أعزب في هذه الفئة العمرية، فالبيت الواسع قد يبشّر بقرب زواج أو استقرار سكن أو فرصة عمل جديدة.</div>
+        <div class="psych-read"><span class="psych-label">قراءة نفسية مضافة</span><div style="font-size:.9rem;">الدخول الطوعي إلى مكان مجهول دون تردد، ووجود شخص مألوف بداخله، يعكس ثقة داخلية بأن ما هو قادم — وإن كان جديدًا — لن يكون معاديًا.</div></div>
+        <div class="method-note"><b>مسلك التأويل:</b> اشتقاق اللفظ من «البيت» ومعناه: لأنه يُؤوى إليه، ويُعبَّر به عن السكن والاستقرار والزوجة.</div>
+      </div>
+    </div>
+
+    <div class="symbol-card person-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.5-4 4-5.5 7-5.5S18.5 16 20 20"/></svg></div>
+      <div>
+        <h4 class="symbol-name">الرجل الذي تعرفه</h4>
+        <div class="from-books">يختلف تأويل الشخص المعروف في الرؤيا باختلاف صلته بالرائي؛ فالصديق يدل غالبًا على نُصح أو عون اجتماعي، وقد يكون الرمز حاملًا لخير من جهته أو من جهة يمثّلها.<span class="cite">من: تفسير الأحلام (منتخب الكلام) — منسوب إلى ابن سيرين (ص 9) · <a href="#" class="source-link" title="ضع هنا رابطًا حقيقيًا لصورة صفحة الكتاب أو صفحة تحقق من النص">المصدر</a></span></div>
+        <div class="personal-note person-note"><b>بحسب ما أدخلته:</b> بما أنك حدّدت أنه «معرفة عادية / صديق» لا قريب أو أحد الوالدين، فالقراءة الأقرب هنا هي مجيء الخير من خلال علاقة اجتماعية أو معرفة، لا من داخل الأسرة — وهذا فارق مهم غيّر التأويل عن قراءة عامة لم تُحدَّد فيها هذه الصلة.</div>
+        <div class="method-note person-method"><b>مسلك التأويل:</b> اعتبار حال الرائي وصلته بالمرئي من أهم قواعد التفسير عند ابن سيرين، وقد تغيّر المعنى كليًا لو كانت الصلة مختلفة.</div>
+        <div class="deceased-callout" style="display:none;margin-top:10px;background:#F3E9DD;border:1px solid #E7D6A6;border-radius:4px;padding:10px 12px;font-size:.85rem;">
+          <b>قاعدة خاصة بالمتوفّين في الرؤيا:</b> إذا أعطاك متوفٍّ تعرفه شيئًا حسنًا في المنام وقبلته، فهذا يُعدّ عند كثير من أهل التعبير من علامات الخير الكبرى، ويُستحب أن تدعو له وتتصدق عنه.
+        </div>
+        <div class="compare-toggle" onclick="this.nextElementSibling.classList.toggle('show'); this.classList.toggle('open');" style="margin-top:12px;font-size:.82rem;color:var(--teal-deep);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          قارن: كيف يتغيّر هذا الرمز حسب كل علاقة ممكنة
+        </div>
+        <div class="compare-table-wrap" style="display:none;margin-top:8px;">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;width:38%;">إن كان: صديق / معرفة عادية</td><td style="padding:8px;border:1px solid var(--line-soft);">خير عبر علاقة اجتماعية — لا من داخل الأسرة</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">إن كان: الأب أو كبير العائلة</td><td style="padding:8px;border:1px solid var(--line-soft);">إرث ديني أو خُلقي، أو بركة تنتقل من الأصل</td></tr>
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">إن كان: قريب (أخ، عم...)</td><td style="padding:8px;border:1px solid var(--line-soft);">خير يصل عبر صلة الرحم والنسب، قد يكون عونًا ماديًا</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">إن كان: شخص متوفى تعرفه</td><td style="padding:8px;border:1px solid var(--line-soft);">علامة خير كبرى — يُستحب الدعاء والصدقة عنه</td></tr>
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">إن كان: شخصية دينية / معلّم</td><td style="padding:8px;border:1px solid var(--line-soft);">علمٌ أو هداية أقرب من نفع دنيوي بحت</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">إن كنت غير متأكد من العلاقة</td><td style="padding:8px;border:1px solid var(--line-soft);">قراءة عامة محايدة، دون ترجيح احتمال على آخر</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M8 4l4 2 4-2 2 4-3 2v10H9V10L6 8z"/></svg></div>
+      <div>
+        <h4 class="symbol-name">الثوب الأبيض الجديد</h4>
+        <div class="from-books">الثوب الأبيض الجديد دلالة على صلاح الحال والنقاء والرزق، وقد يشير إلى الزواج. وقيل: من لُبِس ثوبًا أبيض جديدًا دل على خير في دينه ودنياه، وقيل هو زواج للأعزب أو حسن حال.<span class="cite">من: تعطير الأنام في تعبير المنام — عبد الغني النابلسي (ص 58) · <a href="#" class="source-link" title="ضع هنا رابطًا حقيقيًا لصورة صفحة الكتاب أو صفحة تحقق من النص">المصدر</a></span></div>
+        <div class="personal-note"><b>بحسب حالك:</b> الثوب الأبيض الجديد للأعزب غالبًا ما يُفسَّر بالزواج أو بياض الحال والسمعة الحسنة.</div>
+        <div class="psych-read"><span class="psych-label">قراءة نفسية مضافة</span><div style="font-size:.9rem;">تلقّي الثوب كهدية من شخص تثق به، لا شراؤه بنفسك، قد يعكس شعورًا بأن الخير القادم لن يكون بجهدك المباشر وحده، بل عبر عون من حولك.</div></div>
+        <div class="method-note"><b>مسلك التأويل:</b> العرف والعادة فيما جرى به العرف من أن الثوب الأبيض الجديد يرمز للصفاء والبهجة والزيادة في الدين والدنيا.</div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/></svg></div>
+      <div>
+        <h4 class="symbol-name">الماء الصافي الجاري</h4>
+        <div class="from-books">الماء الصافي في المنام حياة طيبة، ومن رآه جاريًا وعبره بسهولة دلّ على سعة الرزق والنجاة من الهموم وتيسير الأمور العسيرة.<span class="cite">من: تعطير الأنام في تعبير المنام — عبد الغني النابلسي (ص 319) · <a href="#" class="source-link" title="ضع هنا رابطًا حقيقيًا لصورة صفحة الكتاب أو صفحة تحقق من النص">المصدر</a></span></div>
+        <div class="personal-note"><b>بحسب حالك:</b> عبورك للماء بسهولة ودون خوف، وأنت في مرحلة عمرية انتقالية، يدل على تيسير أمر كنت تظنه صعبًا.</div>
+        <div class="method-note"><b>مسلك التأويل:</b> أصل قرآني — استنادًا إلى الآية الكريمة: «وهو الذي خلق من الماء بشرًا فجعله نسبًا وصهرًا» ودلالة الماء على الحياة والنماء.</div>
+      </div>
+    </div>
+
+    <div class="section-label"><h3>الرؤيا على مسالك أهل التعبير</h3><div class="line"></div></div>
+    <div class="synth-card"><h4>مسلك النابلسي وابن سيرين</h4><p style="margin:0;font-size:.95rem;">تدل الرؤيا مجتمعةً على دخول مرحلة مباركة من عمر الرائي؛ فالبيت الواسع يشير إلى سعة الدنيا أو الزواج، والثوب الأبيض الجديد إلى صفاء الحال ونقائه، والماء الصافي إلى فرج وتيسير. وكلها رموز تتّسق لدلالات الخير والرزق.</p></div>
+
+    <div class="section-label"><h3>الخلاصة</h3><div class="line"></div></div>
+    <div class="synth-card">
+      <p style="margin:0;font-size:.95rem;">رؤيا طيبة ومبشرة للغاية؛ تدل على انتقال الرائي إلى مرحلة جديدة في حياته تتسم بالاستقرار والطمأنينة. فالبيت الواسع والباب المفتوح يشيران إلى فتح أبواب الرزق، والثوب الأبيض الجديد يرمز إلى صلاح الحال أو الزواج، والماء الصافي الجاري وعبوره بسهولة يدل على تيسير الأمور وزوال الصعاب.</p>
+      <div class="spectrum-wrap"><div class="spectrum-bar"></div><div class="spectrum-labels"><span>حذر بسيط</span><span>تفاؤل ورجاء غالب</span></div></div>
+      <div class="humility">التعبير هنا ظنّي واجتهادي، وقد تختلف دلالات الرؤيا باختلاف حال الرائي ويقظته، وليست جزءًا مقطوعًا به.</div>
+    </div>
+
+    <div class="section-label"><h3>آداب الرؤيا</h3><div class="line"></div></div>
+    <div class="adab-list">
+      <ul>
+        <li>حمد الله والثناء عليه على هذه الرؤيا الطيبة.</li>
+        <li>التحدث بها لمن تحب ممن هو ناصح أو عالم.</li>
+        <li>الاستبشار بحسن ظن بالله تعالى، وعدم تعليق القلب بالرؤيا وحدها.</li>
+      </ul>
+      <div class="dua-box">"اللهم إني أسألك خير هذه الرؤيا وخير ما فيها، وأعوذ بك من شرها وشر ما فيها"</div>
+      <div class="share-row"><button class="btn btn-ghost" onclick="alert('سيتم فتح نافذة المشاركة')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a3 3 0 1 0-2.8-4M6 12a3 3 0 1 0 0 4M18 20a3 3 0 1 0-2.8-4M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>مشاركة الدعاء</button></div>
+    </div>
+
+    <div class="section-label"><h3>من أحاديث الرؤيا وآدابها</h3><div class="line"></div></div>
+    <div class="hadith-card">عن أبي هريرة رضي الله عنه، عن النبي ﷺ قال: «الرؤيا ثلاث: فرؤيا حق يحدث بها الرجل نفسه، ورؤيا تحزين من الشيطان، ورؤيا مما يرى الرجل في يقظته فيراها في منامه؛ فمن رأى ما يكره فليقم فليصلّ ولا يحدث بها الناس».<div class="hadith-grade">رواه الترمذي — حديث حسن صحيح</div></div>
+
+    <div class="section-label"><h3>النصوص الأصلية من الكتب</h3><div class="line"></div></div>
+    <div class="accordion">
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">طريق<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">«(طريق) هو في المنام الشرع، فمن رأى أنه يمشي في غير طريق فإنه في ضلالة من دينه... والطريق المستقيم دليل على ما يقتدي به من كتاب الله وسنة نبيه أو شيخ أو قدوة.» — تعطير الأنام، ص 233</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">بيت<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">«(بيت) في المنام على وجوه، هو زوجة الرجل التي يأوي إليها، ومنه يقال دخل فلان بيته إذا تزوج.» — تعطير الأنام، ص 33</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">ثوب<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">«...والثياب البيض خير لمن لبسها في المنام.» — تعطير الأنام، ص 58</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">ماء<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">«(ماء) هو في المنام حياة طيبة، فمن رآه في داره فهو سعادة ومال مجموع وغنيمة وزيادة خير، وهو تزويج.» — تعطير الأنام، ص 319</div></div>
+    </div>
+
+    <div class="lock-card">
+      <div class="lock-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+      <h4>هذا التفسير لا ينتهي هنا</h4>
+      <p>اسأل عن تفاصيل رمز معيّن بعمق أكبر، واحفظ هذه الرؤيا في سجلّك لتكتشف مع الوقت الرموز والرسائل المتكررة في أحلامك.</p>
+      <button class="btn btn-gold" onclick="showView('premium')">عرض باقات بريميوم</button>
+    </div>
+  </div>
+</div>
+
+<div class="view view-premium">
+  <div class="price-hero">
+    <h2 style="margin:0 0 8px;font-size:1.7rem;">التفسير الكامل مجاني دائمًا</h2>
+    <p style="color:#CFE0DA;margin:0 auto;max-width:480px;">بريميوم لا يقفل عليك مفسّرًا أو مصدرًا، بل يفتح لك حوارًا أعمق حول رؤياك، وذاكرة تتبع أحلامك عبر الزمن.</p>
+    <div class="price-toggle">
+      <button class="active" onclick="setBilling('monthly',this)">شهري</button>
+      <button onclick="setBilling('yearly',this)">سنوي <span class="save-badge">وفّر شهرين</span></button>
+    </div>
+  </div>
+  <div class="app" style="padding-top:26px;">
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">مجاني</div>
+        <div class="plan-price">0 <span>ر.س</span></div>
+        <div class="plan-note">تفسير كامل ومصادر، بلا حد يومي مصطنع</div>
+        <ul class="plan-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> تفسير كامل بجميع الرموز ومصادرها</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> القراءة النفسية المضافة</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> تصنيف الرؤيا (صادقة / حديث نفس)</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> آداب الرؤيا والأحاديث</li>
+          <li class="dim">— بلا حوار متابعة</li>
+          <li class="dim">— بلا حفظ سحابي أو تتبّع أنماط</li>
+        </ul>
+        <button class="plan-cta ghost">هذا ما تستخدمه الآن</button>
+      </div>
+      <div class="plan-card highlight" data-badge="الأكثر اختيارًا">
+        <div class="plan-name">تأويل⁺</div>
+        <div class="plan-price price-display">15 <span>ر.س / شهريًا</span></div>
+        <div class="plan-note price-note">يعادل 180 ر.س سنويًا عند الدفع الشهري</div>
+        <ul class="plan-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> حوار متابعة مع المفسّر حول تفاصيل رؤياك</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> سجلّ أحلام سحابي متزامن على كل أجهزتك</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> تتبّع الأنماط والرموز المتكررة عبر الزمن</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> تنبيه عند اقتران رمز رأيته سابقًا برؤيا جديدة</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> إحالة رؤيا معقّدة إلى مفسّر بشري موثّق (حد شهري)</li>
+        </ul>
+        <button class="plan-cta primary">ابدأ تأويل⁺</button>
+      </div>
+    </div>
+    <table class="compare-table">
+      <tr><th>الميزة</th><th>مجاني</th><th>تأويل⁺</th></tr>
+      <tr><td>تفسير مصدره موثّق لكل رمز</td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>عدد التفسيرات اليومية</td><td>غير محدود</td><td>غير محدود</td></tr>
+      <tr><td>حوار متابعة حول الرؤيا</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>سجلّ سحابي وتتبّع أنماط</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>إحالة إلى مفسّر بشري موثّق</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+    </table>
+    <p class="faq-note">الدفع عبر فيزا وماستركارد وPayPal. يمكن الإلغاء في أي وقت.</p>
+  </div>
+</div>
+
+<div class="view view-dictionary">
+  <div class="dict-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">قاموس تفسير الأحلام من الألف إلى الياء</h1>
+    <p style="color:#CFE0DA;margin:0;max-width:480px;margin:0 auto;">رأيت رمزًا واحدًا ولا تريد كتابة حلمك كاملاً؟ ابحث عنه مباشرة هنا.</p>
+    <div class="dict-search"><input placeholder="ابحث عن رمز، مثال: ذهب، ثعبان، بحر..."></div>
+  </div>
+
+  <div class="app" style="padding-top:24px;">
+    <div class="dict-summary">
+      <b style="color:var(--teal-deep);">38 رمزًا حقيقيًا</b> مستخرجة من بيانات البحث الفعلية (174 كلمة مفتاحية · 82,350 بحثًا شهريًا مجتمعة) — الرموز المميزة بسهم ← لها صفحة كاملة الآن؛ الباقي معروض بحجم بحثه الحقيقي تمهيدًا لبنائه لاحقًا.
+    </div>
+
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">أ</div><div class="line"></div></div>
+      <div class="dict-row"><span>الألماس</span><span class="vol">260 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ب</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-sea')"><span>البحر ←</span><span class="vol">5,570 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>البكاء</span><span class="vol">1,130 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>البيض</span><span class="vol">620 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>بيت جديد</span><span class="vol">350 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ث</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-snake')"><span>الثعبان ←</span><span class="vol">5,600 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ج</div><div class="line"></div></div>
+      <div class="dict-row"><span>الجن</span><span class="vol">240 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">خ</div><div class="line"></div></div>
+      <div class="dict-row"><span>الخبز</span><span class="vol">320 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>خيانة الزوج/الزوجة</span><span class="vol">200 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">د</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-blood')"><span>الدم ←</span><span class="vol">2,920 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ذ</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-gold')"><span>الذهب ←</span><span class="vol">25,480 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الذبح</span><span class="vol">310 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ز</div><div class="line"></div></div>
+      <div class="dict-row"><span>الزواج والعرس</span><span class="vol">1,330 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الزلزال</span><span class="vol">310 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">س</div><div class="line"></div></div>
+      <div class="dict-row"><span>السيارة</span><span class="vol">3,120 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>السجن</span><span class="vol">770 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ش</div><div class="line"></div></div>
+      <div class="dict-row"><span>الشعر (قص، صبغ، تساقط)</span><span class="vol">4,110 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>شرب الخمر</span><span class="vol">390 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ص</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-fishing')"><span>صيد السمك ←</span><span class="vol">3,800 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الصراصير</span><span class="vol">330 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ط</div><div class="line"></div></div>
+      <div class="dict-row"><span>الطفل</span><span class="vol">2,150 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الطيور</span><span class="vol">390 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الطائرة</span><span class="vol">350 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الطلاق</span><span class="vol">350 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ع</div><div class="line"></div></div>
+      <div class="dict-row"><span>العقرب</span><span class="vol">320 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>العنكبوت</span><span class="vol">210 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ف</div><div class="line"></div></div>
+      <div class="dict-row"><span>الفأر</span><span class="vol">2,420 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>الفلوس والنقود</span><span class="vol">990 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ق</div><div class="line"></div></div>
+      <div class="dict-row"><span>القطة</span><span class="vol">810 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>القمل</span><span class="vol">600 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ك</div><div class="line"></div></div>
+      <div class="dict-row"><span>الكلاب</span><span class="vol">990 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ل</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-milk')"><span>اللبن ←</span><span class="vol">3,000 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">م</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-death')"><span>الموت والميت ←</span><span class="vol">9,870 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>المسجد</span><span class="vol">1,100 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>المطر</span><span class="vol">620 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>ملابس جديدة</span><span class="vol">220 بحث/شهريًا</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">ن</div><div class="line"></div></div>
+      <div class="dict-row"><span>النار</span><span class="vol">500 بحث/شهريًا</span></div>
+      <div class="dict-row"><span>النمل</span><span class="vol">300 بحث/شهريًا</span></div>
+    </div>
+
+    <div class="dict-note">
+      <b>ملاحظة صراحةً:</b> الرموز السبعة الكاملة أدناه (الذهب، الموت، الثعبان، البحر، صيد السمك، اللبن، الدم) نصوص توضيحية لغرض العرض، ولم تُسند بعد إلى صفحة وكتاب حقيقيين من قاعدتك — يجب استبدالها بنصوص مسندة فعليًا من قاعدة الـ11,548 نصًا قبل الإطلاق. الأحجام المعروضة (البحث الشهري) حقيقية من بياناتك.
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: GOLD -->
+<div class="view view-symbol-gold">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← الذهب</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم الذهب</h4>
+        <div class="from-books">يختلف تأويل الذهب في المنام اختلافًا واضحًا بين الرجل والمرأة؛ فلبس الذهب للرجل غالبًا ما يُقرأ بتحذير أو هَمّ يلحقه، بينما يُقرأ للمرأة بزينة أو زواج أو رزق واسع. كثرته المفرطة قد تدل على حرص دنيوي زائد، وقِطعة واحدة كالخاتم أو السوار تُقرأ باستقرار أو ارتباط.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('symbol-sea')">البحر</a>
+      <a onclick="showView('symbol-blood')">الدم</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: DEATH -->
+<div class="view view-symbol-death">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← الموت والميت</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم الموت ورؤية الميت</h4>
+        <div class="from-books">رؤية الموت من أكثر الرموز التي يُساء فهمها؛ فأهل التعبير غالبًا ما يقرؤونها كإشارة إلى تغيّر حال، أو توبة، أو انتهاء مرحلة، لا موتًا حرفيًا. أما رؤية شخص متوفٍّ فلها حكم خاص: إن أعطاك المتوفى شيئًا حسنًا وقبلته، فذلك من علامات الخير الكبرى عند كثير من أهل التعبير.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('symbol-blood')">الدم</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن — خاصة إن ذكر رؤياك شخصًا متوفى تعرفه، فهذا يغيّر التأويل جوهريًا.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: SEA -->
+<div class="view view-symbol-sea">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← البحر</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم البحر</h4>
+        <div class="from-books">البحر في المنام يدل على أمر واسع من أمور الدنيا، وقد يُقرأ بسلطان أو رجل عظيم الشأن. البحر الهادئ الصافي يدل على استقرار وسعة رزق، أما البحر الهائج المضطرب فيدل على قلق أو أمر جلل يواجهه الرائي.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('symbol-fishing')">صيد السمك</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: FISHING -->
+<div class="view view-symbol-fishing">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← صيد السمك</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم صيد السمك</h4>
+        <div class="from-books">صيد السمك في المنام يدل على السعي وراء الرزق، والسمك نفسه يُقرأ عادة برزقٍ حلال. كثرة الصيد تدل على سعة الرزق، وشباك فارغة أو صيد بلا نتيجة تدل على جهد بلا ثمرة في وقته.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('symbol-sea')">البحر</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: MILK -->
+<div class="view view-symbol-milk">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← اللبن</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم اللبن</h4>
+        <div class="from-books">اللبن في المنام يدل على الرزق الطيب الحلال والفطرة السليمة. شربه يدل على خير يناله الرائي بيسر، وسكبه أو إراقته تدل على تفويت رزق أو فرصة كانت في متناول اليد.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('dictionary')">القاموس الكامل</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: BLOOD -->
+<div class="view view-symbol-blood">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← الدم</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم الدم</h4>
+        <div class="from-books">الدم اليسير المحتوى في المنام كثيرًا ما يُقرأ إشارة إلى مال حلال أو مكسب مشروع، بينما الدم الغزير أو المخيف قد يُقرأ على خسارة أو أمرٍ غير مشروع بحسب سياق الرؤيا.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>رموز ذات صلة</h5><div class="related-links">
+      <a onclick="showView('symbol-death')">الموت والميت</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<div class="view view-history">
+  <div class="hist-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">سجل أحلامك</h1>
+    <p style="color:#CFE0DA;margin:0;">كل حلم فسّرته محفوظ هنا، بتاريخه وتفسيره الكامل</p>
+    <div class="hist-filters">
+      <select>
+        <option>كل المفسّرين</option>
+        <option>ابن سيرين</option>
+        <option>النابلسي</option>
+        <option>ابن شاهين</option>
+        <option>علم النفس الحديث</option>
+      </select>
+      <input placeholder="ابحث في أحلامك السابقة...">
+    </div>
+  </div>
+
+  <div class="app" style="padding-top:24px;">
+
+    <div class="hist-sync-banner">
+      <div>
+        <div style="font-weight:700;margin-bottom:4px;">أحلامك محفوظة على هذا الجهاز فقط</div>
+        <p>فعّل بريميوم لمزامنة سجلّك على كل أجهزتك، ولتلقّي تنبيهات عند تكرار رمز رأيته من قبل.</p>
+      </div>
+      <button class="btn btn-gold" onclick="showView('premium')" style="white-space:nowrap;">مزامنة سحابية</button>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">اليوم، 2 سبتمبر 2026</span>
+        <span class="hist-interpreter-tag">ابن سيرين</span>
+      </div>
+      <div class="hist-snippet">«رأيتُ في المنام أنني أمشي في طريقٍ لا أعرفه، فرأيتُ بيتًا واسعًا وبابه مفتوح...»</div>
+      <div class="hist-bottom">
+        <span class="pattern-badge">🔁 رمز متكرر: الماء (بريميوم)</span>
+        <button class="hist-view-btn" onclick="showView('result')">عرض التفسير الكامل</button>
+      </div>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">قبل 6 أيام، 27 أغسطس 2026</span>
+        <span class="hist-interpreter-tag">النابلسي</span>
+      </div>
+      <div class="hist-snippet">«رأيتُ ماءً غزيرًا يدخل بيتنا فجأة، وكنت أحاول منعه من الوصول إلى الغرف...»</div>
+      <div class="hist-bottom">
+        <span class="pattern-badge">🔁 رمز متكرر: الماء (بريميوم)</span>
+        <button class="hist-view-btn">عرض التفسير الكامل</button>
+      </div>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">قبل 12 يومًا، 21 أغسطس 2026</span>
+        <span class="hist-interpreter-tag">ابن سيرين</span>
+      </div>
+      <div class="hist-snippet">«رأيتُ أنني أفقد إحدى أسناني الأمامية دون ألم، وكنت أحملها في يدي...»</div>
+      <div class="hist-bottom">
+        <span></span>
+        <button class="hist-view-btn">عرض التفسير الكامل</button>
+      </div>
+    </div>
+
+    <p class="hist-local-note">تُحذف الأحلام المحفوظة محليًا عند مسح بيانات المتصفح — المزامنة السحابية (بريميوم) تحفظها بأمان بشكل دائم.</p>
+  </div>
+</div>
+
+<!-- INTERPRETERS HUB -->
+<div class="view view-interpreters">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">المفسّرون</h1>
+    <p style="color:#CFE0DA;margin:0;">لكل مفسّر منهجه الخاص. جرّب رؤيتك من عيون كل واحد منهم، مجانًا وبلا قيود.</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('scholar-ibnsirin')">
+        <h4>ابن سيرين</h4>
+        <p>منهج أصيل يعتمد على القرآن والسنة، مثالي للرؤى الواضحة والمباشرة.</p>
+        <span class="arrow">اقرأ منهجه وجرّبه ←</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-nabulsi')">
+        <h4>النابلسي</h4>
+        <p>تحليل موسوعي وعميق، يغوص في تفاصيل الرموز ودلالاتها المعقدة.</p>
+        <span class="arrow">اقرأ منهجه وجرّبه ←</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-psychology')">
+        <h4>علم النفس الحديث</h4>
+        <p>تفسير يركز على حالتك النفسية ومشاعرك، ويربط الحلم بواقعك اليومي.</p>
+        <span class="arrow">اقرأ منهجه وجرّبه ←</span>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:34px;"><h3 style="font-size:1rem;">مرجعيات أخرى</h3><div class="line"></div></div>
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('scholar-imamsadiq')">
+        <h4>الإمام الصادق</h4>
+        <p>مرجعية مستقلة تحترم التراث الشيعي في تفسير الرؤى، منفصلة عن مسالك ابن سيرين والنابلسي.</p>
+        <span class="arrow">اقرأ منهجه وجرّبه ←</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-ibnkathir')">
+        <h4>ابن كثير</h4>
+        <p>صفحة توضيحية أمينة — نتحقق أولاً هل هذا الاسم مرتبط فعلاً بتفسير الأحلام قبل تقديمه كمنهج مستقل.</p>
+        <span class="arrow">اقرأ التوضيح ←</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-alidrisi')">
+        <h4>عبدالرحمن الإدريسي</h4>
+        <p>اسم متكرر البحث لكن هويته غير مؤكدة بعد — صفحة معلّقة عمدًا حتى يُتحقق منه.</p>
+        <span class="arrow">اقرأ التوضيح ←</span>
+      </div>
+    </div>
+
+    <div class="related-box" style="margin-top:26px;">
+      <h5>لماذا هذا العدد من المفسّرين؟</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">كل منهج يضيء زاوية مختلفة من رؤياك. جرّب أيًّا منهم مجانًا بلا حدود، أو <a onclick="showView('premium')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">قارن بينها معًا في قراءة واحدة (بريميوم)</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IMAM SADIQ -->
+<div class="view view-scholar-imamsadiq">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام للإمام الصادق — مرجعية مستقلة للشيعة <b>&lt;h1&gt;</b> تفسير الأحلام للإمام الصادق</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← الإمام الصادق</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">فسّر حلمك على مرجعية الإمام الصادق</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">مرجعية مستقلة بذاتها في تفسير الرؤى، تحظى بثقة راسخة لدى جمهور واسع، ولا تُدرَج ضمن مسالك ابن سيرين أو النابلسي لاختلاف الإطار المرجعي بينهما.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="showView('input')">جرّب حلمك على هذه المرجعية الآن</button>
+    </div>
+    <div class="related-box">
+      <h5>مرجعية قريبة</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">تُدرَج قراءات <b>الإمام علي</b> ضمن هذه الصفحة أيضًا لصغر حجم البحث المستقل عنها وقربها المرجعي.</p>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">أو فسّر حلمك بالطريقة الافتراضية</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: AL-IDRISI (unverified identity, honest holding page) -->
+<div class="view view-scholar-alidrisi">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام عبدالرحمن الادريسي — من هو؟ <b>&lt;h1&gt;</b> تفسير الأحلام لعبدالرحمن الإدريسي</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← عبدالرحمن الإدريسي</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">من هو عبدالرحمن الإدريسي؟</h2>
+    <div class="caveat-box" style="background:#FBEAF0;border-inline-start:3px solid #D4537E;padding:14px 16px;border-radius:4px;font-size:.9rem;color:#72243E;margin:14px 0;">
+      <b>بأمانة:</b> هذا الاسم يحمل حجم بحث حقيقي (700 بحث شهريًا)، لكن لم يُتحقق بعد من هويته — قد يكون شخصية معاصرة (كصانع محتوى أو شيخ محلي) لا مرجعًا تراثيًا موثقًا في تفسير الرؤى. لن نبني له "منهجًا" مزعومًا قبل التحقق من ذلك فعليًا.
+    </div>
+    <p style="color:var(--ink-soft);font-size:.95rem;">إلى حين التحقق، جرّب أحد المسالك الموثّقة والمسندة التالية:</p>
+    <div class="sibling-scholars">
+      <a onclick="showView('scholar-ibnsirin')">ابن سيرين</a>
+      <a onclick="showView('scholar-nabulsi')">النابلسي</a>
+      <a onclick="showView('scholar-imamsadiq')">الإمام الصادق</a>
+    </div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN KATHIR (light, honest caveat) -->
+<div class="view view-scholar-ibnkathir">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام لابن كثير — هل هو مرجع في تفسير الرؤى؟ <b>&lt;h1&gt;</b> تفسير الأحلام لابن كثير</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← ابن كثير</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">هل ابن كثير مرجع في تفسير الأحلام؟</h2>
+    <div class="caveat-box" style="background:#FBEAF0;border-inline-start:3px solid #D4537E;padding:14px 16px;border-radius:4px;font-size:.9rem;color:#72243E;margin:14px 0;">
+      <b>بأمانة:</b> ابن كثير معروف كمفسّر للقرآن الكريم، لا كصاحب منهج مستقل ومسند في تفسير الرؤى بالمعنى الذي عليه ابن سيرين أو النابلسي. هذا البحث المتكرر باسمه غالبًا ما يكون خلطًا في الاسم. نعرض هذا التوضيح بدلًا من تقديم "منهج" غير موجود فعليًا.
+    </div>
+    <p style="color:var(--ink-soft);font-size:.95rem;">إن كنت تبحث عن تفسير رؤيا فعلي، جرّب أحد المسالك الموثّقة والمسندة التالية:</p>
+    <div class="sibling-scholars">
+      <a onclick="showView('scholar-ibnsirin')">ابن سيرين</a>
+      <a onclick="showView('scholar-nabulsi')">النابلسي</a>
+      <a onclick="showView('scholar-imamsadiq')">الإمام الصادق</a>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH HUB -->
+<div class="view view-teeth-hub">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">تفسير حلم سقوط الأسنان</h1>
+    <p style="color:#CFE0DA;margin:0;">أكبر سيناريو حلم منفرد في بياناتنا — أكثر من 90 ألف بحث شهري بأشكاله المختلفة.</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('symbol-teeth-general')">
+        <h4>سقوط الأسنان بشكل عام</h4>
+        <p>المعنى العام لسقوط الأسنان أو تكسّرها في المنام</p>
+        <span class="arrow">اقرأ التفسير ←</span>
+      </div>
+      <div class="hub-card" onclick="showView('symbol-teeth-single')"><h4>سنّ واحدة فقط</h4><p>سقوط سنّ واحدة تحديدًا، بيد أو بلا ألم</p><span class="arrow">اقرأ التفسير ←</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-molar')"><h4>الضرس</h4><p>سقوط أو خلع الضرس في المنام</p><span class="arrow">اقرأ التفسير ←</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-single-woman')"><h4>سقوط الأسنان للعزباء</h4><p>5,940 بحث شهريًا — تفسير مخصص لحالة العزباء تحديدًا</p><span class="arrow">اقرأ التفسير ←</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-married-woman')"><h4>سقوط الأسنان للمتزوجة</h4><p>5,910 بحث شهريًا — تفسير مخصص لحالة المتزوجة تحديدًا</p><span class="arrow">اقرأ التفسير ←</span></div>
+    </div>
+    <div class="related-box" style="margin-top:26px;">
+      <h5>مرتبط بمفسّر محدد</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">14 كلمة بحثية تسأل تحديدًا عن سقوط الأسنان <a onclick="showView('scholar-ibnsirin')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">وفق منهج ابن سيرين</a> — تُخدَم مباشرة من صفحته.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: GENERAL -->
+<div class="view view-symbol-teeth-general">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">تفسير حلم سقوط الأسنان</a> ← سقوط الأسنان بشكل عام</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم سقوط الأسنان</h4>
+        <div class="from-books">سقوط الأسنان في المنام من أكثر الرؤى شيوعًا، وغالبًا ما يُقرأ بارتباط بأفراد الأسرة أو العمر لا بمعناه الحرفي. يختلف التأويل بحسب: هل سقطت بألم أم بلا ألم، هل صاحبها دم أم لا، وهل كانت سنًا أمامية أو خلفية. للعزباء غالبًا ما تُقرأ الرؤيا بارتباط بمرحلة قادمة في حياتها الشخصية، وللمتزوجة بارتباط بأهل بيتها.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>سيناريوهات أدق</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-single')">سنّ واحدة فقط</a>
+        <a onclick="showView('symbol-teeth-molar')">الضرس</a>
+        <a onclick="showView('scholar-ibnsirin')">وفق ابن سيرين</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك أكثر تفصيلاً من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن بكل تفاصيله.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: SINGLE TOOTH -->
+<div class="view view-symbol-teeth-single">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">تفسير حلم سقوط الأسنان</a> ← سنّ واحدة فقط</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم سقوط سنّ واحدة</h4>
+        <div class="from-books">يختلف تأويل سقوط سنّ واحدة عن سقوط الأسنان كلها؛ فالسنّ الواحدة غالبًا ما تُربط بفرد بعينه من الأسرة لا بالأسرة عمومًا. سقوطها من الفك العلوي يُقرأ غالبًا بارتباط بأحد الوالدين أو كبار العائلة، ومن الفك السفلي بارتباط بالأبناء أو الأصغر سنًا.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>سيناريوهات ذات صلة</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">سقوط الأسنان بشكل عام</a>
+        <a onclick="showView('symbol-teeth-molar')">الضرس</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك أكثر تفصيلاً من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن بكل تفاصيله.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: MOLAR -->
+<div class="view view-symbol-teeth-molar">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">تفسير حلم سقوط الأسنان</a> ← الضرس</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم سقوط الضرس</h4>
+        <div class="from-books">الضرس يُقرأ عادة بارتباط بأمر يحمل ثقلاً أو عبئًا في حياة الرائي، لأن الضرس يُستخدم في المضغ والتحمّل. خلعه بلا ألم يُقرأ غالبًا بتخلّص من عبء أو مسؤولية، بخلاف سقوطه المفاجئ المصحوب بألم.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>سيناريوهات ذات صلة</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">سقوط الأسنان بشكل عام</a>
+        <a onclick="showView('symbol-teeth-single')">سنّ واحدة فقط</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك أكثر تفصيلاً من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن بكل تفاصيله.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: SINGLE WOMAN -->
+<div class="view view-symbol-teeth-single-woman">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">تفسير حلم سقوط الأسنان</a> ← للعزباء</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم سقوط الأسنان للعزباء</h4>
+        <div class="from-books">لسقوط الأسنان قراءة خاصة عند العزباء تختلف عن القراءة العامة؛ فغالبًا ما تُقرأ الرؤيا بارتباط بمرحلة جديدة في حياتها الشخصية أو قرارٍ يخصّها هي لا أحد أفراد أسرتها. سقوطها بلا ألم أو دم يُقرأ عادة بتيسير هذه المرحلة، بخلاف سقوطها المؤلم المصحوب بدم.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>سيناريوهات ذات صلة</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">سقوط الأسنان بشكل عام</a>
+        <a onclick="showView('symbol-teeth-married-woman')">للمتزوجة</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك أكثر تفصيلاً من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن بكل تفاصيله.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: MARRIED WOMAN -->
+<div class="view view-symbol-teeth-married-woman">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">تفسير حلم سقوط الأسنان</a> ← للمتزوجة</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم سقوط الأسنان للمتزوجة</h4>
+        <div class="from-books">تُقرأ رؤيا سقوط الأسنان للمتزوجة غالبًا بارتباط بأهل بيتها (زوجها أو أبنائها) لا بها هي مباشرة، بحسب أي سنّ سقطت وموضعها. سقوطها بلا ألم يُقرأ عادة بتيسير أمر يخصّ البيت، وسقوطها بدمٍ أو ألمٍ حادّ بقلقٍ أو خسارة تتعلق بأحد أفراد الأسرة.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>سيناريوهات ذات صلة</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">سقوط الأسنان بشكل عام</a>
+        <a onclick="showView('symbol-teeth-single-woman')">للعزباء</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك أكثر تفصيلاً من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن بكل تفاصيله.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ HUB -->
+<div class="view view-faq">
+  <div class="app" style="padding-top:24px;">
+    <h2 class="serif" style="color:var(--teal-deep);">أسئلة شائعة</h2>
+
+    <div class="related-box">
+      <h5>هل تفسير الأحلام حلال أم حرام؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">سؤال متكرر بحجم بحث حقيقي. نتناوله بإيجاز هنا، مع تفصيل أوسع مبني على فتاوى أهل العلم — بما في ذلك ما ورد عن ابن باز في هذا الباب تحديدًا، لا كمنهج تفسير مستقل له.</p>
+    </div>
+    <div class="related-box">
+      <h5>هل ابن سينا مفسّر أحلام؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">ابن سينا فيلسوف وطبيب، وليس صاحب منهج معروف في تفسير الرؤى — البحث باسمه غالبًا خلط مع «ابن سيرين». نوضح ذلك هنا مباشرة.</p>
+    </div>
+    <div class="related-box">
+      <h5>هل تفسير الأحلام يتغيّر حسب التاريخ الهجري أو أيام الأسبوع؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">اعتقاد شعبي متداول له 8 كلمات بحثية حقيقية. <a onclick="showView('hijri')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">اقرأ التفصيل الكامل</a>.</p>
+    </div>
+    <div class="related-box">
+      <h5>هل تفسير الحلم يجعله يتحقق فعلاً؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">لا. التفسير قراءة اجتهادية لمعنى محتمل، ولا يملك أي قدرة على «تحقيق» شيء بذاته — وهذا ما تنبّه له أداتنا صراحة في ذيل كل تفسير («التعبير ظنّي واجتهادي»).</p>
+    </div>
+    <div class="related-box">
+      <h5>ما تفسير الأحلام المرعبة أو الغريبة أو المزعجة؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">للرؤى المخيفة أو المزعجة آداب خاصة وردت في السنة (الاستعاذة، عدم الحديث بها، تغيير جهة النوم) قبل الانتقال لتفسيرها التفصيلي — وأداتنا تراعي ذلك في قسم «آداب الرؤيا» ضمن كل نتيجة.</p>
+    </div>
+    <div class="related-box">
+      <h5>هل تفسير الرؤيا بعد صلاة الفجر تحديدًا له دلالة خاصة؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">نعم — قرب الفجر من الأوقات التي وردت فيها إشارات لصدق الرؤيا. حقل «وقت الرؤيا» في أداتنا يسأل عن هذا تحديدًا ويستخدمه في التصنيف.</p>
+    </div>
+    <div class="related-box">
+      <h5>من أشهر مفسّري الأحلام؟</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">ابن سيرين والنابلسي وابن شاهين هم الأكثر رسوخًا في التراث السنّي، والإمام الصادق مرجعية مستقلة معتمدة لدى الشيعة. <a onclick="showView('interpreters')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">تصفّح صفحاتهم جميعًا</a>.</p>
+    </div>
+
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">فسّر حلمك الآن</a></div>
+  </div>
+</div>
+
+<!-- HIJRI DATE PAGE -->
+<div class="view view-hijri">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام حسب التاريخ الهجري وأيام الأسبوع <b>&lt;h1&gt;</b> هل يتغيّر تفسير الحلم حسب اليوم أو التاريخ؟</div>
+    <div class="breadcrumb"><a onclick="showView('faq')">الأسئلة الشائعة</a> ← حسب التاريخ الهجري</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">هل يتغيّر تفسير الحلم حسب اليوم أو التاريخ الهجري؟</h2>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <div class="from-books">من الاعتقادات الشعبية المتداولة أن لبعض الليالي أو الأيام في الشهر الهجري أثرًا على مدى صدق الرؤيا أو دلالتها، وهو اعتقاد لا يستند إلى نص شرعي قاطع بقدر ما هو عرف متوارث. المعيار الأدق الذي وردت به نصوص عند أهل التعبير هو وقت الرؤيا في الليل نفسه (قرب الفجر مثلاً) لا تاريخها في الشهر.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> نص توضيحي لغرض العرض.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>المعيار الأدق: وقت الرؤيا نفسه</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">أداتنا تسأل بالفعل عن وقت رؤياك (قبل الفجر / بعد صلاة أو عبادة) — وهذا هو المعيار الذي يعتمده أهل التعبير فعليًا، لا تاريخها في التقويم.</p>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">فسّر حلمك الآن</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN SIRIN -->
+<div class="view view-scholar-ibnsirin">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام لابن سيرين — على منهجه الأصيل مباشرة <b>&lt;h1&gt;</b> تفسير الأحلام لابن سيرين</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← ابن سيرين</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">فسّر حلمك مع ابن سيرين</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">محمد بن سيرين البصري (33-110 هـ)، المؤسس الفعلي لعلم تفسير الرؤى في الإسلام. اعتمد منهجه على الاستنباط من القرآن والسنة، والتأويل بالضد أحيانًا، واعتبار حال الرائي.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('ibnsirin','ar')">جرّب حلمك مع ابن سيرين الآن</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">جرّب أيضًا مع:</span>
+      <a onclick="showView('scholar-nabulsi')">النابلسي</a>
+      <a onclick="showView('scholar-ibnshaheen')">ابن شاهين</a>
+      <a onclick="showView('scholar-psychology')">علم النفس الحديث</a>
+    </div>
+    <div class="related-box">
+      <h5>أمثلة من رموز فسّرها ابن سيرين</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-snake')">الثعبان</a>
+        <a onclick="showView('dictionary')">الماء</a>
+        <a onclick="showView('dictionary')">الثوب الأبيض</a>
+      </div>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">أو فسّر حلمك بالطريقة الافتراضية (كل المصادر معًا)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: AL-NABULSI -->
+<div class="view view-scholar-nabulsi">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام للنابلسي — تحليل موسوعي عميق <b>&lt;h1&gt;</b> تفسير الأحلام للنابلسي</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← النابلسي</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">فسّر حلمك مع النابلسي</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">عبد الغني النابلسي، صاحب «تعطير الأنام في تعبير المنام»، أحد أشمل المصنّفات في هذا الباب، يجمع بين النقل عن الأقدمين والتفصيل الموسّع لكل رمز.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('nabulsi','ar')">جرّب حلمك مع النابلسي الآن</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">جرّب أيضًا مع:</span>
+      <a onclick="showView('scholar-ibnsirin')">ابن سيرين</a>
+      <a onclick="showView('scholar-ibnshaheen')">ابن شاهين</a>
+      <a onclick="showView('scholar-psychology')">علم النفس الحديث</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">أو فسّر حلمك بالطريقة الافتراضية (كل المصادر معًا)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN SHAHEEN -->
+<div class="view view-scholar-ibnshaheen">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الاحلام لابن شاهين — منهج تحليلي منظّم <b>&lt;h1&gt;</b> تفسير الأحلام لابن شاهين</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← ابن شاهين</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">فسّر حلمك مع ابن شاهين</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">ابن شاهين الظاهري، من أهل التعبير الذين رتّبوا الرموز بحسب الأبواب والموضوعات، بما يسهّل الربط بين عدة رموز وردت في الرؤيا الواحدة.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('ibnshaheen','ar')">جرّب حلمك مع ابن شاهين الآن</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">جرّب أيضًا مع:</span>
+      <a onclick="showView('scholar-ibnsirin')">ابن سيرين</a>
+      <a onclick="showView('scholar-nabulsi')">النابلسي</a>
+      <a onclick="showView('scholar-psychology')">علم النفس الحديث</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">أو فسّر حلمك بالطريقة الافتراضية (كل المصادر معًا)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: MODERN PSYCHOLOGY -->
+<div class="view view-scholar-psychology">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">معاينة SEO: <b>&lt;title&gt;</b> تفسير الأحلام بالذكاء الاصطناعي — قراءة نفسية حديثة <b>&lt;h1&gt;</b> تفسير الأحلام بالذكاء الاصطناعي</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">المفسّرون</a> ← علم النفس الحديث</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">فسّر حلمك بعلم النفس الحديث</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">قراءة إضافية غير مسندة إلى كتاب تراثي بعينه، تنظر في الرمز من زاوية نفسية معاصرة، وتُعرض دائمًا بجانب القراءات التراثية لا بدلاً عنها.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('psychology','ar')">جرّب حلمك بهذه القراءة الآن</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">جرّب أيضًا مع:</span>
+      <a onclick="showView('scholar-ibnsirin')">ابن سيرين</a>
+      <a onclick="showView('scholar-nabulsi')">النابلسي</a>
+      <a onclick="showView('scholar-ibnshaheen')">ابن شاهين</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">أو فسّر حلمك بالطريقة الافتراضية (كل المصادر معًا)</a></div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF PAGE: SNAKE (template for every symbol) -->
+<div class="view view-symbol-snake">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">القاموس</a> ← ثعبان</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">تفسير حلم الثعبان</h4>
+        <div class="from-books">الثعبان في المنام يدل غالبًا على عدوّ مستور أو خصم لا يُظهر عداوته صراحة. يفرّق أهل التعبير بحسب لون الثعبان وحجمه: فالأصفر قد يُقرأ بالمرض، والأسود بشدة العداوة. أما قتل الثعبان في المنام فيُقرأ غالبًا على التغلب على ذلك العدو، وعضّته على أذى يلحق من جهته.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> هذا نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>رموز ذات صلة</h5>
+      <div class="related-links">
+        <a onclick="showView('dictionary')">عقرب</a>
+        <a onclick="showView('dictionary')">كلب</a>
+        <a onclick="showView('common-dream-chased')">حلم المطاردة</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل حلمك كان أعقد من ذلك؟</h4>
+      <p>فسّر حلمك الكامل الآن، أو اقرأ منهج ابن سيرين تفصيليًا في تفسير هذا الرمز.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمك الكامل</button>
+      <button class="btn btn-ghost" onclick="showView('scholar-ibnsirin')" style="margin-inline-start:8px;color:white;border-color:rgba(255,255,255,.4);">منهج ابن سيرين</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMON DREAMS HUB -->
+<div class="view view-common-dreams">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">الأحلام الأكثر تكرارًا</h1>
+    <p style="color:#CFE0DA;margin:0;">أحلام يشترك فيها كثيرون — ماذا تعني حقًا؟</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('common-dream-chased')"><h4>المطاردة</h4><p>أن تحلم بأنك مُطارد ولا تستطيع الهرب</p><span class="arrow">اقرأ المعنى ←</span></div>
+      <div class="hub-card"><h4>السقوط</h4><p>حلم السقوط من مكان مرتفع</p><span class="arrow">اقرأ المعنى ←</span></div>
+      <div class="hub-card"><h4>الطيران</h4><p>حلم الطيران أو التحليق في الهواء</p><span class="arrow">اقرأ المعنى ←</span></div>
+      <div class="hub-card"><h4>التأخر عن امتحان أو موعد</h4><p>حلم متكرر مرتبط بالقلق اليومي</p><span class="arrow">اقرأ المعنى ←</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMON DREAM LEAF: BEING CHASED -->
+<div class="view view-common-dream-chased">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('common-dreams')">الأحلام الأكثر تكرارًا</a> ← المطاردة</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">لماذا أحلم دائمًا بأنني مُطارَد؟</h4>
+        <div class="from-books">حلم المطاردة من أكثر الأحلام شيوعًا عالميًا. في التراث التفسيري، من يطاردك في الحلم غالبًا ما يكون العنصر الأهم: فإن كان حيوانًا كالثعبان أو الكلب، فالقراءة تقترب من دلالة ذلك الحيوان نفسه (عدو مستور، إلخ). أما الشعور بالعجز عن الهرب فيُربط غالبًا بضغط أو قلق يومي يشعر به الرائي في يقظته.</div>
+        <div class="method-note" style="margin-top:12px;"><b>ملاحظة صراحةً:</b> هذا نص توضيحي لغرض العرض، وليس نصًا مسندًا من كتبك بعد.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>مرتبط بـ</h5>
+      <div class="related-links"><a onclick="showView('symbol-snake')">رمز الثعبان</a></div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">هل تتذكر تفاصيل أكثر من حلمك؟</h4>
+      <p>اكتب حلمك كاملاً واحصل على تفسير خاص بتفاصيلك أنت.</p>
+      <button class="btn btn-gold" onclick="showView('input')">فسّر حلمي الكامل</button>
+    </div>
+  </div>
+</div>
+
+<!-- METHODOLOGY / TRUST PAGE -->
+<div class="view view-methodology">
+  <div class="app" style="padding-top:24px;">
+    <h2 class="serif" style="color:var(--teal-deep);">من أين تأتي تفسيراتنا؟</h2>
+    <p style="font-size:.95rem;color:var(--ink);">نعتمد على 5 كتب مرجعية، تضم 2,317 رمزًا و11,548 نصًا و44 حديثًا في آداب الرؤيا. كل تفسير تراه في الموقع يُبنى على نص حقيقي من أحد هذه الكتب، مع ذكر اسم الكتاب ورقم الصفحة.</p>
+    <div class="related-box">
+      <h5>الكتب الخمسة</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">تعطير الأنام في تعبير المنام (النابلسي) · تفسير الأحلام — منتخب الكلام (منسوب إلى ابن سيرين) · وثلاثة مصادر إضافية لابن شاهين وعلم النفس الحديث.</p>
+    </div>
+    <div class="related-box">
+      <h5>سيدنا يوسف عليه السلام — أصل تفسير الأحلام</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">يرتبط تفسير الأحلام في التراث الإسلامي بقصة سيدنا يوسف عليه السلام، الذي فسّر رؤيا الملك في مصر ورؤياه هو نفسه كما وردت في سورة يوسف — وهي الأصل القرآني الذي يستند إليه هذا العلم بأكمله، لا مجرد حكاية تاريخية.</p>
+    </div>
+    <div class="related-box">
+      <h5>هل تفسير الأحلام علمٌ له أصول، أم موهبة؟</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">تفسير الرؤى عند أهل التعبير علمٌ له قواعد مدوّنة (اعتبار حال الرائي، ربط الرمز بسياقه، النظر في وقت الرؤيا ووضوحها)، لا تخمينًا حرًّا — وهذا ما تحاول أداتنا تطبيقه بدل التخمين.</p>
+    </div>
+    <div class="related-box">
+      <h5>الفرق بين الحلم والرؤيا</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">الرؤيا الصالحة تأتي من الله وتحمل بشارة أو إنذارًا صادقًا، والحلم قد يكون من تخويف الشيطان أو من حديث النفس. أداتنا تصنّف رؤياك ضمن هذه الأنواع تلقائيًا كجزء من التفسير نفسه.</p>
+    </div>
+    <div class="related-box">
+      <h5>كيف تتعلّم تفسير الأحلام بنفسك؟</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">ابدأ بقاموس الرموز — كل رمز فيه يشرح «مسلك التأويل» الذي بُني عليه المعنى، لا المعنى وحده.</p>
+    </div>
+    <div class="related-box">
+      <h5>تصفح حسب المفسّر أو الرمز</h5>
+      <div class="related-links">
+        <a onclick="showView('interpreters')">كل المفسّرين</a>
+        <a onclick="showView('dictionary')">قاموس الرموز</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END ARABIC ROOT -->
+
+<!-- ============================================================ -->
+<!-- ENGLISH ROOT -->
+<!-- ============================================================ -->
+<div id="root-en" class="lang-root" dir="ltr" lang="en">
+
+<div class="view view-input">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Write your dream, and its symbols are searched against the classical interpretation books</h1>
+      <p class="sub">A reading built on original texts, not a guess — you see exactly what those texts say, with the source and page cited.</p>
+      <div class="trust-line">
+        <span><b>2,317</b> symbols</span>·<span><b>11,548</b> texts</span>·<span><b>44</b> hadiths on dream etiquette</span>·<span>from <b>5</b> books</span>
+      </div>
+    </div>
+  </div>
+  <div class="app">
+    <div class="seo-chip">SEO preview — homepage: <b>&lt;title&gt;</b> Dream Interpretation — Interpret Your Dream Instantly from 5 Classical Books <b>&lt;h1&gt;</b> Dream Interpretation</div>
+    <div class="panel">
+      <textarea>I dreamed I was walking down a road I didn't know. I saw a spacious house with its door open, so I went in and found a man I know sitting there, with a new white robe beside him. He gave it to me and said, "This is for you." Then I left the house feeling reassured, and I saw clear water flowing on the road ahead of me. I crossed it easily and woke up.</textarea>
+      <div class="fields-toggle" onclick="toggleFields(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        Your situation (optional) — this changes the reading, since the books distinguish men from women, married from single
+      </div>
+      <div class="fields">
+        <div class="field"><label>Gender</label><select><option>Male</option><option>Female</option></select></div>
+        <div class="field"><label>Marital status</label><select><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select></div>
+        <div class="field"><label>Age range</label><select><option>18-25</option><option>26-35</option><option>36-50</option><option>50+</option></select></div>
+        <div class="field"><label>Your state before sleep</label><select><option>Calm / relaxed</option><option>Anxious / tense</option><option>Sad / low</option></select></div>
+        <div class="field"><label>Any fear or discomfort in the dream?</label><select><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Has this dream repeated before?</label><select><option>No</option><option>Yes</option></select></div>
+        <div class="field"><label>Time of the dream (if you recall it)</label><select><option>Not sure</option><option>Before dawn</option><option>After prayer / worship</option></select></div>
+        <div class="field"><label>How clearly do you recall the dream?</label><select><option>Fully clear</option><option>Partly vague</option><option>Very jumbled</option></select></div>
+        <div class="field"><label>Feeling right on waking from THIS dream</label><select><option>Reassured &amp; at ease</option><option>Afraid or worried</option><option>Don't recall well</option></select></div>
+        <div class="field"><label>Your general state before sleep</label><select><option>Was praying / reciting Qur'an</option><option>Ate something heavy</option><option>Stressed / under pressure</option><option>Normal</option></select></div>
+        <div class="field dynamic">
+          <div class="flag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8A611F" stroke-width="2"><path d="M12 2l1.8 5.6H20l-4.6 3.4 1.8 5.6L12 13.2 6.8 16.6l1.8-5.6L4 8h6.2z"/></svg> An important question most other interpretation tools skip</div>
+          <label>Was this vision after an Istikhara prayer?</label>
+          <select><option>No</option><option>Yes</option></select>
+        </div>
+      </div>
+
+      <div class="fields show" style="border-top:1px dashed var(--line);margin-top:16px;padding-top:16px;">
+        <div style="grid-column:1/-1;font-size:.9rem;color:var(--teal-deep);font-weight:700;margin-bottom:2px;">Details about elements in your dream (optional) — if it mentioned someone you know or a specific place</div>
+        <div class="field">
+          <label>Your relationship to the person (if any)</label>
+          <select class="person-select">
+            <option value="unsure">—</option>
+            <option value="friend">Casual acquaintance / friend</option>
+            <option value="father">My father / a family elder</option>
+            <option value="relative">A relative (brother, uncle...)</option>
+            <option value="deceased">Someone I know who has passed away</option>
+            <option value="teacher">A religious figure / teacher I trust</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Was the place (if any) familiar to you?</label>
+          <select>
+            <option value="">—</option>
+            <option>Yes, familiar to me</option>
+            <option>No, completely unfamiliar</option>
+          </select>
+        </div>
+      </div>
+      <div class="mode-row">
+        <div class="mode-title">Interpretation mode</div>
+        <label class="mode-option"><input type="radio" name="mode-en" class="mode-radio" value="blend" checked onchange="toggleScholarSelect(this)"> Best-matching source per symbol (default, recommended)</label>
+        <label class="mode-option"><input type="radio" name="mode-en" class="mode-radio" value="single" onchange="toggleScholarSelect(this)"> One interpreter's method only —
+          <select class="scholar-select" disabled>
+            <option value="ibnsirin">Ibn Sirin</option>
+            <option value="nabulsi">Al-Nabulsi</option>
+            <option value="ibnshaheen">Ibn Shaheen</option>
+            <option value="psychology">Modern psychology</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="examples">
+        <span class="example-chip">I dreamed a snake was chasing me</span>
+        <span class="example-chip">I dreamed my teeth were falling out</span>
+        <span class="example-chip">I dreamed my late father smiled at me</span>
+      </div>
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="interpret(this)">Interpret my dream
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="loading"><div class="spinner"></div>Checking every symbol in your dream against the original texts...</div>
+  </div>
+</div>
+
+<div class="view view-result">
+  <div class="app" style="padding-top:26px;">
+    <div class="verdict-card">
+      <span class="tag">Likely a true vision (ru'ya) · built on 4 original texts</span>
+      <h2>A good vision — it points to you moving into a better state, God willing</h2>
+      <p>Three of the strongest symbols of good fortune came together in your dream: abundance, covering/protection, and relief. Full detail and sources below.</p>
+      <div class="verdict-mini-trust">Based on Nabulsi's "Ta'tir al-Anam," the text attributed to Ibn Sirin, plus an added psychological reading</div>
+    </div>
+    <div class="mode-banner"></div>
+
+    <div class="section-label"><h3>Symbols &amp; their meanings</h3><div class="line"></div></div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M9 4L5 20M15 4l4 16"/><path d="M12 5v3M12 11v3M12 17v2" stroke-dasharray="2 3"/></svg></div>
+      <div>
+        <h4 class="symbol-name">The unfamiliar road <span class="origin-badge origin-yours">✓ your tool</span></h4>
+        <div class="from-books">Points to a life path not yet clear; walking an unknown road can signal searching for a new direction or a new stage of life. A straight road signals guidance and being on the right path.<span class="cite">From: "Ta'tir al-Anam fi Ta'bir al-Manam" — Abd al-Ghani al-Nabulsi (p. 233) · <a href="#" class="source-link" title="Developer: link this to a real scanned page image or an internal citation-verification page">Source</a> <span class="origin-badge origin-yours">✓ your tool</span></span></div>
+        <div class="personal-note"><b>Given your situation:</b> since you're 18-25 and single, the unfamiliar road more likely points to the start of a personal or career transition, not confusion or being lost. <span class="origin-badge origin-yours">✓ your tool</span></div>
+        <div class="psych-read"><span class="psych-label">Added psychological reading</span><span class="origin-badge origin-yours">✓ your tool</span><div style="font-size:.9rem;">Walking steadily, without hesitation, on an unknown road reflects an inner readiness to face upcoming uncertainty without visible anxiety — consistent with the calm state you reported before sleep.</div></div>
+        <div class="method-note"><b>Interpretive basis:</b> drawn from the road's classical association with one's path/way of life; linking it here to a life-stage transition is an added inference, not a direct textual statement. <span class="origin-badge origin-yours">✓ your tool</span></div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 11l8-7 8 7M6 10v10h12V10"/></svg></div>
+      <div>
+        <h4 class="symbol-name">The spacious house with its open door</h4>
+        <div class="from-books">A spacious house signals abundance in worldly life, and can point to marriage or wide provision. An open door signals doors of provision and good opening up before the dreamer.<span class="cite">From: "Ta'tir al-Anam fi Ta'bir al-Manam" — Abd al-Ghani al-Nabulsi (p. 33) · <a href="#" class="source-link" title="Developer: link this to a real scanned page image or an internal citation-verification page">Source</a></span></div>
+        <div class="personal-note"><b>Given your situation:</b> as a single person in this age bracket, the spacious house may signal an approaching marriage, a stable home, or a new work opportunity.</div>
+        <div class="psych-read"><span class="psych-label">Added psychological reading</span><div style="font-size:.9rem;">Willingly entering an unfamiliar place without hesitation, and finding someone familiar inside, reflects an inner trust that what's coming — even if new — won't be hostile.</div></div>
+        <div class="method-note"><b>Interpretive basis:</b> from the word "house" itself, since one takes shelter (ya'wi) in it — used to express settledness, stability, and one's spouse.</div>
+      </div>
+    </div>
+
+    <div class="symbol-card person-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.5-4 4-5.5 7-5.5S18.5 16 20 20"/></svg></div>
+      <div>
+        <h4 class="symbol-name">The man you know <span class="origin-badge origin-competitor">◐ partly covered by royatok</span></h4>
+        <div class="from-books">The reading of a known figure in a dream depends heavily on their relationship to the dreamer; a friend usually signals advice or social support, and may carry good news on their own behalf or on behalf of who they represent.<span class="cite">From: "Tafsir al-Ahlam" (Muntakhab al-Kalam) — attributed to Ibn Sirin (p. 9) · <a href="#" class="source-link" title="Developer: link this to a real scanned page image or an internal citation-verification page">Source</a> <span class="origin-badge origin-yours">✓ your tool</span></span></div>
+        <div class="personal-note person-note"><b>Based on what you entered:</b> since you specified "casual acquaintance / friend" rather than a relative or parent, the closer reading is that good comes through a social connection or acquaintance, not from within the family — a meaningful difference from a generic reading that left this relationship unspecified. <span class="origin-badge origin-new">★ new — not in your tool or royatok</span></div>
+        <div class="method-note person-method"><b>Interpretive basis:</b> weighing the dreamer's situation and their relation to the person seen is one of Ibn Sirin's most important interpretive rules, and the meaning can change entirely if that relationship differs. <span class="origin-badge origin-yours">✓ your tool</span></div>
+        <div class="deceased-callout" style="display:none;margin-top:10px;background:#F3E9DD;border:1px solid #E7D6A6;border-radius:4px;padding:10px 12px;font-size:.85rem;">
+          <b>Special rule for the deceased in dreams:</b> if someone deceased that you know gives you something good in a dream and you accept it, many interpreters count this among the strongest signs of good — it's recommended to pray for them and give charity on their behalf.
+        </div>
+        <div class="compare-toggle" onclick="this.nextElementSibling.classList.toggle('show'); this.classList.toggle('open');" style="margin-top:12px;font-size:.82rem;color:var(--teal-deep);cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          Compare: how this symbol changes with each possible relationship
+        </div>
+        <div class="compare-table-wrap" style="display:none;margin-top:8px;">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;width:38%;">If: friend / casual acquaintance</td><td style="padding:8px;border:1px solid var(--line-soft);">Good through a social relationship — not from within the family</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">If: father or a family elder</td><td style="padding:8px;border:1px solid var(--line-soft);">A religious or character-based inheritance, or a blessing passed down</td></tr>
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">If: a relative (brother, uncle...)</td><td style="padding:8px;border:1px solid var(--line-soft);">Good arriving through kinship, possibly material support</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">If: someone deceased you know</td><td style="padding:8px;border:1px solid var(--line-soft);">A very strong sign of good — praying and giving charity for them is recommended</td></tr>
+            <tr style="background:var(--bg-parchment);"><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">If: a religious figure / teacher</td><td style="padding:8px;border:1px solid var(--line-soft);">Knowledge or guidance, more than plain worldly benefit</td></tr>
+            <tr><td style="padding:8px;border:1px solid var(--line-soft);font-weight:700;">If unsure of the relationship</td><td style="padding:8px;border:1px solid var(--line-soft);">A neutral general reading, without favoring one possibility</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M8 4l4 2 4-2 2 4-3 2v10H9V10L6 8z"/></svg></div>
+      <div>
+        <h4 class="symbol-name">The new white robe</h4>
+        <div class="from-books">A new white garment signals good standing, purity, and provision, and may point to marriage. It's said that wearing a new white garment signals good in one's religious and worldly life — for the single person, it's often read as marriage or an improved standing.<span class="cite">From: "Ta'tir al-Anam fi Ta'bir al-Manam" — Abd al-Ghani al-Nabulsi (p. 58) · <a href="#" class="source-link" title="Developer: link this to a real scanned page image or an internal citation-verification page">Source</a></span></div>
+        <div class="personal-note"><b>Given your situation:</b> a new white garment for a single person is commonly read as marriage, or a clean reputation and improved standing.</div>
+        <div class="psych-read"><span class="psych-label">Added psychological reading</span><div style="font-size:.9rem;">Receiving the garment as a gift from someone you trust, rather than obtaining it yourself, may reflect a sense that the coming good won't be through your effort alone, but through support from those around you.</div></div>
+        <div class="method-note"><b>Interpretive basis:</b> established convention that a new white garment symbolizes clarity, joy, and increase in one's religious and worldly affairs.</div>
+      </div>
+    </div>
+
+    <div class="symbol-card">
+      <div class="symbol-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z"/></svg></div>
+      <div>
+        <h4 class="symbol-name">The clear, flowing water</h4>
+        <div class="from-books">Clear water in a dream signals a good life; seeing it flowing and crossing it with ease signals wide provision, relief from worries, and difficult matters being made easy.<span class="cite">From: "Ta'tir al-Anam fi Ta'bir al-Manam" — Abd al-Ghani al-Nabulsi (p. 319) · <a href="#" class="source-link" title="Developer: link this to a real scanned page image or an internal citation-verification page">Source</a></span></div>
+        <div class="personal-note"><b>Given your situation:</b> crossing the water easily and without fear, at a transitional stage of life, points to something you assumed would be difficult being made easy.</div>
+        <div class="method-note"><b>Interpretive basis:</b> a Qur'anic root — referencing the verse "It is He who created man from water, then made for him kinship by blood and marriage" — and water's association with life and growth.</div>
+      </div>
+    </div>
+
+    <div class="section-label"><h3>The vision, across interpretive schools</h3><div class="line"></div></div>
+    <div class="synth-card"><h4>Nabulsi's and Ibn Sirin's approach</h4><p style="margin:0;font-size:.95rem;">Taken together, the vision signals the dreamer entering a blessed new stage of life; the spacious house points to worldly abundance or marriage, the new white garment to a clear and improved state, and the clear water to relief and ease. All the symbols consistently point toward good and provision.</p></div>
+
+    <div class="section-label"><h3>Summary</h3><div class="line"></div></div>
+    <div class="synth-card">
+      <p style="margin:0;font-size:.95rem;">A good, very promising vision; it signals the dreamer moving into a new stage marked by stability and reassurance. The spacious house and open door point to doors of provision opening; the new white garment signals an improved state or marriage; the clear flowing water, crossed with ease, signals matters being made easier and hardship lifting.</p>
+      <div class="spectrum-wrap"><div class="spectrum-bar"></div><div class="spectrum-labels"><span>Some caution</span><span>Mostly hope &amp; optimism</span></div></div>
+      <div class="humility">This reading is interpretive and scholarly effort, not certainty — a vision's meaning can vary with the dreamer's situation and wakeful life, and this is not a settled, final judgment.</div>
+    </div>
+
+    <div class="section-label"><h3>Etiquette of a good vision</h3><div class="line"></div></div>
+    <div class="adab-list">
+      <ul>
+        <li>Praise and thank God for this good vision.</li>
+        <li>Share it only with someone you love who is thoughtful or knowledgeable.</li>
+        <li>Take it as good news through good thought of God, without pinning your heart on the vision alone.</li>
+      </ul>
+      <div class="dua-box">"O God, I ask You for the good of this vision and the good within it, and I seek refuge in You from its harm and the harm within it."</div>
+      <div class="share-row"><button class="btn btn-ghost" onclick="alert('Share dialog would open here')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a3 3 0 1 0-2.8-4M6 12a3 3 0 1 0 0 4M18 20a3 3 0 1 0-2.8-4M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>Share the prayer</button></div>
+    </div>
+
+    <div class="section-label"><h3>From the hadiths on dreams &amp; their etiquette</h3><div class="line"></div></div>
+    <div class="hadith-card">On the authority of Abu Hurairah, the Prophet ﷺ said: "Dreams are of three kinds: a true vision the person tells themselves, a distressing dream from Shaytan, and a dream reflecting what a person has thought about while awake. So if one of you sees something he dislikes, let him rise and pray, and not tell people about it."<div class="hadith-grade">Narrated by al-Tirmidhi — graded hasan sahih</div></div>
+
+    <div class="section-label"><h3>Original texts from the books</h3><div class="line"></div></div>
+    <div class="accordion">
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">Road (طريق)<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">"A road in a dream represents one's way of life; walking off the road signals straying from one's religious path... a straight road signals guidance found in the Book of God and the Sunnah of His Prophet, or a teacher or role model one follows." — Ta'tir al-Anam, p. 233</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">House (بيت)<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">"A house in a dream has several senses; it can be a man's wife, who he takes shelter in, hence the expression 'he entered his house' meaning he married." — Ta'tir al-Anam, p. 33</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">Garment (ثوب)<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">"...and white garments are good for whoever wears them in a dream." — Ta'tir al-Anam, p. 58</div></div>
+      <div class="acc-item"><div class="acc-head" onclick="toggleAcc(this)">Water (ماء)<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div><div class="acc-body">"Water in a dream is a good life; whoever sees it in their home, it is happiness, accumulated wealth, gain, and increase of good, and it can also signal marriage." — Ta'tir al-Anam, p. 319</div></div>
+    </div>
+
+    <div class="lock-card">
+      <div class="lock-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+      <h4>This reading doesn't have to stop here</h4>
+      <p>Ask about a specific symbol in more depth, and save this dream to your log to discover recurring symbols and messages over time.</p>
+      <button class="btn btn-gold" onclick="showView('premium')">See premium plans</button>
+    </div>
+  </div>
+</div>
+
+<div class="view view-premium">
+  <div class="price-hero">
+    <h2 style="margin:0 0 8px;font-size:1.7rem;">The full interpretation is always free</h2>
+    <p style="color:#CFE0DA;margin:0 auto;max-width:480px;">Premium doesn't lock away a scholar or a source — it opens a deeper conversation about your dream, and a memory that tracks your dreams over time.</p>
+    <div class="price-toggle">
+      <button class="active" onclick="setBilling('monthly',this)">Monthly</button>
+      <button onclick="setBilling('yearly',this)">Yearly <span class="save-badge">Save 2 months</span></button>
+    </div>
+  </div>
+  <div class="app" style="padding-top:26px;">
+    <div class="plans">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-note">Full interpretation and sources, no artificial daily cap</div>
+        <ul class="plan-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Full reading, every symbol, sourced</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Added psychological reading</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Dream classification (true vision / subconscious noise)</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Etiquette &amp; hadith section</li>
+          <li class="dim">— No follow-up conversation</li>
+          <li class="dim">— No cloud save or pattern tracking</li>
+        </ul>
+        <button class="plan-cta ghost">This is what you're using now</button>
+      </div>
+      <div class="plan-card highlight" data-badge="Most popular">
+        <div class="plan-name">Ta'weel⁺</div>
+        <div class="plan-price price-display">$4 <span>/ month</span></div>
+        <div class="plan-note price-note">Equivalent to $48/year when paid monthly</div>
+        <ul class="plan-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Follow-up conversation about your dream's details</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Cloud-synced dream log across all your devices</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Pattern &amp; recurring-symbol tracking over time</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Alert when a past symbol reappears in a new dream</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2F6F63" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> Escalate a complex dream to a verified human interpreter (monthly cap)</li>
+        </ul>
+        <button class="plan-cta primary">Start Ta'weel⁺</button>
+      </div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>Free</th><th>Ta'weel⁺</th></tr>
+      <tr><td>Sourced interpretation for every symbol</td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>Daily interpretations</td><td>Unlimited</td><td>Unlimited</td></tr>
+      <tr><td>Follow-up conversation</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>Cloud log &amp; pattern tracking</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+      <tr><td>Escalation to a verified human interpreter</td><td><span class="no">—</span></td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg></td></tr>
+    </table>
+    <p class="faq-note">Payment via Visa, Mastercard, and PayPal. Cancel anytime.</p>
+  </div>
+</div>
+
+<div class="view view-dictionary">
+  <div class="dict-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">A-to-Z Dream Symbol Dictionary</h1>
+    <p style="color:#CFE0DA;margin:0;max-width:480px;margin:0 auto;">Saw just one symbol and don't want to write out a whole dream? Look it up directly here.</p>
+    <div class="dict-search"><input placeholder="Search a symbol, e.g. gold, snake, sea..."></div>
+  </div>
+
+  <div class="app" style="padding-top:24px;">
+    <div class="dict-summary">
+      <b style="color:var(--teal-deep);">38 real symbols</b> pulled directly from real search data (174 keywords · 82,350 combined monthly searches) — symbols marked with an arrow → already have a full page; the rest are shown with their real search volume ahead of being built out.
+    </div>
+
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">A</div><div class="line"></div></div>
+      <div class="dict-row"><span>Airplane</span><span class="vol">350/mo</span></div>
+      <div class="dict-row"><span>Ants</span><span class="vol">300/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">B</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-blood')"><span>Blood →</span><span class="vol">2,920/mo</span></div>
+      <div class="dict-row"><span>Birds</span><span class="vol">390/mo</span></div>
+      <div class="dict-row"><span>Bread</span><span class="vol">320/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">C</div><div class="line"></div></div>
+      <div class="dict-row"><span>Car</span><span class="vol">3,120/mo</span></div>
+      <div class="dict-row"><span>Child / infant</span><span class="vol">2,150/mo</span></div>
+      <div class="dict-row"><span>Crying</span><span class="vol">1,130/mo</span></div>
+      <div class="dict-row"><span>Cat</span><span class="vol">810/mo</span></div>
+      <div class="dict-row"><span>Cockroaches</span><span class="vol">330/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">D</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-death')"><span>Death & the deceased →</span><span class="vol">9,870/mo</span></div>
+      <div class="dict-row"><span>Dogs</span><span class="vol">990/mo</span></div>
+      <div class="dict-row"><span>Drinking alcohol</span><span class="vol">390/mo</span></div>
+      <div class="dict-row"><span>Divorce</span><span class="vol">350/mo</span></div>
+      <div class="dict-row"><span>Diamonds</span><span class="vol">260/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">E</div><div class="line"></div></div>
+      <div class="dict-row"><span>Eggs</span><span class="vol">620/mo</span></div>
+      <div class="dict-row"><span>Earthquake</span><span class="vol">310/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">F</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-fishing')"><span>Fishing →</span><span class="vol">3,800/mo</span></div>
+      <div class="dict-row"><span>Fire</span><span class="vol">500/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">G</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-gold')"><span>Gold →</span><span class="vol">25,480/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">H</div><div class="line"></div></div>
+      <div class="dict-row"><span>Hair (cutting, dyeing, falling)</span><span class="vol">4,110/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">I</div><div class="line"></div></div>
+      <div class="dict-row"><span>Infidelity</span><span class="vol">200/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">J</div><div class="line"></div></div>
+      <div class="dict-row"><span>Jinn</span><span class="vol">240/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">L</div><div class="line"></div></div>
+      <div class="dict-row"><span>Lice</span><span class="vol">600/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">M</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-milk')"><span>Milk →</span><span class="vol">3,000/mo</span></div>
+      <div class="dict-row"><span>Mouse</span><span class="vol">2,420/mo</span></div>
+      <div class="dict-row"><span>Marriage & wedding</span><span class="vol">1,330/mo</span></div>
+      <div class="dict-row"><span>Money</span><span class="vol">990/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">N</div><div class="line"></div></div>
+      <div class="dict-row"><span>New house</span><span class="vol">350/mo</span></div>
+      <div class="dict-row"><span>New clothes</span><span class="vol">220/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">P</div><div class="line"></div></div>
+      <div class="dict-row"><span>Prison</span><span class="vol">770/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">R</div><div class="line"></div></div>
+      <div class="dict-row"><span>Rain</span><span class="vol">620/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">S</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-snake')"><span>Snake →</span><span class="vol">5,600/mo</span></div>
+      <div class="dict-row"><span>Scorpion</span><span class="vol">320/mo</span></div>
+      <div class="dict-row"><span>Slaughter</span><span class="vol">310/mo</span></div>
+      <div class="dict-row"><span>Spider</span><span class="vol">210/mo</span></div>
+    </div>
+    <div class="letter-group">
+      <div class="letter-row"><div class="letter-badge">T</div><div class="line"></div></div>
+      <div class="dict-row full" onclick="showView('symbol-sea')"><span>The sea →</span><span class="vol">5,570/mo</span></div>
+      <div class="dict-row"><span>The mosque</span><span class="vol">1,100/mo</span></div>
+    </div>
+
+    <div class="dict-note">
+      <b>Full transparency note:</b> the seven fully-built symbols below (gold, death, snake, sea, fishing, milk, blood) are placeholder illustrative text and are not yet sourced to a real page/book citation from your database — they need to be replaced with genuinely sourced text before launch. The volumes shown are real, from your data.
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: GOLD -->
+<div class="view view-symbol-gold">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Gold</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Gold dream meaning</h4>
+        <div class="from-books">Gold's reading differs sharply between men and women: a man wearing gold is often read as a warning or a coming worry, while for a woman it's usually read as adornment, marriage, or wide provision. Excessive gold can signal excessive worldly ambition; a single piece like a ring or bracelet is read as stability or a commitment.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('symbol-sea')">The sea</a>
+      <a onclick="showView('symbol-blood')">Blood</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: DEATH -->
+<div class="view view-symbol-death">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Death &amp; the deceased</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Death and seeing the deceased — dream meaning</h4>
+        <div class="from-books">Death is one of the most commonly misunderstood dream symbols; interpreters usually read it as a change of state, a turning back to God, or the end of a life stage — not a literal death. Seeing a deceased person has its own rule: if they give you something good and you accept it, many interpreters count this among the strongest signs of good.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('symbol-blood')">Blood</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now — especially if it mentioned someone deceased you know, since that changes the reading significantly.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: SEA -->
+<div class="view view-symbol-sea">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → The sea</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Sea dream meaning</h4>
+        <div class="from-books">The sea in a dream signals something vast in worldly affairs, and can be read as a ruler or a person of great standing. A calm, clear sea signals stability and wide provision; a stormy, turbulent sea signals anxiety or a major matter the dreamer is facing.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('symbol-fishing')">Fishing</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: FISHING -->
+<div class="view view-symbol-fishing">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Fishing</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Fishing dream meaning</h4>
+        <div class="from-books">Fishing in a dream signals pursuing one's provision, and the fish itself is usually read as lawful sustenance. A large catch signals wide provision; empty nets or an unsuccessful catch signal effort without result, for now.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('symbol-sea')">The sea</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: MILK -->
+<div class="view view-symbol-milk">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Milk</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Milk dream meaning</h4>
+        <div class="from-books">Milk in a dream signals good, lawful provision and a sound natural disposition. Drinking it signals good coming with ease; spilling it signals a missed provision or opportunity that had been within reach.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('dictionary')">Full dictionary</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: BLOOD -->
+<div class="view view-symbol-blood">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Blood</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Blood dream meaning</h4>
+        <div class="from-books">A small, contained amount of blood is often read as lawful wealth or gain; heavy or frightening bleeding tends to be read as loss, or something unlawful, depending on the dream's context.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box"><h5>Related symbols</h5><div class="related-links">
+      <a onclick="showView('symbol-death')">Death &amp; the deceased</a>
+    </div></div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<div class="view view-history">
+  <div class="hist-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">Your Dream Log</h1>
+    <p style="color:#CFE0DA;margin:0;">Every dream you've interpreted, saved with its date and full reading</p>
+    <div class="hist-filters">
+      <select>
+        <option>All interpreters</option>
+        <option>Ibn Sirin</option>
+        <option>Al-Nabulsi</option>
+        <option>Ibn Shaheen</option>
+        <option>Modern psychology</option>
+      </select>
+      <input placeholder="Search your past dreams...">
+    </div>
+  </div>
+
+  <div class="app" style="padding-top:24px;">
+
+    <div class="hist-sync-banner">
+      <div>
+        <div style="font-weight:700;margin-bottom:4px;">Your dreams are saved on this device only</div>
+        <p>Turn on premium to sync your log across all your devices, and get alerted when a past symbol reappears.</p>
+      </div>
+      <button class="btn btn-gold" onclick="showView('premium')" style="white-space:nowrap;">Enable cloud sync</button>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">Today, Sep 2, 2026</span>
+        <span class="hist-interpreter-tag">Ibn Sirin</span>
+      </div>
+      <div class="hist-snippet">"I dreamed I was walking down a road I didn't know. I saw a spacious house with its door open..."</div>
+      <div class="hist-bottom">
+        <span class="pattern-badge">🔁 Recurring symbol: water (premium)</span>
+        <button class="hist-view-btn" onclick="showView('result')">View full reading</button>
+      </div>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">6 days ago, Aug 27, 2026</span>
+        <span class="hist-interpreter-tag">Al-Nabulsi</span>
+      </div>
+      <div class="hist-snippet">"I dreamed heavy water suddenly entered our house, and I was trying to keep it from reaching the rooms..."</div>
+      <div class="hist-bottom">
+        <span class="pattern-badge">🔁 Recurring symbol: water (premium)</span>
+        <button class="hist-view-btn">View full reading</button>
+      </div>
+    </div>
+
+    <div class="hist-entry">
+      <div class="hist-entry-top">
+        <span class="hist-date">12 days ago, Aug 21, 2026</span>
+        <span class="hist-interpreter-tag">Ibn Sirin</span>
+      </div>
+      <div class="hist-snippet">"I dreamed I lost one of my front teeth without pain, and I was holding it in my hand..."</div>
+      <div class="hist-bottom">
+        <span></span>
+        <button class="hist-view-btn">View full reading</button>
+      </div>
+    </div>
+
+    <p class="hist-local-note">Locally saved dreams are lost if you clear your browser data — cloud sync (premium) stores them safely and permanently.</p>
+  </div>
+</div>
+
+<!-- INTERPRETERS HUB -->
+<div class="view view-interpreters">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">The Four Interpreters</h1>
+    <p style="color:#CFE0DA;margin:0;">Each has their own method. Try your dream through any of their eyes, free and unlimited.</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('scholar-ibnsirin')">
+        <h4>Ibn Sirin</h4>
+        <p>An authentic approach based on the Qur'an and Sunnah, ideal for clear, direct visions.</p>
+        <span class="arrow">Read his method &amp; try it →</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-nabulsi')"><h4>Al-Nabulsi</h4><p>An encyclopedic, deep analysis, diving into complex symbols and their meanings.</p><span class="arrow">Read his method &amp; try it →</span></div>
+      <div class="hub-card" onclick="showView('scholar-ibnshaheen')"><h4>Ibn Shaheen</h4><p>A systematic method organized by theme, connecting different dream symbols.</p><span class="arrow">Read his method &amp; try it →</span></div>
+      <div class="hub-card" onclick="showView('scholar-psychology')"><h4>Modern psychology</h4><p>A reading focused on your psychological state, connecting the dream to daily life.</p><span class="arrow">Read his method &amp; try it →</span></div>
+    </div>
+
+    <div class="section-label" style="margin-top:34px;"><h3 style="font-size:1rem;">Other authorities</h3><div class="line"></div></div>
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('scholar-imamsadiq')">
+        <h4>Imam Sadiq</h4>
+        <p>An independent authority respecting the Shia tradition of dream interpretation, kept separate from the Ibn Sirin/Nabulsi lineage.</p>
+        <span class="arrow">Read his method &amp; try it →</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-ibnkathir')">
+        <h4>Ibn Kathir</h4>
+        <p>An honest clarification page — we verify first whether this name is genuinely tied to dream interpretation before presenting it as its own method.</p>
+        <span class="arrow">Read the clarification →</span>
+      </div>
+      <div class="hub-card" onclick="showView('scholar-alidrisi')">
+        <h4>Abdulrahman Al-Idrisi</h4>
+        <p>A name with real recurring search volume but an unverified identity — deliberately held back until we confirm who this actually is.</p>
+        <span class="arrow">Read the clarification →</span>
+      </div>
+    </div>
+
+    <div class="related-box" style="margin-top:26px;">
+      <h5>Why this many interpreters?</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Each method illuminates a different angle of your vision. Try any one free, unlimited, or <a onclick="showView('premium')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">compare them all in one reading (premium)</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IMAM SADIQ -->
+<div class="view view-scholar-imamsadiq">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Imam Sadiq — an independent Shia authority <b>&lt;h1&gt;</b> Dream Interpretation by Imam Sadiq</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Imam Sadiq</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Interpret your dream on Imam Sadiq's authority</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">An independent authority in dream interpretation in its own right, trusted by a wide audience, and not grouped under Ibn Sirin's or Al-Nabulsi's methods since it draws on a different reference tradition.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="showView('input')">Try your dream on this authority now</button>
+    </div>
+    <div class="related-box">
+      <h5>A related authority</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Readings attributed to <b>Imam Ali</b> are also included on this page, given the small independent search volume and close thematic relation.</p>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Or interpret your dream the default way</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: AL-IDRISI (unverified identity, honest holding page) -->
+<div class="view view-scholar-alidrisi">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Abdulrahman Al-Idrisi — who is he? <b>&lt;h1&gt;</b> Dream Interpretation by Abdulrahman Al-Idrisi</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Abdulrahman Al-Idrisi</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Who is Abdulrahman Al-Idrisi?</h2>
+    <div class="caveat-box" style="background:#FBEAF0;border-inline-start:3px solid #D4537E;padding:14px 16px;border-radius:4px;font-size:.9rem;color:#72243E;margin:14px 0;">
+      <b>Honestly:</b> this name carries real search volume (700/month), but the identity behind it hasn't been verified yet — it may be a contemporary figure (a content creator or local sheikh) rather than a documented classical authority in dream interpretation. We won't build a claimed "method" for this name until that's actually confirmed.
+    </div>
+    <p style="color:var(--ink-soft);font-size:.95rem;">Until then, try one of these sourced, documented methods instead:</p>
+    <div class="sibling-scholars">
+      <a onclick="showView('scholar-ibnsirin')">Ibn Sirin</a>
+      <a onclick="showView('scholar-nabulsi')">Al-Nabulsi</a>
+      <a onclick="showView('scholar-imamsadiq')">Imam Sadiq</a>
+    </div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN KATHIR (light, honest caveat) -->
+<div class="view view-scholar-ibnkathir">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Ibn Kathir — is he a dream-interpretation authority? <b>&lt;h1&gt;</b> Dream Interpretation by Ibn Kathir</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Ibn Kathir</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Is Ibn Kathir a dream-interpretation authority?</h2>
+    <div class="caveat-box" style="background:#FBEAF0;border-inline-start:3px solid #D4537E;padding:14px 16px;border-radius:4px;font-size:.9rem;color:#72243E;margin:14px 0;">
+      <b>Honestly:</b> Ibn Kathir is known as a Qur'an commentator, not as the author of an independent, sourced method of dream interpretation the way Ibn Sirin or Al-Nabulsi are. This recurring search under his name is most likely a mix-up with a similar name. We're presenting this clarification rather than offering a "method" that doesn't genuinely exist.
+    </div>
+    <p style="color:var(--ink-soft);font-size:.95rem;">If you're looking for an actual dream reading, try one of these sourced, documented methods instead:</p>
+    <div class="sibling-scholars">
+      <a onclick="showView('scholar-ibnsirin')">Ibn Sirin</a>
+      <a onclick="showView('scholar-nabulsi')">Al-Nabulsi</a>
+      <a onclick="showView('scholar-imamsadiq')">Imam Sadiq</a>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH HUB -->
+<div class="view view-teeth-hub">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">Teeth Falling Out Dream Meaning</h1>
+    <p style="color:#CFE0DA;margin:0;">The single largest dream scenario in our data — over 90,000 monthly searches across its variants.</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('symbol-teeth-general')">
+        <h4>Teeth falling out, generally</h4>
+        <p>The general meaning of teeth falling out or breaking in a dream</p>
+        <span class="arrow">Read the meaning →</span>
+      </div>
+      <div class="hub-card" onclick="showView('symbol-teeth-single')"><h4>A single tooth only</h4><p>One tooth falling specifically, with or without pain</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-molar')"><h4>The molar</h4><p>A molar falling out or being extracted in a dream</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-single-woman')"><h4>For a single woman</h4><p>5,940 monthly searches — a reading specific to being unmarried</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card" onclick="showView('symbol-teeth-married-woman')"><h4>For a married woman</h4><p>5,910 monthly searches — a reading specific to being married</p><span class="arrow">Read the meaning →</span></div>
+    </div>
+    <div class="related-box" style="margin-top:26px;">
+      <h5>Tied to a specific interpreter</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">14 search terms ask specifically about teeth falling out <a onclick="showView('scholar-ibnsirin')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">per Ibn Sirin's method</a> — served directly from his page.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: GENERAL -->
+<div class="view view-symbol-teeth-general">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">Teeth Falling Out</a> → General meaning</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Teeth falling out dream meaning</h4>
+        <div class="from-books">Teeth falling out in a dream is one of the most common visions, and is usually read in connection with family members or age rather than literally. The reading differs by whether it fell painfully or painlessly, whether blood was involved, and whether it was a front or back tooth. For a single woman it's often read in connection with an upcoming personal stage; for a married woman, with her household.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>More specific scenarios</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-single')">A single tooth only</a>
+        <a onclick="showView('symbol-teeth-molar')">The molar</a>
+        <a onclick="showView('scholar-ibnsirin')">Per Ibn Sirin</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more detailed than this?</h4>
+      <p>Interpret your full dream now, with all its details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: SINGLE TOOTH -->
+<div class="view view-symbol-teeth-single">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">Teeth Falling Out</a> → A single tooth only</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">A single tooth falling out</h4>
+        <div class="from-books">A single tooth falling is read differently from all teeth falling out; it's usually tied to one specific family member rather than the family in general. Falling from the upper jaw is often linked to a parent or family elder, and from the lower jaw to children or someone younger.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related scenarios</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">Teeth falling out, generally</a>
+        <a onclick="showView('symbol-teeth-molar')">The molar</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more detailed than this?</h4>
+      <p>Interpret your full dream now, with all its details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: MOLAR -->
+<div class="view view-symbol-teeth-molar">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">Teeth Falling Out</a> → The molar</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">A molar falling out</h4>
+        <div class="from-books">A molar is usually read in connection with a burden or responsibility in the dreamer's life, since molars are used for grinding and endurance. Losing it painlessly is often read as being relieved of a burden, unlike a sudden, painful loss.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related scenarios</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">Teeth falling out, generally</a>
+        <a onclick="showView('symbol-teeth-single')">A single tooth only</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more detailed than this?</h4>
+      <p>Interpret your full dream now, with all its details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: FOR A SINGLE WOMAN -->
+<div class="view view-symbol-teeth-single-woman">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">Teeth Falling Out</a> → For a single woman</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Teeth falling out — for a single woman</h4>
+        <div class="from-books">Teeth falling out carries a distinct reading for a single woman, usually tied to a new stage in her own personal life or a decision that concerns her specifically, rather than a family member. Falling without pain or blood is usually read as that stage unfolding smoothly; a painful fall with blood is read with more caution.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related scenarios</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">Teeth falling out, generally</a>
+        <a onclick="showView('symbol-teeth-married-woman')">For a married woman</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more detailed than this?</h4>
+      <p>Interpret your full dream now, with all its details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEETH LEAF: FOR A MARRIED WOMAN -->
+<div class="view view-symbol-teeth-married-woman">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('teeth-hub')">Teeth Falling Out</a> → For a married woman</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Teeth falling out — for a married woman</h4>
+        <div class="from-books">For a married woman, this vision is usually read in connection with her household — her husband or children — rather than herself directly, depending on which tooth fell and where. A painless fall usually signals an easing of a household matter; a painful fall with blood signals worry or loss concerning a family member.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related scenarios</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-teeth-general')">Teeth falling out, generally</a>
+        <a onclick="showView('symbol-teeth-single-woman')">For a single woman</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more detailed than this?</h4>
+      <p>Interpret your full dream now, with all its details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ HUB -->
+<div class="view view-faq">
+  <div class="app" style="padding-top:24px;">
+    <h2 class="serif" style="color:var(--teal-deep);">Frequently asked questions</h2>
+
+    <div class="related-box">
+      <h5>Is dream interpretation permissible or forbidden?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">A recurring question with real search volume. We address it briefly here, with a fuller treatment grounded in scholarly rulings — including what's reported from Ibn Baz specifically on this question, not as an independent interpretation method of his.</p>
+    </div>
+    <div class="related-box">
+      <h5>Is Ibn Sina a dream interpreter?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">Ibn Sina (Avicenna) was a philosopher and physician, not the author of a known dream-interpretation method — searches under his name are most likely confused with "Ibn Sirin." We clarify that directly here.</p>
+    </div>
+    <div class="related-box">
+      <h5>Does a dream's meaning change by the Hijri date or day of the week?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">A widespread folk belief with 8 real search terms behind it. <a onclick="showView('hijri')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">Read the full detail</a>.</p>
+    </div>
+    <div class="related-box">
+      <h5>Does interpreting a dream actually make it come true?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">No. An interpretation is a scholarly reading of a possible meaning — it has no power to "make" anything happen on its own, which is exactly what our tool states plainly at the end of every reading ("this reading is interpretive effort, not certainty").</p>
+    </div>
+    <div class="related-box">
+      <h5>What's the interpretation of scary, confusing, or disturbing dreams?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">Frightening or unsettling visions have their own etiquette from the Sunnah (seeking refuge, not telling others, changing sleeping position) that comes before any detailed interpretation — our tool reflects this in the "etiquette of the vision" section of every result.</p>
+    </div>
+    <div class="related-box">
+      <h5>Does interpreting a dream right after Fajr prayer carry special significance?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">Yes — near dawn is one of the times associated with a vision being more likely true. Our tool's "time of vision" field asks about this specifically and uses it in classification.</p>
+    </div>
+    <div class="related-box">
+      <h5>Who are the most famous dream interpreters?</h5>
+      <p style="font-size:.9rem;color:var(--ink-soft);margin:0;">Ibn Sirin, Al-Nabulsi, and Ibn Shaheen are the most established in the Sunni tradition, and Imam Sadiq is an independent, trusted authority for Shia audiences. <a onclick="showView('interpreters')" style="color:var(--teal-deep);font-weight:700;cursor:pointer;">Browse all of their pages</a>.</p>
+    </div>
+
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Interpret your dream now</a></div>
+  </div>
+</div>
+
+<!-- HIJRI DATE PAGE -->
+<div class="view view-hijri">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Hijri date and day of the week <b>&lt;h1&gt;</b> Does a dream's meaning change by the day or date?</div>
+    <div class="breadcrumb"><a onclick="showView('faq')">FAQ</a> → By Hijri date</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Does a dream's meaning change by the day or Hijri date?</h2>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <div class="from-books">It's a widespread folk belief that certain nights or days of the Hijri month affect how true or significant a vision is — a belief that rests more on inherited custom than on a decisive religious text. The more precise standard actually found in the interpretive tradition is the time of night the vision occurred (near dawn, for instance), not its date on the calendar.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> placeholder illustrative text.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>The more precise standard: the time of the vision itself</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Our tool already asks for the timing of your vision (before dawn / after prayer or worship) — that's the standard interpreters actually use, not its date on a calendar.</p>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Interpret your dream now</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN SIRIN -->
+<div class="view view-scholar-ibnsirin">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Ibn Sirin — his authentic method, directly <b>&lt;h1&gt;</b> Dream Interpretation by Ibn Sirin</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Ibn Sirin</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Interpret your dream with Ibn Sirin</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">Muhammad ibn Sirin al-Basri (33-110 AH), the true founder of dream interpretation as a discipline in Islam. His method drew directly on the Qur'an and Sunnah, occasionally read symbols by their opposite, and always weighed the dreamer's own situation.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('ibnsirin','en')">Try your dream with Ibn Sirin now</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">Also try with:</span>
+      <a onclick="showView('scholar-nabulsi')">Al-Nabulsi</a>
+      <a onclick="showView('scholar-ibnshaheen')">Ibn Shaheen</a>
+      <a onclick="showView('scholar-psychology')">Modern psychology</a>
+    </div>
+    <div class="related-box">
+      <h5>Example symbols Ibn Sirin interpreted</h5>
+      <div class="related-links">
+        <a onclick="showView('symbol-snake')">Snake</a>
+        <a onclick="showView('dictionary')">Water</a>
+        <a onclick="showView('dictionary')">White garment</a>
+      </div>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Or interpret your dream the default way (all sources together)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: AL-NABULSI -->
+<div class="view view-scholar-nabulsi">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Al-Nabulsi — a deep, encyclopedic analysis <b>&lt;h1&gt;</b> Dream Interpretation by Al-Nabulsi</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Al-Nabulsi</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Interpret your dream with Al-Nabulsi</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">Abd al-Ghani al-Nabulsi, author of "Ta'tir al-Anam fi Ta'bir al-Manam," one of the most comprehensive works in this field, combining transmission from earlier scholars with extensive detail on every symbol.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('nabulsi','en')">Try your dream with Al-Nabulsi now</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">Also try with:</span>
+      <a onclick="showView('scholar-ibnsirin')">Ibn Sirin</a>
+      <a onclick="showView('scholar-ibnshaheen')">Ibn Shaheen</a>
+      <a onclick="showView('scholar-psychology')">Modern psychology</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Or interpret your dream the default way (all sources together)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: IBN SHAHEEN -->
+<div class="view view-scholar-ibnshaheen">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> Dream interpretation by Ibn Shaheen — a systematic method <b>&lt;h1&gt;</b> Dream Interpretation by Ibn Shaheen</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Ibn Shaheen</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Interpret your dream with Ibn Shaheen</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">Ibn Shaheen al-Zahiri organized dream symbols by theme and chapter, making it easier to connect several symbols that appear together in a single vision.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('ibnshaheen','en')">Try your dream with Ibn Shaheen now</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">Also try with:</span>
+      <a onclick="showView('scholar-ibnsirin')">Ibn Sirin</a>
+      <a onclick="showView('scholar-nabulsi')">Al-Nabulsi</a>
+      <a onclick="showView('scholar-psychology')">Modern psychology</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Or interpret your dream the default way (all sources together)</a></div>
+  </div>
+</div>
+
+<!-- SCHOLAR DETAIL: MODERN PSYCHOLOGY -->
+<div class="view view-scholar-psychology">
+  <div class="app" style="padding-top:24px;">
+    <div class="seo-chip">SEO preview: <b>&lt;title&gt;</b> AI-powered dream interpretation — a modern psychological reading <b>&lt;h1&gt;</b> AI-Powered Dream Interpretation</div>
+    <div class="breadcrumb"><a onclick="showView('interpreters')">Interpreters</a> → Modern psychology</div>
+    <h2 class="serif" style="margin:0 0 6px;color:var(--teal-deep);">Interpret your dream through modern psychology</h2>
+    <p style="color:var(--ink-soft);font-size:.95rem;">An additional reading not attributed to a specific classical book — it looks at the symbol through a contemporary psychological lens, and is always shown alongside the classical readings, never instead of them.</p>
+    <div class="cta-row" style="justify-content:flex-start;">
+      <button class="btn btn-primary" onclick="tryWithScholar('psychology','en')">Try this reading now</button>
+    </div>
+    <div class="sibling-scholars">
+      <span style="font-size:.82rem;color:var(--ink-soft);align-self:center;">Also try with:</span>
+      <a onclick="showView('scholar-ibnsirin')">Ibn Sirin</a>
+      <a onclick="showView('scholar-nabulsi')">Al-Nabulsi</a>
+      <a onclick="showView('scholar-ibnshaheen')">Ibn Shaheen</a>
+    </div>
+    <div class="home-link" style="font-size:.85rem;margin-top:16px;"><a onclick="showView('input')" style="color:var(--ink-soft);cursor:pointer;">Or interpret your dream the default way (all sources together)</a></div>
+  </div>
+</div>
+
+<!-- DICTIONARY LEAF: SNAKE -->
+<div class="view view-symbol-snake">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('dictionary')">Dictionary</a> → Snake</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Snake dream meaning</h4>
+        <div class="from-books">A snake in a dream often signals a hidden enemy — someone who doesn't show their hostility openly. Interpreters distinguish by the snake's color and size: yellow can point to illness, black to stronger hostility. Killing the snake in the dream is usually read as overcoming that enemy; being bitten as harm from their direction.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> this is placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related symbols</h5>
+      <div class="related-links">
+        <a onclick="showView('dictionary')">Scorpion</a>
+        <a onclick="showView('dictionary')">Dog</a>
+        <a onclick="showView('common-dream-chased')">Being chased dream</a>
+      </div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Was your dream more than just this?</h4>
+      <p>Interpret your full dream now, or read Ibn Sirin's detailed method for this symbol.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+      <button class="btn btn-ghost" onclick="showView('scholar-ibnsirin')" style="margin-inline-start:8px;color:white;border-color:rgba(255,255,255,.4);">Ibn Sirin's method</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMON DREAMS HUB -->
+<div class="view view-common-dreams">
+  <div class="hub-hero">
+    <h1 style="margin:0 0 8px;font-size:1.6rem;">The Most Common Dreams</h1>
+    <p style="color:#CFE0DA;margin:0;">Dreams many people share — what do they actually mean?</p>
+  </div>
+  <div class="app" style="padding-top:24px;">
+    <div class="hub-grid">
+      <div class="hub-card" onclick="showView('common-dream-chased')"><h4>Being chased</h4><p>Dreaming you're being chased and can't escape</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card"><h4>Falling</h4><p>Dreaming of falling from a height</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card"><h4>Flying</h4><p>Dreaming of flying or floating in the air</p><span class="arrow">Read the meaning →</span></div>
+      <div class="hub-card"><h4>Running late / an exam</h4><p>A recurring dream tied to everyday anxiety</p><span class="arrow">Read the meaning →</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMON DREAM LEAF: BEING CHASED -->
+<div class="view view-common-dream-chased">
+  <div class="app" style="padding-top:24px;">
+    <div class="breadcrumb"><a onclick="showView('common-dreams')">Common Dreams</a> → Being Chased</div>
+    <div class="symbol-card" style="grid-template-columns:1fr;">
+      <div>
+        <h4 class="symbol-name" style="font-size:1.4rem;">Why do I keep dreaming I'm being chased?</h4>
+        <div class="from-books">Being chased is one of the most universally common dreams. In the interpretive tradition, what's chasing you is usually the key element: if it's an animal like a snake or dog, the reading leans toward that animal's own symbolism (a hidden enemy, etc). The feeling of being unable to escape is often linked to pressure or anxiety the dreamer feels in waking life.</div>
+        <div class="method-note" style="margin-top:12px;"><b>Full transparency note:</b> this is placeholder illustrative text, not yet a sourced citation from your books.</div>
+      </div>
+    </div>
+    <div class="related-box">
+      <h5>Related to</h5>
+      <div class="related-links"><a onclick="showView('symbol-snake')">The snake symbol</a></div>
+    </div>
+    <div class="big-cta">
+      <h4 style="margin:0 0 6px;">Remember more details from your dream?</h4>
+      <p>Write your full dream and get a reading tailored to your specific details.</p>
+      <button class="btn btn-gold" onclick="showView('input')">Interpret my full dream</button>
+    </div>
+  </div>
+</div>
+
+<!-- METHODOLOGY / TRUST PAGE -->
+<div class="view view-methodology">
+  <div class="app" style="padding-top:24px;">
+    <h2 class="serif" style="color:var(--teal-deep);">Where do our interpretations come from?</h2>
+    <p style="font-size:.95rem;color:var(--ink);">We draw on 5 reference books, covering 2,317 symbols, 11,548 texts, and 44 hadiths on dream etiquette. Every reading you see on the site is built on a real text from one of these books, with the book name and page number cited.</p>
+    <div class="related-box">
+      <h5>The five books</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">"Ta'tir al-Anam fi Ta'bir al-Manam" (al-Nabulsi) · "Tafsir al-Ahlam — Muntakhab al-Kalam" (attributed to Ibn Sirin) · and three further sources for Ibn Shaheen and modern psychology.</p>
+    </div>
+    <div class="related-box">
+      <h5>Prophet Joseph (Yusuf) — the origin of dream interpretation</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Dream interpretation in the Islamic tradition traces back to the story of Prophet Joseph, who interpreted the king's dream in Egypt and his own dream, as recounted in Surah Yusuf — the Qur'anic origin this entire field is built on, not just a historical anecdote.</p>
+    </div>
+    <div class="related-box">
+      <h5>Is dream interpretation a science with real principles, or a talent?</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Interpreters follow documented principles (weighing the dreamer's situation, tying a symbol to its context, considering the timing and clarity of the vision) rather than free guessing — which is exactly what our tool tries to apply instead of guesswork.</p>
+    </div>
+    <div class="related-box">
+      <h5>The difference between a dream and a vision</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">A true vision (ru'ya) comes from God and carries a genuine glad tiding or warning; a dream (hulm) may come from Shaytan's fear-mongering or from the mind processing waking concerns. Our tool classifies your vision into these categories automatically as part of the reading itself.</p>
+    </div>
+    <div class="related-box">
+      <h5>How to learn dream interpretation yourself</h5>
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Start with the symbol dictionary — every entry explains the "interpretive basis" the meaning was built on, not just the meaning itself.</p>
+    </div>
+    <div class="related-box">
+      <h5>Browse by interpreter or symbol</h5>
+      <div class="related-links">
+        <a onclick="showView('interpreters')">All interpreters</a>
+        <a onclick="showView('dictionary')">Symbol dictionary</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- END ENGLISH ROOT -->
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col i18n-block">
+      <h5 class="i18n" data-ar="الأداة" data-en="The Tool">الأداة</h5>
+      <a onclick="showView('input')" class="i18n" data-ar="فسّر حلمك" data-en="Interpret your dream">فسّر حلمك</a>
+      <a onclick="showView('history')" class="i18n" data-ar="سجل أحلامي" data-en="My dream log">سجل أحلامي</a>
+      <a onclick="showView('premium')" class="i18n" data-ar="بريميوم" data-en="Premium">بريميوم</a>
+    </div>
+    <div class="footer-col i18n-block">
+      <h5 class="i18n" data-ar="استكشف" data-en="Explore">استكشف</h5>
+      <a onclick="showView('interpreters')" class="i18n" data-ar="المفسّرون" data-en="Interpreters">المفسّرون</a>
+      <a onclick="showView('dictionary')" class="i18n" data-ar="قاموس الرموز" data-en="Symbol dictionary">قاموس الرموز</a>
+      <a onclick="showView('teeth-hub')" class="i18n" data-ar="تفسير حلم سقوط الأسنان" data-en="Teeth falling out dreams">تفسير حلم سقوط الأسنان</a>
+      <a onclick="showView('common-dreams')" class="i18n" data-ar="الأحلام الأكثر تكرارًا" data-en="Common dreams">الأحلام الأكثر تكرارًا</a>
+    </div>
+    <div class="footer-col i18n-block">
+      <h5 class="i18n" data-ar="الثقة" data-en="Trust">الثقة</h5>
+      <a onclick="showView('methodology')" class="i18n" data-ar="من أين تأتي تفسيراتنا" data-en="Where our readings come from">من أين تأتي تفسيراتنا</a>
+      <a onclick="showView('faq')" class="i18n" data-ar="الأسئلة الشائعة" data-en="FAQ">الأسئلة الشائعة</a>
+    </div>
+    <div class="footer-col i18n-block">
+      <h5 class="i18n" data-ar="اللغة" data-en="Language">اللغة</h5>
+      <a onclick="setLang('ar')">العربية</a>
+      <a onclick="setLang('en')">English</a>
+    </div>
+  </div>
+  <div class="footer-bottom">Ta'weel — concept prototype for discussion purposes, not a live site</div>
+</footer>
+
+<script>
+function toggleFields(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('show');
+}
+function toggleAcc(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('show');
+}
+function toggleScholarSelect(radio){
+  const row = radio.closest('.mode-row');
+  row.querySelector('.scholar-select').disabled = (radio.value !== 'single');
+}
+
+// Called from a scholar page's CTA — pre-locks the homepage tool to that
+// scholar's single-mode before navigating there, so "try with Nabulsi"
+// actually behaves like the Nabulsi page's own tool, not a reset form.
+function tryWithScholar(scholarKey, lang){
+  const root = document.getElementById('root-'+lang);
+  const inputView = root.querySelector('.view-input');
+  const singleRadio = inputView.querySelector('.mode-radio[value="single"]');
+  const scholarSelect = inputView.querySelector('.scholar-select');
+  if (singleRadio) singleRadio.checked = true;
+  if (scholarSelect){ scholarSelect.disabled = false; scholarSelect.value = scholarKey; }
+  showView('input');
+}
+
+var PERSON_TEXT = {
+  ar: {
+    friend:   {note:'<b>بحسب ما أدخلته:</b> بما أنك حدّدت أنه «معرفة عادية / صديق» لا قريب أو أحد الوالدين، فالقراءة الأقرب هنا هي مجيء الخير من خلال علاقة اجتماعية أو معرفة، لا من داخل الأسرة — وهذا فارق مهم غيّر التأويل عن قراءة عامة لم تُحدَّد فيها هذه الصلة.', method:'<b>مسلك التأويل:</b> اعتبار حال الرائي وصلته بالمرئي من أهم قواعد التفسير عند ابن سيرين، وقد تغيّر المعنى كليًا لو كانت الصلة مختلفة.', deceased:false},
+    father:   {note:'<b>بحسب ما أدخلته:</b> كون الرجل أباك أو أحد كبار العائلة يغيّر الرمز جوهريًا؛ فما يُعطى من الأب في الرؤيا كثيرًا ما يُقرأ كإرثٍ من الدين أو الخُلق أو بركة تنتقل من الأصل، لا كخير عابر من معرفة خارجية.', method:'<b>مسلك التأويل:</b> عطاء الأب أو كبير العائلة يُقرأ عند أهل التعبير في سياق انتقال البركة والوصية، بخلاف عطاء الصديق أو الغريب.', deceased:false},
+    relative: {note:'<b>بحسب ما أدخلته:</b> كونه قريبًا (أخًا أو عمًا أو خالًا)، فالقراءة الأقرب أن الخير سيصلك عبر رابطة القرابة والنسب، وقد يكون عونًا ماديًا أو اجتماعيًا من داخل الأسرة الممتدة.', method:'<b>مسلك التأويل:</b> عطاء القريب في الرؤيا غالبًا ما يُنسب إلى دائرة النسب لا إلى دائرة المعرفة العامة.', deceased:false},
+    deceased: {note:'<b>بحسب ما أدخلته:</b> كونه شخصًا متوفى تعرفه، فهذا يستدعي قاعدة مختلفة تمامًا؛ فما يُعطاه الرائي من متوفٍّ في المنام، إن كان شيئًا حسنًا كالثوب، فأخذه يُعدّ من علامات الخير الكبرى.', method:'<b>مسلك التأويل:</b> لرؤية الموتى وعطائهم أحكام خاصة عند المفسرين تختلف عن أحكام الأحياء.', deceased:true},
+    teacher:  {note:'<b>بحسب ما أدخلته:</b> كونه شخصية دينية أو معلّمًا تثق به، فالقراءة الأقرب أن الثوب الأبيض يشير إلى علمٍ أو هداية أو توجيه ديني ستناله، أقرب إلى «الكسوة بالدين» منها إلى مكسبٍ دنيوي بحت.', method:'<b>مسلك التأويل:</b> عطاء العالم أو الشيخ في الرؤيا غالبًا ما يُقرأ في باب العلم والهداية لا في باب الرزق الدنيوي وحده.', deceased:false},
+    unsure:   {note:'<b>ملاحظة:</b> لم تُحدَّد علاقتك بهذا الرجل بدقة، لذا اكتفينا بقراءة عامة لا تفترض صلة معينة. حدّد العلاقة في المرة القادمة لتحصل على تأويل أدق.', method:'<b>مسلك التأويل:</b> دون تحديد الصلة، يُكتفى بالمعنى العام للرمز دون ترجيح أحد الاحتمالات الخاصة بالقرابة أو المعرفة.', deceased:false}
+  },
+  en: {
+    friend:   {note:'<b>Based on what you entered:</b> since you specified "casual acquaintance / friend" rather than a relative or parent, the closer reading is that good comes through a social connection, not from within the family — a meaningful difference from a generic reading.', method:'<b>Interpretive basis:</b> weighing the dreamer\'s relation to the person seen is one of Ibn Sirin\'s most important rules, and the meaning can change entirely if that relationship differs.', deceased:false},
+    father:   {note:'<b>Based on what you entered:</b> the man being your father or a family elder changes the symbol fundamentally; what a father gives in a dream is often read as a religious or character-based inheritance, or a blessing passed down — not a passing benefit from an outside acquaintance.', method:'<b>Interpretive basis:</b> a gift from a father or family elder is read in the context of passed-down blessing or a final instruction, unlike a gift from a friend or stranger.', deceased:false},
+    relative: {note:'<b>Based on what you entered:</b> being a relative (brother, uncle...) makes the closer reading that good will reach you through kinship, possibly as material or social support from within the extended family.', method:'<b>Interpretive basis:</b> a gift from a relative in a dream is usually attributed to the sphere of kinship, not general acquaintance.', deceased:false},
+    deceased: {note:'<b>Based on what you entered:</b> this being someone deceased that you know calls for an entirely different rule; scholars hold that if the dreamer is given something good — like a garment — by a deceased person, and accepts it, this counts among the strongest signs of good.', method:'<b>Interpretive basis:</b> the deceased appearing and giving something in a dream follows rules distinct from those for the living.', deceased:true},
+    teacher:  {note:'<b>Based on what you entered:</b> this being a religious figure or a teacher you trust, the closer reading is that the white garment signals knowledge, guidance, or religious direction you will receive — closer to "being clothed in religion" than a purely worldly gain.', method:'<b>Interpretive basis:</b> a gift from a scholar or teacher in a dream is usually read in the domain of knowledge and guidance, not worldly provision alone.', deceased:false},
+    unsure:   {note:'<b>Note:</b> your relationship to this man wasn\'t specified, so we\'ve given a general reading that doesn\'t assume a particular tie. Specify the relationship next time for a sharper reading.', method:'<b>Interpretive basis:</b> without a specified relationship, only the symbol\'s general meaning is used, without favoring any one possibility.', deceased:false}
+  }
+};
+
+var SCHOLAR_NAME = {
+  ar: {ibnsirin:'ابن سيرين', nabulsi:'النابلسي', ibnshaheen:'ابن شاهين', psychology:'علم النفس الحديث'},
+  en: {ibnsirin:'Ibn Sirin', nabulsi:'Al-Nabulsi', ibnshaheen:'Ibn Shaheen', psychology:'modern psychology'}
+};
+
+function applyChoices(lang, person, mode, scholar){
+  const root = document.getElementById('root-'+lang);
+  const resultView = root.querySelector('.view-result');
+  const t = PERSON_TEXT[lang][person];
+  resultView.querySelector('.person-note').innerHTML = t.note;
+  resultView.querySelector('.person-method').innerHTML = t.method;
+  resultView.querySelector('.deceased-callout').style.display = t.deceased ? 'block' : 'none';
+
+  const banner = resultView.querySelector('.mode-banner');
+  if(mode === 'single'){
+    const name = SCHOLAR_NAME[lang][scholar];
+    banner.textContent = lang==='ar'
+      ? 'أنت تشاهد تفسيرًا مقصورًا على منهج ' + name + ' فقط. الرموز التي لا يوجد لها نص مباشر من هذا المفسّر في قاعدتنا الحالية ستُعرض بإشارة توضح ذلك، بدل الاستعانة بمصدر آخر.'
+      : 'You are viewing a reading restricted to ' + name + '\'s method only. Symbols with no direct text from this interpreter in our current database will be flagged as such, instead of pulling from another source.';
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function interpret(btn){
+  const scope = btn.closest('.view-input');
+  const lang = scope.closest('#root-en') ? 'en' : 'ar';
+  const person = scope.querySelector('.person-select').value;
+  const modeInput = scope.querySelector('.mode-radio:checked');
+  const mode = modeInput ? modeInput.value : 'blend';
+  const scholar = scope.querySelector('.scholar-select').value;
+  scope.querySelector('.panel').style.display='none';
+  scope.querySelector('.loading').classList.add('show');
+  setTimeout(()=>{
+    applyChoices(lang, person, mode, scholar);
+    showView('result');
+  }, 1300);
+}
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+  document.querySelectorAll('.view-'+name).forEach(v=>v.style.display='block');
+  ['nav-input','nav-result','nav-premium','nav-dictionary','nav-teeth-hub','nav-history','nav-interpreters','nav-faq'].forEach(id=>{const el=document.getElementById(id); if(el) el.classList.remove('active');});
+  const navEl = document.getElementById('nav-'+name);
+  if(navEl) navEl.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name!=='input'){
+    document.querySelectorAll('.view-input .panel').forEach(p=>p.style.display='block');
+    document.querySelectorAll('.view-input .loading').forEach(l=>l.classList.remove('show'));
+  }
+}
+function setBilling(mode, btn){
+  const scope = btn.closest('.view-premium');
+  scope.querySelectorAll('.price-toggle button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const price = scope.querySelector('.price-display');
+  const note = scope.querySelector('.price-note');
+  const isEnglish = !!btn.closest('#root-en');
+  if(mode==='monthly'){
+    price.innerHTML = isEnglish ? '$4 <span>/ month</span>' : '15 <span>ر.س / شهريًا</span>';
+    note.textContent = isEnglish ? 'Equivalent to $48/year when paid monthly' : 'يعادل 180 ر.س سنويًا عند الدفع الشهري';
+  }else{
+    price.innerHTML = isEnglish ? '$33 <span>/ year</span>' : '125 <span>ر.س / سنويًا</span>';
+    note.textContent = isEnglish ? 'That\'s about $2.75/month — 2 months free' : 'يعادل 10.4 ر.س شهريًا — وفّر شهرين كاملين';
+  }
+}
+function setLang(lang){
+  document.getElementById('root-ar').style.display = lang==='ar' ? 'block' : 'none';
+  document.getElementById('root-en').style.display = lang==='en' ? 'block' : 'none';
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', lang==='ar' ? 'rtl' : 'ltr');
+  document.getElementById('langArBtn').classList.toggle('active', lang==='ar');
+  document.getElementById('langEnBtn').classList.toggle('active', lang==='en');
+  document.querySelectorAll('.i18n').forEach(el=>{
+    el.textContent = el.getAttribute('data-'+lang);
+  });
+}
+</script>
+</body>
+</html>

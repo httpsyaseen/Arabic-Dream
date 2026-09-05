@@ -1,0 +1,23 @@
+{
+  "slug": "sadiq",
+  "name": {
+    "ar": "تفسير الأحلام الكبير برواية الإمام علي وأهل البيت",
+    "en": "The Great Book of Dream Interpretation, narrated from Imam Ali and the Ahl al-Bayt"
+  },
+  "author": {
+    "ar": "منسوب إلى الإمام جعفر الصادق وأهل البيت",
+    "en": "Attributed to Imam Ja'far al-Sadiq and the Ahl al-Bayt"
+  },
+  "kind": "classical",
+  "role": "passages",
+  "died": "al-Sadiq d. 148 AH / 765 CE",
+  "source_url": "https://archive.org/details/0932890343",
+  "color": "teal",
+  "note": {
+    "ar": "هذا الكتاب يمثّل تراث التعبير عند الشيعة، وهو مجموع متأخر. ونسبته إلى الإمام الصادق غير ثابتة؛ فقد نبّه الباحثون على أن بعض المتداول باسمه يذكر ما لم يكن موجوداً في عصره. ونعرضه بوصفه التراث المنسوب إليه لا بوصفه من كلامه. والنص مأخوذ من مسح ضوئي، وقد يبقى فيه شيء من خطأ القراءة.",
+    "en": "This represents the Shia strand of dream interpretation. It is a late compilation, and the attribution to Imam al-Sadiq is not established — researchers note that texts circulating under his name mention things that did not exist in his lifetime. Carried as the tradition ascribed to him, not as his own words. The text comes from a scan and some OCR errors remain."
+  },
+  "parser": "textfile",
+  "raw_pages": 0,
+  "chunks": 1490
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "nabulsi",
+  "name": {
+    "ar": "تعطير الأنام في تعبير المنام",
+    "en": "Ta'tir al-Anam — Perfuming Mankind in the Interpretation of Dreams"
+  },
+  "author": {
+    "ar": "عبد الغني النابلسي",
+    "en": "Abd al-Ghani al-Nabulsi"
+  },
+  "kind": "classical",
+  "role": "symbols",
+  "died": "d. 1143 AH / 1731 CE",
+  "source_url": "https://shamela.ws/book/1217",
+  "color": "gold",
+  "note": null,
+  "parser": "shamela_dictionary",
+  "raw_pages": 378,
+  "chunks": 2317
+}

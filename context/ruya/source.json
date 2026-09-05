@@ -1,0 +1,23 @@
+{
+  "slug": "ruya",
+  "name": {
+    "ar": "الرؤيا",
+    "en": "al-Ru'ya — hadith on dreams and their etiquette"
+  },
+  "author": {
+    "ar": "كتاب الرؤيا",
+    "en": "al-Ru'ya"
+  },
+  "kind": "adab",
+  "role": "hadith",
+  "died": null,
+  "source_url": "https://shamela.ws/book/20824",
+  "color": "green",
+  "note": {
+    "ar": "ليس كتاب رموز، بل أحاديث في أنواع الرؤيا وآدابها.",
+    "en": "Not a symbol dictionary — hadith on the types of dream and the etiquette that follows one, which grounds classification and the sunnah response."
+  },
+  "parser": "shamela_hadith",
+  "raw_pages": 194,
+  "chunks": 44
+}

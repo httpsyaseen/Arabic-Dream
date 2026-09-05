@@ -1,0 +1,20 @@
+{
+  "slug": "ibn_shaheen",
+  "name": {
+    "ar": "الإشارات في علم العبارات",
+    "en": "al-Isharat — The Indications in the Science of Interpretation"
+  },
+  "author": {
+    "ar": "ابن شاهين الظاهري",
+    "en": "Ibn Shahin al-Zahiri"
+  },
+  "kind": "classical",
+  "role": "passages",
+  "died": "d. 873 AH / 1468 CE",
+  "source_url": "https://shamela.ws/book/9968",
+  "color": "gold",
+  "note": null,
+  "parser": "shamela_prose",
+  "raw_pages": 273,
+  "chunks": 4621
+}

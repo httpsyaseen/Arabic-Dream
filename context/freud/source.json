@@ -1,0 +1,23 @@
+{
+  "slug": "freud",
+  "name": {
+    "ar": "تفسير الأحلام / الحلم وتأويله",
+    "en": "The Interpretation of Dreams / On Dreams"
+  },
+  "author": {
+    "ar": "سيغموند فرويد",
+    "en": "Sigmund Freud"
+  },
+  "kind": "psychological",
+  "role": "passages",
+  "died": null,
+  "source_url": "https://archive.org/details/elshandawily6168",
+  "color": "purple",
+  "note": {
+    "ar": "قراءة نفسية، ليست من كتب التعبير، وتُعرض مستقلة عنها.",
+    "en": "A psychological reading. Not one of the interpretation books, and shown separately — the two traditions are never blended."
+  },
+  "parser": "textfile",
+  "raw_pages": 0,
+  "chunks": 2414
+}

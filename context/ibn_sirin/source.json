@@ -1,0 +1,23 @@
+{
+  "slug": "ibn_sirin",
+  "name": {
+    "ar": "تفسير الأحلام (منتخب الكلام)",
+    "en": "Muntakhab al-Kalam — Selected Discourse on the Interpretation of Dreams"
+  },
+  "author": {
+    "ar": "منسوب إلى ابن سيرين",
+    "en": "Attributed to Ibn Sirin"
+  },
+  "kind": "classical",
+  "role": "passages",
+  "died": "d. 110 AH / 728 CE",
+  "source_url": "https://shamela.ws/book/21615",
+  "color": "gold",
+  "note": {
+    "ar": "نسبة الكتاب إلى ابن سيرين غير صحيحة، وهو ما نصّ عليه المحققون، فالكتاب ينقل عن أعلام تأخّروا عنه بأكثر من قرن. ونعرضه بوصفه التراث المتداول باسمه لا بوصفه من تأليفه.",
+    "en": "The ascription to Ibn Sirin is rejected by scholars — the book quotes authorities who lived more than a century after his death. Carried as the tradition circulating under his name, not as his own writing."
+  },
+  "parser": "shamela_prose",
+  "raw_pages": 830,
+  "chunks": 2806
+}
