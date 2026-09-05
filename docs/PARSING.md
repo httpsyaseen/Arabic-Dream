@@ -56,6 +56,32 @@ Result: `context/<book>/raw/`
 
 ## Stage ② — Parse
 
+### First: is this page even about dreams?
+
+The books are not purely interpretation. They open with prefaces, an editor's
+introduction and the author's biography, and drift into chains of narration and
+poetry. None of that belongs in a dream corpus.
+
+`is_dream_page()` in `pipeline/parse.py` drops those before anything is chunked.
+It cost me two bugs to get right:
+
+**Bug 1 — it dropped all 492 pages.** Shamela puts فهرس الكتاب (*fihris
+al-kitab* = "book index") in the breadcrumb of *every* page, so a "skip front
+matter" rule matched everywhere. Fixed by stripping that boilerplate first.
+
+**Bug 2 — it dropped Ibn Sirin's chapter on Qur'anic suras.** That chapter is
+pure symbol content — "whoever recites Surat al-Kahf in a dream will attain his
+wishes" — but it is phrased with ومن قرأ (*wa-man qara'a* = "whoever recites")
+and never uses the word "dream" at all. It scored zero.
+
+The fix generalises: **if a page sits inside a chapter whose title contains dream
+vocabulary, keep it regardless of the page's own wording.** Losing real content
+costs far more than keeping a digression the chunker will never match anyway.
+
+Currently drops 214 non-dream passages across the scraped books.
+
+### Then: one chunk format
+
 Every book, whatever its layout, becomes the same chunk:
 
 ```json
@@ -329,7 +355,7 @@ editing all of them and keeping the names in sync by hand.
 
 ## Two things deliberately not done
 
-**No AI in the pipeline.** An extraction pipeline exists (`legacy/`) that used
+**No AI in the pipeline.** An extraction pipeline once existed (removed; see git history) that used
 Gemini to turn prose into structured translated entries, with a guard that
 discarded any entry whose Arabic quote was not literally present in its source
 page. It works — 95–100% pass rates — but the site does not use it, because

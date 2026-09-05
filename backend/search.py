@@ -18,7 +18,7 @@ import re
 from pathlib import Path
 
 from .aliases import ALIASES
-from .arabic import normalize
+from pipeline.arabic import normalize
 
 INDEX = Path(__file__).resolve().parent.parent / "index"
 

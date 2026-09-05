@@ -55,6 +55,55 @@ RULING_START = re.compile(
     r"(?=(?:فإن رأى|وإن رأى|ومن رأى|من رأى|وإذا رأى|وقال|فمن رأى|وأما|ومن قرأ))"
 )
 
+# --- keeping only dream content ---------------------------------------------
+# The books are not purely ta'bir. They open with prefaces, an editor's
+# introduction and the author's biography, and drift into chains of narration
+# and poetry. None of that belongs in a dream corpus: it adds no symbol
+# coverage and dilutes retrieval.
+#
+# Vocabulary a page must carry to count as interpretation:
+#   رؤيا (ru'ya = vision) · منام (manam = dream) · حلم (hulm = dream)
+#   تأويل / تعبير (ta'wil / ta'bir = interpretation) · رأى (ra'a = he saw)
+DREAM_WORDS = [normalize(w) for w in
+               ("رؤيا", "منام", "حلم", "تأويل", "تعبير", "رأى", "يدل على", "دليل على")]
+
+# Vocabulary in a CHAPTER TITLE that makes the whole chapter ta'bir. Pages
+# inside such a chapter are kept even when the page itself never says "dream" —
+# Ibn Sirin's chapter on Qur'anic suras runs page after page of
+# "ومن قرأ سورة كذا" ("whoever recites sura X") with no dream vocabulary at all,
+# and it is pure symbol content. Losing that costs far more than keeping a
+# digression the chunker will simply never match.
+CHAPTER_WORDS = [normalize(w) for w in ("تأويل", "رؤيا", "رؤية", "منام", "تعبير", "حلم")]
+
+# Apparatus rather than content. Deliberately narrow: a chapter called
+# مقدمة عن الرؤيا ("introduction on visions") IS dream material, so prefaces are
+# judged on their vocabulary rather than their title.
+APPARATUS = [normalize(w) for w in
+             ("ترجمة المؤلف", "فهرس المحتويات", "الفهارس", "فهرس الموضوعات",
+              "المصادر والمراجع")]
+# Shamela prefixes every breadcrumb with this, so it carries no information.
+_BOILERPLATE = normalize("فهرس الكتاب")
+
+MIN_DREAM_HITS = 3
+MIN_PAGE_CHARS = 200
+
+
+def is_dream_page(page: dict) -> bool:
+    """Whether a scraped page is dream-interpretation content."""
+    text = page.get("text", "")
+    if len(text) < MIN_PAGE_CHARS:
+        return False
+
+    heading = normalize(f"{page.get('heading') or ''} {page.get('chapter') or ''}")
+    heading = heading.replace(_BOILERPLATE, " ")
+    if any(a in heading for a in APPARATUS):
+        return False
+    if any(w in heading for w in CHAPTER_WORDS):
+        return True
+
+    norm = normalize(text)
+    return sum(norm.count(w) for w in DREAM_WORDS) >= MIN_DREAM_HITS
+
 # OCR of scanned books leaves ornamental borders as stray Latin and broken glyphs.
 _ARABIC_CHAR = re.compile(r"[؀-ۿ]")
 _OCR_NOISE = re.compile(r"[ـ]|\(\s*[0-9A-Za-z/:.\s]{1,12}\s*\)|[«»]")
@@ -82,6 +131,8 @@ def parse_shamela_dictionary(src: sources.Source, pages: list[dict]) -> list[dic
     """
     best: dict[str, dict] = {}
     for page in pages:
+        if not is_dream_page(page):
+            continue
         for para in page["paragraphs"]:
             head = (para.get("marker") or "").strip()
             body = para["text"].strip()
@@ -115,6 +166,8 @@ def parse_shamela_prose(src: sources.Source, pages: list[dict]) -> list[dict]:
     """Topical prose with no headwords: cut at the phrases that start a ruling."""
     out = []
     for page in pages:
+        if not is_dream_page(page):
+            continue
         for part in RULING_START.split(page["text"]):
             part = " ".join(part.split())
             if len(part) < PASSAGE_MIN:

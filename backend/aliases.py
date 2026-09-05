@@ -18,7 +18,7 @@ Plus modern words for things the classical books name differently:
                                           teeth under "molar", and nobody
                                           describing a dream types "molar"
 
-Keys are already normalised (see backend/arabic.py) — no hamza, no ta marbuta.
+Keys are already normalised (see pipeline/arabic.py) — no hamza, no ta marbuta.
 This table should grow from logs of dreams that matched nothing.
 """
 
