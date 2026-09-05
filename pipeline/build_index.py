@@ -58,9 +58,9 @@ def build() -> dict:
     # --- vocabulary: only sources whose role is "symbols" -------------------
     symbols: list[dict] = []
     for src in sources.SOURCES.values():
-        if src.role != "symbols":
-            continue
         for c in load_chunks(src.slug):
+            if c["kind"] != "symbol":
+                continue
             symbols.append({
                 "key": normalize(c["symbol_ar"]),
                 "symbol_ar": c["symbol_ar"],
@@ -80,10 +80,10 @@ def build() -> dict:
     passages: dict[str, list[dict]] = defaultdict(list)
     per_source_counts: dict[str, int] = {}
     for src in sources.SOURCES.values():
-        if src.role != "passages":
-            continue
         n = 0
         for c in load_chunks(src.slug):
+            if c["kind"] != "passage":
+                continue
             hits = candidates(c["text_ar"], max_words) & keys
             for key in hits:
                 bucket = passages[key]
@@ -97,14 +97,15 @@ def build() -> dict:
                     "url": c.get("url", ""),
                 })
                 n += 1
-        per_source_counts[src.slug] = n
+        if n:
+            per_source_counts[src.slug] = n
 
     # --- adab ---------------------------------------------------------------
     adab = []
     for src in sources.SOURCES.values():
-        if src.role != "hadith":
-            continue
         for c in load_chunks(src.slug):
+            if c["kind"] != "hadith":
+                continue
             adab.append({
                 "text_ar": c["text_ar"],
                 "source": c["source"],

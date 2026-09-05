@@ -50,9 +50,18 @@ PASSAGE_MAX = 700     # longer buries the relevant sentence in the prompt
 # the exception is Arabic function words, which would otherwise match in almost
 # every sentence.
 HEADWORD_MIN = 2
+# Note that وجه (wajh = face) is deliberately NOT here: a face in a dream is a
+# real symbol, however short the word is. The test is whether the word carries
+# meaning in a dream, not how common it is.
 STOPWORDS = {
+    # particles and prepositions
     "من", "في", "ما", "لا", "ان", "او", "ثم", "قد", "هل", "بل", "لم", "لن",
-    "هو", "هي", "به", "له", "مع", "عن", "على", "الي", "كل", "اي", "ذو", "ذا",
+    "مع", "عن", "على", "الي", "كل", "اي", "حتي", "لكن", "بعد", "قبل", "عند",
+    # pronouns and demonstratives — these were reaching the vocabulary and
+    # matching ordinary sentences: ذلك ("that") and لي ("to me") both did.
+    "هو", "هي", "هم", "هن", "به", "له", "لها", "لي", "لك", "بها", "فيه", "منه",
+    "اليه", "عليه", "هذا", "هذه", "ذلك", "تلك", "الذي", "التي", "ذو", "ذا",
+    "انا", "انت", "نحن", "هنا", "هناك", "كذا", "كذلك", "ايضا",
 }
 HEADWORD_MAX = 30
 HEADWORD_MAX_WORDS = 4
@@ -174,6 +183,53 @@ def parse_shamela_dictionary(src: sources.Source, pages: list[dict]) -> list[dic
                 "url": page.get("url", ""),
             }
     return list(best.values())
+
+
+# This book is alphabetical too, but writes its headwords inline and ends them
+# with a colon — "البوم في المنام:" ("the owl, in a dream:"). Only entries that
+# say "in a dream" are taken: the same colon also ends section headings
+# ("المقالة الثانية:" = "Chapter Two") and speaker attributions ("قال ابن سيرين:"
+# = "Ibn Sirin said"), and letting those into the vocabulary would create
+# symbols that match ordinary prose. The book declaring an entry a dream entry
+# is a far better signal than any list of rejects.
+INLINE_HEAD = re.compile(r"^(.{2,34}):\s*$", re.M)
+IN_DREAM = re.compile(r"\s*(?:فِي|في)\s*(?:الْمَنَام|المنام|الرُّؤْيَا|الرؤيا)\s*$")
+
+
+def parse_inline_dictionary(src: sources.Source, pages: list[dict]) -> list[dict]:
+    """Headwords marked inline, plus the surrounding prose as passages."""
+    symbols: dict[str, dict] = {}
+    for page in pages:
+        if not is_dream_page(page):
+            continue
+        text = page["text"]
+        marks = [m for m in INLINE_HEAD.finditer(text) if IN_DREAM.search(m.group(1))]
+        for i, m in enumerate(marks):
+            head = IN_DREAM.sub("", m.group(1).strip()).strip()
+            key = normalize(strip_parens(head))
+            if not (HEADWORD_MIN <= len(key) <= HEADWORD_MAX) or key in STOPWORDS:
+                continue
+            if len(key.split()) > HEADWORD_MAX_WORDS:
+                continue
+            # The entry runs to the next headword, or to the end of the page.
+            end = marks[i + 1].start() if i + 1 < len(marks) else len(text)
+            body = " ".join(text[m.end():end].split())[:PASSAGE_MAX]
+            if len(body) < BODY_MIN:
+                continue
+            prev = symbols.get(key)
+            if prev and len(prev["text_ar"]) >= len(body):
+                continue
+            symbols[key] = {
+                "source": src.slug,
+                "kind": "symbol",
+                "symbol_ar": strip_parens(head),
+                "text_ar": body,
+                "chapter_ar": page.get("chapter"),
+                "printed_page": page.get("printed_page"),
+                "url": page.get("url", ""),
+            }
+    # The prose is still worth having as supporting passages for other symbols.
+    return list(symbols.values()) + parse_shamela_prose(src, pages)
 
 
 def parse_shamela_prose(src: sources.Source, pages: list[dict]) -> list[dict]:
@@ -308,6 +364,7 @@ def parse_textfile(src: sources.Source, _pages) -> list[dict]:
 
 PARSERS = {
     "shamela_dictionary": parse_shamela_dictionary,
+    "shamela_inline_dictionary": parse_inline_dictionary,
     "shamela_prose": parse_shamela_prose,
     "shamela_hadith": parse_shamela_hadith,
     "textfile": parse_textfile,

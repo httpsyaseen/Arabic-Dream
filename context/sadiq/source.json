@@ -1,5 +1,9 @@
 {
   "slug": "sadiq",
+  "display": {
+    "ar": "الإمام الصادق",
+    "en": "Imam Al-Sadiq"
+  },
   "name": {
     "ar": "تفسير الأحلام الكبير برواية الإمام علي وأهل البيت",
     "en": "The Great Book of Dream Interpretation, narrated from Imam Ali and the Ahl al-Bayt"

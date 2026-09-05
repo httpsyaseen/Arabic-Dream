@@ -2915,7 +2915,7 @@
    "english": "Marrying a Dead Person",
    "key": "الزواج من ميت",
    "match": "partial",
-   "corpus_symbol": "موت",
+   "corpus_symbol": "الزواج",
    "has_english_text": true
   },
   "طلاق": {

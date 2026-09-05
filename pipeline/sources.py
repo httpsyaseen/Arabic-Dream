@@ -32,6 +32,7 @@ class Source:
     kind: str
     # "symbols"  -> contributes headwords to the search vocabulary
     # "passages" -> contributes supporting text, found via those headwords
+    # "both"     -> a dictionary whose prose is also worth searching
     # "hadith"   -> etiquette and classification material, not symbols
     role: str
 
@@ -124,8 +125,8 @@ SOURCES: dict[str, Source] = {
         author_ar="كتاب تعبير الرؤيا",
         author_en="Ta'bir al-Ru'ya",
         kind="classical",
-        role="passages",
-        parser="shamela_prose",
+        role="both",
+        parser="shamela_inline_dictionary",
         shamela_id=10696,
         source_url="https://shamela.ws/book/10696",
     ),

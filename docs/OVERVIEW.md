@@ -257,13 +257,13 @@ on the list, the symbol is missed entirely. This is the single biggest weakness 
 it is what made "I fell from a building" return nothing until verb forms were
 added.
 
-**No logging of failed matches.** We have no data on what real users write that
-finds nothing. This should be built next; it makes every later improvement
-evidence-based instead of guesswork.
+**The alias table still needs growing** — but now from evidence.
+`backend/misses.py` records which words reach no symbol (words only, never the
+dream text) and `GET /api/v1/misses` ranks them. That list is the work queue.
 
-**One book's headwords are unextracted.** *Ta'bir al-Ru'ya* is alphabetical but
-writes its headwords inline rather than marking them up, so it contributes
-passages instead of vocabulary. Extracting them would add perhaps 1,000 symbols.
+**88 English symbols still reach nothing.** `index/arabic_symbol_dict.json`
+lists them. Each needs someone who reads Arabic to find what the books file it
+under, the way lion turned out to be سبع rather than أسد.
 
 **OCR noise** in the two scanned sources (Freud, and the Shia volume).
 

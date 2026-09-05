@@ -8,6 +8,7 @@ from pipeline import sources
 from .. import config
 from ..deps import CORPUS
 from ..schemas import HealthResponse
+from .. import misses
 
 router = APIRouter(tags=["meta"])
 
@@ -69,4 +70,22 @@ def options() -> dict:
             "حلمت أني أسقط من بناية عالية",
             "رأيت الكعبة وأنا أصلي",
         ],
+    }
+
+
+@router.get("/misses")
+def unmatched(top: int = 60) -> dict:
+    """Words that reached no symbol, most frequent first.
+
+    The list of aliases still worth writing. Dreams are never stored — only the
+    individual words, which is enough to act on and carries almost none of the
+    content of the dream they came from.
+    """
+    data = misses._load()
+    ranked = sorted(data["words"].items(), key=lambda kv: -kv[1])[:top]
+    return {
+        "dreams_seen": data["dreams_seen"],
+        "dreams_with_no_match": data["dreams_with_no_match"],
+        "distinct_unmatched_words": len(data["words"]),
+        "words": [{"word": w, "count": n} for w, n in ranked],
     }

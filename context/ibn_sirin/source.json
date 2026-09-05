@@ -1,5 +1,9 @@
 {
   "slug": "ibn_sirin",
+  "display": {
+    "ar": "ابن سيرين",
+    "en": "Ibn Sirin"
+  },
   "name": {
     "ar": "تفسير الأحلام (منتخب الكلام)",
     "en": "Muntakhab al-Kalam — Selected Discourse on the Interpretation of Dreams"

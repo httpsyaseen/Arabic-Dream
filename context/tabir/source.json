@@ -1,5 +1,9 @@
 {
   "slug": "tabir",
+  "display": {
+    "ar": "كتاب تعبير الرؤيا",
+    "en": "Ta'bir al-Ru'ya"
+  },
   "name": {
     "ar": "تعبير الرؤيا",
     "en": "Ta'bir al-Ru'ya — The Interpretation of Visions"
@@ -9,12 +13,12 @@
     "en": "Ta'bir al-Ru'ya"
   },
   "kind": "classical",
-  "role": "passages",
+  "role": "both",
   "died": null,
   "source_url": "https://shamela.ws/book/10696",
   "color": "gold",
   "note": null,
-  "parser": "shamela_prose",
+  "parser": "shamela_inline_dictionary",
   "raw_pages": 333,
-  "chunks": 1376
+  "chunks": 1539
 }

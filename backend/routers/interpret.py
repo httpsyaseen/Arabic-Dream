@@ -16,6 +16,7 @@ from fastapi.responses import JSONResponse
 
 from .. import answer as answer_mod
 from .. import config
+from .. import misses
 from ..deps import CORPUS, source_names_ar, source_public
 from ..schemas import DreamRequest, InterpretResponse
 from ..search import looks_distressing
@@ -56,6 +57,8 @@ def interpret(payload: DreamRequest):
     context = payload.context()
 
     matches = CORPUS.match(dream, source=payload.source)
+    # Note the words that reached nothing. Words only — never the dream itself.
+    misses.record(dream, matches)
     distressing = looks_distressing(dream) or payload.alam == "نعم" or \
         payload.shuur in ("قلق", "خوف", "حزن")
     adab = CORPUS.adab_for(dream, distressing)

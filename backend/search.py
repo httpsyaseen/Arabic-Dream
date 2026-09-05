@@ -40,6 +40,21 @@ _PREFIX = r"(?:وال|بال|كال|فال|لل|ال|وب|فب|و|ف|ب)?"
 _SUFFIX = r"(?:ها|هم|هن|كم|كن|نا|تين|ات|ين|ون|ان|ه|ي|ك|ا)?"
 _ARABIC = r"[؀-ۿ]"
 
+# Very common Arabic words that a short symbol plus a permitted affix can be
+# read out of. فقط ("only") is ف + قط (qitt = cat); ذلك ("that") is ذل
+# (dhull = humiliation) + ك. Both produced confident, entirely wrong symbols.
+# Masking the whole word before matching is more reliable than trying to forbid
+# the affix, which is legitimate elsewhere — دماً (blood) needs that same alif.
+# Stems, not surface forms: the same word arrives as بعد, وبعدها, فبعد, so the
+# token has its affixes stripped before this set is consulted.
+COMMON_WORDS = {
+    "فقط", "ذلك", "كذلك", "لذلك", "هكذا", "هذلك",
+    "كانت", "كنت", "كانوا", "بينما", "عندما", "حينما", "ايضا", "ربما",
+    "جدا", "قليلا", "كثيرا", "دايما", "احيانا", "فجاه", "مباشره",
+    "بعد", "قبل", "لكن", "لان", "حول", "امام", "خلف", "بجانب", "نحو",
+    "اثناء", "خلال", "وسط", "جانب", "طرف", "جهه", "مره", "مرات",
+}
+
 MAX_SYMBOLS = 6
 PSYCH_PER_SYMBOL = 2
 CLASSICAL_PER_SYMBOL = 4
@@ -71,6 +86,35 @@ class Corpus:
 
     # -- symbols ------------------------------------------------------------
 
+    # Stripping affixes with one greedy pass picks the wrong split when the stem
+    # itself begins with a prefix letter: وبعدها is و + بعدها, but a pattern that
+    # prefers the longer "وب" reads it as وب + عدها. So every plausible split is
+    # tried and the word is masked if any of them is a common word.
+    _PREFIXES = ("وال", "بال", "كال", "فال", "لل", "ال", "وب", "فب", "و", "ف", "ب", "")
+    _SUFFIXES = ("ها", "هم", "هن", "كم", "كن", "نا", "ات", "ين", "ون", "ان",
+                 "ه", "ي", "ك", "ا", "")
+
+    @classmethod
+    def _stems(cls, word: str):
+        for pre in cls._PREFIXES:
+            if pre and not word.startswith(pre):
+                continue
+            body = word[len(pre):]
+            for suf in cls._SUFFIXES:
+                if suf and not body.endswith(suf):
+                    continue
+                stem = body[: len(body) - len(suf)] if suf else body
+                if stem:
+                    yield stem
+
+    @classmethod
+    def _mask_common(cls, text: str) -> str:
+        """Blank out words a short symbol could be misread out of."""
+        return " ".join(
+            "\u0000" if any(s in COMMON_WORDS for s in cls._stems(word)) else word
+            for word in text.split()
+        )
+
     def match(self, dream: str, limit: int = MAX_SYMBOLS,
               source: str | None = None) -> list[dict]:
         """Symbols occurring in the dream, longest headword first.
@@ -80,7 +124,7 @@ class Corpus:
         that finds symbols at all — but when a reader has chosen one interpreter,
         only that interpreter's text is shown to them and to the model.
         """
-        text = normalize(dream)
+        text = self._mask_common(normalize(dream))
         hits: list[dict] = []
         claimed: list[str] = []
 

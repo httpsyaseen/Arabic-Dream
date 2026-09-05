@@ -1,5 +1,9 @@
 {
   "slug": "ibn_shaheen",
+  "display": {
+    "ar": "ابن شاهين",
+    "en": "Ibn Shahin"
+  },
   "name": {
     "ar": "الإشارات في علم العبارات",
     "en": "al-Isharat — The Indications in the Science of Interpretation"

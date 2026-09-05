@@ -1,5 +1,9 @@
 {
   "slug": "ruya",
+  "display": {
+    "ar": "أحاديث الرؤيا وآدابها",
+    "en": "Hadith on dreams"
+  },
   "name": {
     "ar": "الرؤيا",
     "en": "al-Ru'ya — hadith on dreams and their etiquette"

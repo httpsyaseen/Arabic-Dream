@@ -1,5 +1,9 @@
 {
   "slug": "freud",
+  "display": {
+    "ar": "سيغموند فرويد",
+    "en": "Sigmund Freud"
+  },
   "name": {
     "ar": "تفسير الأحلام / الحلم وتأويله",
     "en": "The Interpretation of Dreams / On Dreams"
