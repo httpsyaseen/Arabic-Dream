@@ -65,15 +65,6 @@ Parse and index together take about 6 seconds. **Do not delete `context/*/raw/`*
 — the index is derived from it, and every change to the alias table or the
 matching rules means rebuilding from it.
 
-## Generated data files
-
-| File | Contents |
-|---|---|
-| `symbols_ar.json` | `symbols.json` with Arabic symbol names. Same 1,323 entries, same shape, interpretations untouched — only the `symbol` field differs. `python -m pipeline.translate_symbol_names` |
-| `symbols.txt` | The English→Arabic name pairs behind it, 1,234 rows. Grows whenever the translator fills a gap, so the same name is never translated twice. |
-| `index/corpus_symbols_ar.json` | The same idea built from our own books instead: 2,573 Arabic symbols with verbatim interpretations, printed pages and source links. `python -m pipeline.build_arabic_symbols` |
-| `index/arabic_symbol_dict.json` | English↔Arabic mapping with which names the corpus actually covers. `python -m pipeline.build_symbol_dict` |
-
 ## Adding a book
 
 One entry in `pipeline/sources.py`, then scrape, parse, build. See
