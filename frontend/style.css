@@ -315,3 +315,94 @@ details.fold{border-top:0;padding:0}
 
 /* The AR/EN toggle was the only tap target under the 32px minimum. */
 .lang-switch button{min-height:32px;min-width:38px;padding:.3rem .7rem}
+
+/* =========================================================== spacing scale
+ * The values above grew ad hoc — .85rem here, 1.15rem there — which is why the
+ * vertical rhythm wandered. One scale, used everywhere below, so related things
+ * sit at the same distance no matter which component they are in.
+ */
+:root{
+  --s1:.25rem; --s2:.5rem;  --s3:.75rem; --s4:1rem;
+  --s5:1.5rem; --s6:2rem;   --s7:3rem;   --s8:4.5rem;
+  --measure:68ch;           /* comfortable line length for body text */
+}
+
+/* --- vertical rhythm ----------------------------------------------------- */
+.page{padding-top:var(--s6);padding-bottom:var(--s8)}
+.card{padding:var(--s5) var(--s5);margin-top:var(--s4)}
+.card + .card{margin-top:var(--s4)}
+.card h2{margin:0 0 var(--s4)}
+.section-label{margin:var(--s7) 0 var(--s2)}
+.section-label + .card,
+.section-label + .hub-grid,
+.section-label + .chips{margin-top:var(--s3)}
+h1{margin:0 0 var(--s2)}
+.sub{margin:0 0 var(--s5);max-width:var(--measure)}
+
+/* Give the eye a rest between the reading and the evidence beneath it. */
+.verdict{padding:var(--s7) var(--s6) var(--s5);margin-top:var(--s5)}
+.verdict + .card,.verdict + .lens-banner{margin-top:var(--s4)}
+.lens-banner{padding:var(--s3) var(--s5);margin-top:var(--s4)}
+
+/* --- the form ------------------------------------------------------------ */
+.form-card{padding:var(--s5) var(--s5) var(--s5)}
+.field{margin-bottom:var(--s4)}
+.field > span{margin-bottom:var(--s2)}
+textarea{padding:var(--s4) var(--s4);min-height:9.5rem}
+.ctx{padding:var(--s3) var(--s4);margin-bottom:var(--s4)}
+.ctx-grid{gap:var(--s3);margin-top:var(--s3)}
+.row{margin-top:var(--s4);gap:var(--s3)}
+.examples{margin-top:var(--s4);gap:var(--s2)}
+.hub-grid{gap:var(--s3);margin-top:var(--s4)}
+.hub-card{padding:var(--s4) var(--s4);gap:var(--s1)}
+
+/* --- symbol cards -------------------------------------------------------- */
+.symbol-card{padding:var(--s5)}
+.symbol-head{gap:var(--s3);margin-bottom:var(--s4)}
+.quote-box{padding:var(--s4) var(--s4)}
+.quote-box p{margin:0 0 var(--s3)}
+.quote-src{margin-top:var(--s3);padding-top:var(--s2)}
+.cond,.method-note,.hal{padding:var(--s3) var(--s4);margin-top:var(--s3)}
+.psych-block{padding:var(--s4);margin-top:var(--s3)}
+.srcs{margin-top:var(--s3)}
+.meters{gap:var(--s4);margin-top:var(--s5)}
+.dua,.personal-note{padding:var(--s4) var(--s5)}
+.cite{padding-inline-start:var(--s4);margin:var(--s3) 0 var(--s5)}
+.cite .meta{margin-top:var(--s2)}
+.actions{margin-top:var(--s6);gap:var(--s2)}
+
+/* --- body copy ----------------------------------------------------------- */
+.verdict-sub,.quote-box p,.personal-note,.cite .txt{max-width:var(--measure)}
+.verdict-sub{margin-inline:auto}
+
+/* =========================================================== loading state */
+.verdict-loading{text-align:center}
+.verdict-loading .skel{background:linear-gradient(90deg,
+  rgba(255,255,255,.05) 25%, rgba(255,255,255,.13) 37%, rgba(255,255,255,.05) 63%);
+  background-size:400% 100%}
+.skel-lg{height:26px;margin:var(--s3) auto}
+.verdict-loading .verdict-pill{margin-bottom:var(--s5)}
+.verdict-loading .verdict-foot{margin-top:var(--s5);opacity:.75}
+
+/* The symbols found, shown the moment the lookup returns. */
+.chips{display:flex;gap:var(--s2);flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:var(--s2);
+  background:var(--white);border:1px solid var(--line);border-radius:999px;
+  padding:var(--s2) var(--s4);font-size:.95rem}
+.chip b{color:var(--gold-deep);font-variant-numeric:tabular-nums}
+.chip-n{color:var(--ink-soft);font-size:.78rem}
+
+/* New content should arrive rather than appear. */
+.verdict,.symbol-card,.chips{animation:rise .32s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+@media (max-width:760px){
+  :root{--s5:1.15rem;--s6:1.5rem;--s7:2rem;--s8:3rem}
+  .verdict{padding:var(--s6) var(--s4) var(--s5)}
+  .card,.symbol-card,.form-card{padding:var(--s4)}
+}
+
+/* A headline that leaves one word alone on the last line reads as broken.
+   Balanced wrapping evens the lines out; pretty avoids orphans in body copy. */
+.verdict-title,h1,.hero h1,.symbol-name,.card h2{text-wrap:balance}
+.verdict-sub,.sub,.quote-box p,.personal-note{text-wrap:pretty}

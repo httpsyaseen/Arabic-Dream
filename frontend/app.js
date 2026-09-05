@@ -83,6 +83,11 @@ const T = {
     sourceLabel: "المرجعية",
     sourceAll: "كل المصادر مجتمعة",
     go: "فسّر الرؤيا", clear: "مسح", searching: "يُبحث في الكتب…",
+    stageSearch: "يُبحث عن رموز رؤياك في الكتب…",
+    stageFound: (s, c) => `وُجد ${s} في ${c}. يُحرَّر الشرح الآن…`,
+    stageNone: "لم يُعثر على رمزٍ في الكتب المفهرسة. يُحرَّر الجواب الآن…",
+    stageWait: "قد يستغرق هذا بضع ثوانٍ.",
+    foundSymbols: "الرموز التي عُثر عليها",
     empty: "اكتب رؤياك أولاً.",
     yourDream: "رؤياك", changeDream: "تعديل الرؤيا",
     verdictPill: (kind, n) => `${kind} · مبنيّ على ${count(n, TEXTS)} من الكتب`,
@@ -135,6 +140,11 @@ const T = {
     sourceLabel: "Authority",
     sourceAll: "All sources together",
     go: "Interpret", clear: "Clear", searching: "Searching the books…",
+    stageSearch: "Looking up your dream's symbols in the books…",
+    stageFound: (s, c) => `Found ${s} across ${c}. Composing the reading…`,
+    stageNone: "No symbol found in the indexed books. Composing an answer…",
+    stageWait: "This takes a few seconds.",
+    foundSymbols: "Symbols found",
     empty: "Write your dream first.",
     yourDream: "Your dream", changeDream: "Edit dream",
     verdictPill: (kind, n) => `${kind} · built on ${n} original ${n === 1 ? "text" : "texts"}`,
@@ -446,30 +456,100 @@ async function submitDream(fixedSource) {
 
   // A skeleton of the shape that is coming reads as progress; a bare spinner
   // reads as a stall, and this call takes six seconds or more.
-  $("#pending").innerHTML = `
-    <div class="card loading" aria-live="polite">
-      <div class="loading-head"><span class="spin"></span> ${L.searching}</div>
-      <div class="skel" style="width:55%"></div>
-      <div class="skel"></div><div class="skel" style="width:85%"></div>
-      <div class="skel" style="width:70%"></div>
-    </div>`;
-  $("#pending").scrollIntoView({ behavior: "smooth", block: "center" });
+  // Two phases. The lookup costs about 2 ms and the model six to nine seconds,
+  // so the citations are shown as soon as they exist rather than being held
+  // hostage to the slow half. A reader gets real content in well under a second.
+  STATE.pending = { dream, body, phase: "matching", match: null };
+  location.hash = "#/result";
+  route();
+
+  try {
+    const m = await fetch(API + "/match", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    }).then(r => r.json());
+    if (STATE.pending?.dream !== dream) return;      // a newer dream took over
+    STATE.pending.match = m;
+    STATE.pending.phase = "interpreting";
+    if (location.hash === "#/result") route();
+  } catch { /* fall through to the full call */ }
+
   try {
     const r = await fetch(API + "/interpret", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
     });
+    if (STATE.pending?.dream !== dream) return;
     STATE.last = await r.json();
     STATE.last.dream = dream;
+    STATE.pending = null;
     sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
-    location.hash = "#/result";
-    if ((location.hash || "") === "#/result") route();
+    if (location.hash === "#/result") route(); else location.hash = "#/result";
   } catch (e) {
-    $("#pending").innerHTML = `<div class="card err">${esc(e.message)}</div>`;
+    STATE.pending = { ...STATE.pending, phase: "error", error: e.message };
+    if (location.hash === "#/result") route();
   }
+}
+
+/* The dream echoed back, shown in every phase so the page never looks empty. */
+function dreamEcho(dream, srcName) {
+  const L = t();
+  return `<div class="card dream-echo">
+      <div class="echo-label">${L.yourDream}${srcName ? ` · ${esc(srcName)}` : ""}</div>
+      <p dir="rtl" lang="ar" class="serif">${esc(dream || "")}</p>
+      <a class="btn ghost" href="#/">${L.changeDream}</a>
+    </div>`;
+}
+
+/* What is on screen while the model is still working. */
+function viewPending() {
+  const L = t(), pend = STATE.pending;
+  const m = pend.match;
+  const srcName = pend.body.source
+    ? (STATE.sources.find(s => s.slug === pend.body.source) || {}).display?.[lang]
+    : null;
+
+  let stage, sub;
+  if (pend.phase === "matching") {
+    stage = L.stageSearch; sub = "";
+  } else if (m && m.matched) {
+    stage = L.stageFound(count(m.matched, SYMS),
+                         count(m.symbols.reduce((n, s) => n + s.citations.length, 0), TEXTS));
+    sub = L.stageWait;
+  } else {
+    stage = L.stageNone; sub = L.stageWait;
+  }
+
+  let h = `<div class="wrap page">${dreamEcho(pend.dream, srcName)}`;
+
+  if (pend.phase === "error") {
+    h += `<div class="card err">${esc(pend.error)}</div></div>`;
+    return chrome(h);
+  }
+
+  // A skeleton in the shape of the verdict that is coming, so the layout does
+  // not jump when it arrives.
+  h += `<div class="verdict verdict-loading" aria-live="polite" aria-busy="true">
+      <span class="verdict-pill"><span class="spin"></span> ${esc(stage)}</span>
+      <div class="skel skel-lg" style="width:78%;margin-inline:auto"></div>
+      <div class="skel skel-lg" style="width:56%;margin-inline:auto"></div>
+      <div class="skel" style="width:64%;margin-inline:auto;margin-top:1.4rem"></div>
+      <div class="skel" style="width:48%;margin-inline:auto"></div>
+      ${sub ? `<p class="verdict-foot">${esc(sub)}</p>` : ""}
+    </div>`;
+
+  // The citations already exist — show them rather than another placeholder.
+  if (m?.symbols?.length) {
+    h += `<h2 class="section-label">${L.foundSymbols}</h2>
+      <div class="chips">${m.symbols.map((s, i) =>
+        `<span class="chip"><b>${num(i + 1)}</b> ${esc(s.symbol_ar)}
+          <span class="chip-n">${count(s.citations.length, TEXTS)}</span></span>`).join("")}</div>`;
+    h += citationsBlock(m.symbols);
+  }
+  return chrome(h + `</div>`);
 }
 
 function viewResult() {
   const L = t();
+  if (STATE.pending) return viewPending();
   if (!STATE.last) {
     try { STATE.last = JSON.parse(sessionStorage.getItem("taweel_last")); } catch { /* none */ }
   }
@@ -481,12 +561,7 @@ function viewResult() {
     ? (STATE.sources.find(s => s.slug === meta.source) || {}).display?.[lang]
     : null;
 
-  let h = `<div class="wrap page">
-    <div class="card dream-echo">
-      <div class="echo-label">${L.yourDream}${srcName ? ` · ${esc(srcName)}` : ""}</div>
-      <p dir="rtl" lang="ar" class="serif">${esc(d.dream || "")}</p>
-      <a class="btn ghost" href="#/">${L.changeDream}</a>
-    </div>`;
+  let h = `<div class="wrap page">${dreamEcho(d.dream, srcName)}`;
 
   if (!a) {
     h += `<div class="card err">${esc(meta.error || "no answer")}</div>`;
@@ -588,22 +663,8 @@ function viewResult() {
     if (meta.used_corpus === false) h += `<div class="note">${L.noCorpusNote}</div>`;
   }
 
-  if (d.symbols?.length) h += `<div class="card"><h2>${L.nusus}</h2>` + d.symbols.map(s => `
-    <details><summary>${esc(s.symbol_ar)} <span class="badge">${count(s.citations.length, TEXTS)}</span></summary>
-      ${s.citations.map(c => `<div class="cite">
-        <div class="txt serif">${esc(c.text_ar)}</div>
-        <div class="meta"><span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${c.kind === "psychological" ? L.psych : L.classical}</span>
-          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${num(c.printed_page)})` : ""}
-          ${c.url ? `· <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
-      </div>`).join("")}</details>`).join("") + `</div>`;
-
-  if (d.adab_sources?.length) h += `<div class="card"><details class="fold"><summary><h2>${L.ahadith}</h2>
-      <span class="badge">${count(Math.min(d.adab_sources.length, 4), HADITH)}</span></summary>` +
-    d.adab_sources.slice(0, 4).map(x => `<div class="cite">
-      <div class="txt serif">${esc(x.text_ar)}</div>
-      <div class="meta">${esc(x.chapter_ar || "")}${x.printed_page ? ` (${L.page} ${num(x.printed_page)})` : ""}
-        ${x.url ? `· <a href="${esc(x.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
-    </div>`).join("") + `</details></div>`;
+  if (d.symbols?.length) h += citationsBlock(d.symbols);
+  h += adabBlock(d);
 
   h += `<div class="actions">
     <button class="btn ghost" id="copyBtn">${L.copy}</button>
@@ -613,6 +674,31 @@ function viewResult() {
   chrome(h);
   $("#copyBtn").onclick = copyResult;
   $("#saveBtn").onclick = () => { saveToJournal(); $("#saveBtn").textContent = L.saved; };
+}
+
+function citationsBlock(symbols) {
+  const L = t();
+  return `<div class="card"><h2>${L.nusus}</h2>` + symbols.map(s => `
+    <details><summary>${esc(s.symbol_ar)} <span class="badge">${count(s.citations.length, TEXTS)}</span></summary>
+      ${s.citations.map(c => `<div class="cite">
+        <div class="txt serif">${esc(c.text_ar)}</div>
+        <div class="meta"><span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${c.kind === "psychological" ? L.psych : L.classical}</span>
+          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${num(c.printed_page)})` : ""}
+          ${c.url ? `· <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
+      </div>`).join("")}</details>`).join("") + `</div>`;
+}
+
+function adabBlock(d) {
+  const L = t();
+  let h = "";
+  if (d.adab_sources?.length) h += `<div class="card"><details class="fold"><summary><h2>${L.ahadith}</h2>
+      <span class="badge">${count(Math.min(d.adab_sources.length, 4), HADITH)}</span></summary>` +
+    d.adab_sources.slice(0, 4).map(x => `<div class="cite">
+      <div class="txt serif">${esc(x.text_ar)}</div>
+      <div class="meta">${esc(x.chapter_ar || "")}${x.printed_page ? ` (${L.page} ${num(x.printed_page)})` : ""}
+        ${x.url ? `· <a href="${esc(x.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
+    </div>`).join("") + `</details></div>`;
+  return h;
 }
 
 /* ------------------------------------------------------------- journal */

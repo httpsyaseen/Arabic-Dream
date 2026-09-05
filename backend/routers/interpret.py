@@ -50,6 +50,33 @@ def _citations(match: dict) -> list[dict]:
     return out
 
 
+@router.post("/match")
+def match_only(payload: DreamRequest) -> dict:
+    """Symbols and citations, with no model call. Costs ~2 ms.
+
+    The page uses this first so a reader sees their symbols and the classical
+    text almost immediately, then fills in the interpretation when the model
+    returns six to nine seconds later. Waiting on the model to show text that
+    was already on disk is a self-inflicted delay.
+    """
+    started = time.time()
+    dream = payload.dream.strip()
+    matches = CORPUS.match(dream, source=payload.source)
+    misses.record(dream, matches)
+    distressing = looks_distressing(dream) or payload.alam == "نعم" or \
+        payload.shuur in ("قلق", "خوف", "حزن")
+    return {
+        "symbols": [
+            {"symbol_ar": m["symbol_ar"], "key": m["key"], "citations": _citations(m)}
+            for m in matches
+        ],
+        "matched": len(matches),
+        "distressing": distressing,
+        "source": payload.source,
+        "elapsed_ms": int((time.time() - started) * 1000),
+    }
+
+
 @router.post("/interpret", response_model=InterpretResponse)
 def interpret(payload: DreamRequest):
     started = time.time()
