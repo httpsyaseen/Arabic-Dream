@@ -42,7 +42,8 @@ class Source:
 
     shamela_id: int | None = None     # for scraped sources
     files: tuple[str, ...] = ()       # for plain-text sources under context/<slug>/raw/
-    died: str = ""
+    died: str = ""            # English form
+    died_ar: str = ""         # Arabic form, for the Arabic interface
     source_url: str = ""
     color: str = "gold"               # display hint for the frontend
 
@@ -74,6 +75,7 @@ SOURCES: dict[str, Source] = {
         parser="shamela_dictionary",
         shamela_id=1217,
         died="d. 1143 AH / 1731 CE",
+        died_ar="ت ١١٤٣هـ / ١٧٣١م",
         source_url="https://shamela.ws/book/1217",
     ),
     "ibn_sirin": Source(
@@ -89,6 +91,7 @@ SOURCES: dict[str, Source] = {
         parser="shamela_prose",
         shamela_id=21615,
         died="d. 110 AH / 728 CE",
+        died_ar="ت ١١٠هـ / ٧٢٨م",
         source_url="https://shamela.ws/book/21615",
         note_ar=(
             "نسبة الكتاب إلى ابن سيرين غير صحيحة، وهو ما نصّ عليه المحققون، فالكتاب "
@@ -114,6 +117,7 @@ SOURCES: dict[str, Source] = {
         parser="shamela_prose",
         shamela_id=9968,
         died="d. 873 AH / 1468 CE",
+        died_ar="ت ٨٧٣هـ / ١٤٦٨م",
         source_url="https://shamela.ws/book/9968",
     ),
     "tabir": Source(
@@ -146,6 +150,7 @@ SOURCES: dict[str, Source] = {
         files=("sadiq.txt",),
         needs_ocr_clean=True,
         died="al-Sadiq d. 148 AH / 765 CE",
+        died_ar="الصادق ت ١٤٨هـ / ٧٦٥م",
         source_url="https://archive.org/details/0932890343",
         color="teal",
         note_ar=(
@@ -271,7 +276,7 @@ def as_dict(s: Source) -> dict:
         "author": {"ar": s.author_ar, "en": s.author_en},
         "kind": s.kind,
         "role": s.role,
-        "died": s.died or None,
+        "died": {"ar": s.died_ar or s.died, "en": s.died} if s.died else None,
         "source_url": s.source_url or None,
         "color": s.color,
         "note": {"ar": s.note_ar, "en": s.note_en} if s.note_en else None,

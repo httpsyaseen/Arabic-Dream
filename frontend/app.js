@@ -32,6 +32,37 @@ const API_BASE = (() => {
 const API = API_BASE + "/api/v1";
 
 const $ = s => document.querySelector(s);
+
+/* ------------------------------------------------------------- numerals
+ * Arabic writes its own digits, and Latin ones inside Arabic text read as a
+ * foreign object — worse in RTL, where the browser has to flip direction for
+ * them mid-sentence.
+ *
+ * Counting is also not a matter of appending a plural. Arabic agreement runs:
+ *   1  singular            نصّ واحد
+ *   2  dual                نصّان
+ *   3-10 plural            ٣ نصوص
+ *   11+ singular again     ٢٠ نصًّا
+ * so "20 نصوص" is simply wrong. `count()` puts the right form with the number.
+ */
+const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+const num = n => lang === "ar"
+  ? String(n).replace(/\d/g, d => AR_DIGITS[+d])
+  : Number(n).toLocaleString("en-US");
+
+function count(n, forms) {
+  // forms: [singular, dual, plural, accusative-singular] for ar; [one, many] for en
+  if (lang !== "ar") return `${num(n)} ${n === 1 ? forms.one : forms.many}`;
+  const [one, two, few, many] = forms.ar;
+  if (n === 1) return one;
+  if (n === 2) return two;
+  if (n >= 3 && n <= 10) return `${num(n)} ${few}`;
+  return `${num(n)} ${many}`;
+}
+const TEXTS  = { ar: ["نصٌّ واحد", "نصّان", "نصوص", "نصًّا"], one: "text", many: "texts" };
+const SYMS   = { ar: ["رمزٌ واحد", "رمزان", "رموز", "رمزًا"], one: "symbol", many: "symbols" };
+const HADITH = { ar: ["حديثٌ واحد", "حديثان", "أحاديث", "حديثًا"], one: "hadith", many: "hadith" };
+const DREAMS = { ar: ["رؤيا واحدة", "رؤيان", "رؤى", "رؤيا"], one: "dream", many: "dreams" };
 const esc = s => (s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 let lang = localStorage.getItem("taweel_lang") || "ar";
@@ -54,7 +85,7 @@ const T = {
     go: "فسّر الرؤيا", clear: "مسح", searching: "يُبحث في الكتب…",
     empty: "اكتب رؤياك أولاً.",
     yourDream: "رؤياك", changeDream: "تعديل الرؤيا",
-    verdictPill: (kind, n) => `${kind} · مبنيّ على ${n} ${n === 1 ? "نصّ أصلي" : "نصوص أصلية"}`,
+    verdictPill: (kind, n) => `${kind} · مبنيّ على ${count(n, TEXTS)} من الكتب`,
     verdictPillNoText: kind => `${kind} · لا نصّ له في كتبنا`,
     basedOn: "اعتماداً على",
     plusPsych: "مع قراءة نفسية مضافة",
@@ -84,10 +115,12 @@ const T = {
     faqH1: "أسئلة شائعة",
     journalH1: "سجل أحلامي", journalNote: "محفوظ في متصفحك وحده، لا يُرسل إلى أي خادم.",
     recurring: "رموز تتكرر في رؤاك:", jclear: "حذف السجل", noJournal: "لم تحفظ شيئاً بعد.",
+    skip: "تخطَّ إلى المحتوى",
     page: "ص", sourceLink: "المصدر", texts: "نص",
     footer: "هذا عرضٌ لما ورد في كتب التعبير، وليس فتوى ولا حكماً شرعياً ولا علماً بالغيب. التعبير ظنّي يختلف باختلاف حال الرائي، والمرجع في ذلك أهل العلم.",
     kinds: { classical: "من كتب التعبير", psychological: "قراءة نفسية", adab: "آداب وأحاديث" },
-    roles: { symbols: "يمدّ الفهرس بالرموز", passages: "يمدّ الفهرس بالنصوص", hadith: "أحاديث الآداب والتصنيف" },
+    roles: { symbols: "يمدّ الفهرس بالرموز", passages: "يمدّ الفهرس بالنصوص",
+             both: "يمدّ الفهرس بالرموز والنصوص", hadith: "أحاديث الآداب والتصنيف" },
   },
   en: {
     dir: "ltr", brand: "Ta'weel",
@@ -134,10 +167,12 @@ const T = {
     faqH1: "Frequently asked questions",
     journalH1: "My dreams", journalNote: "Stored in your browser only — never sent to any server.",
     recurring: "Symbols recurring in your dreams:", jclear: "Delete journal", noJournal: "Nothing saved yet.",
+    skip: "Skip to content",
     page: "p.", sourceLink: "source", texts: "texts",
     footer: "This presents what the classical books say. It is not a fatwa, not a ruling, and not knowledge of the unseen. Interpretation is probabilistic and varies with the dreamer's situation; qualified scholars are the reference.",
     kinds: { classical: "interpretation books", psychological: "psychological", adab: "etiquette and hadith" },
-    roles: { symbols: "supplies the symbol vocabulary", passages: "supplies supporting passages", hadith: "hadith for etiquette and classification" },
+    roles: { symbols: "supplies the symbol vocabulary", passages: "supplies supporting passages",
+             both: "supplies both symbols and passages", hadith: "hadith for etiquette and classification" },
   },
 };
 const t = () => T[lang];
@@ -179,6 +214,7 @@ function chrome(inner) {
   document.documentElement.dir = L.dir;
 
   document.body.innerHTML = `
+    <a class="skip" href="#main">${L.skip}</a>
     <div class="topbar"><div class="topbar-inner">
       <a class="brand" href="#/">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -194,7 +230,7 @@ function chrome(inner) {
         </span>
       </nav>
     </div></div>
-    ${inner}
+    <main id="main">${inner}</main>
     <footer class="site-foot"><div class="wrap">${L.footer}</div></footer>`;
 }
 
@@ -260,7 +296,7 @@ function sourceCard(s) {
         <h3>${esc(s.display[lang])}</h3>
       </div>
       <div class="hub-author">«${esc(s.name[lang])}»</div>
-      <div class="hub-role">${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</div>
+      <div class="hub-role">${esc(s.author[lang])}${s.died ? ` · ${esc(s.died[lang])}` : ""}</div>
       <div class="hub-role">${L.kinds[s.kind] || s.kind} · ${L.roles[s.role] || s.role}</div>
       <span class="arrow">${L.readMore}</span>
     </a>`;
@@ -269,15 +305,14 @@ function sourceCard(s) {
 /* ------------------------------------------------------------------ views */
 function viewHome() {
   const L = t(), c = STATE.stats;
-  const n = x => x.toLocaleString(lang === "ar" ? "ar-EG" : "en-US");
   chrome(`
     <div class="hero"><div class="hero-inner">
       <h1>${L.heroH1}</h1>
       <p class="sub">${L.heroSub}</p>
       <div class="trust-line">
-        <span><b>${n(c.symbols)}</b> ${L.symbols}</span>·
-        <span><b>${n(c.passages)}</b> ${L.passages}</span>·
-        <span><b>${n(c.adab)}</b> ${L.hadith}</span>
+        <span>${count(c.symbols, SYMS)}</span>·
+        <span>${count(c.passages, TEXTS)}</span>·
+        <span>${count(c.adab, HADITH)}</span>
       </div>
     </div></div>
     <div class="wrap">
@@ -320,7 +355,7 @@ function viewLens(slug) {
     <div class="wrap page">
       <a class="home-link" href="#/interpreters">← ${L.nav.interpreters}</a>
       <h1>${esc(s.display[lang])}</h1>
-      <p class="sub">«${esc(s.name[lang])}» · ${esc(s.author[lang])}${s.died ? ` · ${esc(s.died)}` : ""}</p>
+      <p class="sub">«${esc(s.name[lang])}» · ${esc(s.author[lang])}${s.died ? ` · ${esc(s.died[lang])}` : ""}</p>
 
       <div class="card meta-card">
         <div class="meta-row"><span>${L.role}</span><b>${L.kinds[s.kind] || s.kind} · ${L.roles[s.role] || s.role}</b></div>
@@ -409,7 +444,16 @@ async function submitDream(fixedSource) {
     if (el && el.value) body[f.key] = el.value;
   });
 
-  $("#pending").innerHTML = `<div class="card"><span class="spin"></span> ${L.searching}</div>`;
+  // A skeleton of the shape that is coming reads as progress; a bare spinner
+  // reads as a stall, and this call takes six seconds or more.
+  $("#pending").innerHTML = `
+    <div class="card loading" aria-live="polite">
+      <div class="loading-head"><span class="spin"></span> ${L.searching}</div>
+      <div class="skel" style="width:55%"></div>
+      <div class="skel"></div><div class="skel" style="width:85%"></div>
+      <div class="skel" style="width:70%"></div>
+    </div>`;
+  $("#pending").scrollIntoView({ behavior: "smooth", block: "center" });
   try {
     const r = await fetch(API + "/interpret", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
@@ -479,7 +523,7 @@ function viewResult() {
 
     if (a.rumuz?.length) {
       h += `<h2 class="section-label">${L.rumuz}</h2>`;
-      h += a.rumuz.map(r => {
+      h += a.rumuz.map((r, i) => {
         // Pair each symbol with the citations the lookup found for it, so the
         // quote box can name the exact book and page under the meaning.
         const hit = (d.symbols || []).find(s => s.symbol_ar === r.ramz) || {};
@@ -498,7 +542,7 @@ function viewResult() {
 
         return `<div class="card symbol-card">
           <div class="symbol-head">
-            <div class="symbol-icon serif">${esc((r.ramz || "؟").trim().charAt(0))}</div>
+            <div class="symbol-icon">${num(i + 1)}</div>
             <h3 class="symbol-name">${esc(r.ramz)}
               <span class="badge ${r.min_alkutub ? "book" : ""}">${r.min_alkutub ? L.fromBooks : L.fromGeneral}</span></h3>
           </div>
@@ -545,20 +589,21 @@ function viewResult() {
   }
 
   if (d.symbols?.length) h += `<div class="card"><h2>${L.nusus}</h2>` + d.symbols.map(s => `
-    <details><summary>${esc(s.symbol_ar)} <span class="badge">${s.citations.length} ${L.texts}</span></summary>
+    <details><summary>${esc(s.symbol_ar)} <span class="badge">${count(s.citations.length, TEXTS)}</span></summary>
       ${s.citations.map(c => `<div class="cite">
         <div class="txt serif">${esc(c.text_ar)}</div>
         <div class="meta"><span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${c.kind === "psychological" ? L.psych : L.classical}</span>
-          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${esc(c.printed_page)})` : ""}
+          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${num(c.printed_page)})` : ""}
           ${c.url ? `· <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
       </div>`).join("")}</details>`).join("") + `</div>`;
 
-  if (d.adab_sources?.length) h += `<div class="card"><h2>${L.ahadith}</h2>` +
+  if (d.adab_sources?.length) h += `<div class="card"><details class="fold"><summary><h2>${L.ahadith}</h2>
+      <span class="badge">${count(Math.min(d.adab_sources.length, 4), HADITH)}</span></summary>` +
     d.adab_sources.slice(0, 4).map(x => `<div class="cite">
       <div class="txt serif">${esc(x.text_ar)}</div>
-      <div class="meta">${esc(x.chapter_ar || "")}${x.printed_page ? ` (${L.page} ${esc(x.printed_page)})` : ""}
+      <div class="meta">${esc(x.chapter_ar || "")}${x.printed_page ? ` (${L.page} ${num(x.printed_page)})` : ""}
         ${x.url ? `· <a href="${esc(x.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
-    </div>`).join("") + `</div>`;
+    </div>`).join("") + `</details></div>`;
 
   h += `<div class="actions">
     <button class="btn ghost" id="copyBtn">${L.copy}</button>
@@ -593,7 +638,7 @@ function viewJournal() {
     <h1>${L.journalH1}</h1>
     <p class="sub">${L.journalNote}</p>
     ${rec.length ? `<div class="card"><div class="why">${L.recurring}</div>
-      <div class="recur">${rec.map(([r, n]) => `<span class="r">${esc(r)} · ${n}</span>`).join("")}</div></div>` : ""}
+      <div class="recur">${rec.map(([r, n]) => `<span class="r">${esc(r)} · ${num(n)}</span>`).join("")}</div></div>` : ""}
     ${a.length ? `<div class="card">${a.map((x, i) => `
       <div class="jrow"><div><b dir="rtl" lang="ar">${esc(x.dream.slice(0, 130))}</b>
         ${x.rumuz?.length ? `<div class="why">${x.rumuz.map(esc).join(" · ")}</div>` : ""}</div>
