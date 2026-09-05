@@ -1,14 +1,14 @@
 {
   "symbols": 2573,
-  "passages": 14958,
+  "passages": 14936,
   "passages_by_source": {
-    "ibn_sirin": 3222,
-    "ibn_shaheen": 3409,
-    "tabir": 2962,
-    "sadiq": 3174,
-    "freud": 2191
+    "ibn_sirin": 3219,
+    "ibn_shaheen": 3405,
+    "tabir": 2952,
+    "sadiq": 3170,
+    "freud": 2190
   },
   "adab": 44,
-  "symbols_with_support": 1929,
+  "symbols_with_support": 1924,
   "sources": 7
 }

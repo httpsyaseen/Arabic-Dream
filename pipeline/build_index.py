@@ -14,6 +14,7 @@ keys it *could* contain and those are intersected with the known vocabulary, so
 the whole build is a couple of seconds.
 """
 
+import functools
 import json
 import re
 from collections import defaultdict
@@ -29,6 +30,20 @@ INDEX = ROOT / "index"
 # Arabic attaches the article and some conjunctions to the front of a word and
 # possessives to the back, so both are stripped when generating candidate keys.
 _AFFIX = re.compile(r"^(?:وال|بال|كال|فال|لل|ال|و|ف)|(?:ها|هم|هن|كم|كن|نا|تين|ات|ين|ون|ان|ه|ي|ك)$")
+
+# Stripping affixes to find candidates is deliberately generous — it has to be,
+# or inflected forms are missed. But generosity in one direction also reaches
+# words that merely share a stem: أجرى ("caused to flow") reduces to the same
+# form as آجر ("brick"), and the brick entry ended up carrying a passage about
+# the nature of dreams. So every candidate is confirmed against the passage as a
+# whole word before it is attached. That cost 4% of attachments, all noise.
+_PRE = r"(?:وال|بال|كال|فال|لل|ال|و|ف|ب)?"
+_SUF = r"(?:ها|هم|هن|كم|كن|نا|ات|ين|ون|ان|ه|ي|ك|ا)?"
+
+
+@functools.lru_cache(maxsize=32768)
+def _whole_word(key: str) -> re.Pattern:
+    return re.compile(rf"(?<![؀-ۿ]){_PRE}{re.escape(key)}{_SUF}(?![؀-ۿ])")
 
 # Per symbol, per source. Enough for the model to see agreement or disagreement
 # between books without burying the prompt.
@@ -84,8 +99,11 @@ def build() -> dict:
         for c in load_chunks(src.slug):
             if c["kind"] != "passage":
                 continue
+            norm = normalize(c["text_ar"])
             hits = candidates(c["text_ar"], max_words) & keys
             for key in hits:
+                if not _whole_word(key).search(norm):
+                    continue        # shares a stem, does not mention the symbol
                 bucket = passages[key]
                 if sum(1 for p in bucket if p["source"] == src.slug) >= PER_SOURCE:
                     continue
