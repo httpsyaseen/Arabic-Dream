@@ -17,6 +17,7 @@ rather than dressed up as a citation.
 | **[docs/OVERVIEW.md](docs/OVERVIEW.md)** | Start here. What the project is, the tradition behind it, and how a request flows end to end. Written for a reader who does not know Arabic. |
 | **[docs/PARSING.md](docs/PARSING.md)** | How the books become structured data — the four parsers, the OCR rescue, and the matching rules. |
 | **[docs/SOURCES.md](docs/SOURCES.md)** | Every book, with links, page ranges and what it contributes. |
+| **[docs/DEPLOY.md](docs/DEPLOY.md)** | Running it in production, and the cache headers that stop a browser serving stale code. |
 | `/docs` on the running API | Interactive OpenAPI reference. |
 
 ## Layout
@@ -36,8 +37,13 @@ docs/        documentation + the design prototype
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 cp .env.example .env          # add GEMINI_API_KEY
-.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 3000
+.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 3000   # API
+.venv/bin/python frontend/serve.py 5173                        # frontend
 ```
+
+Use `frontend/serve.py` rather than `python -m http.server`: it sends `no-store`,
+so a reload always runs the code on disk. The stock server answers 304 and a
+browser will happily keep executing a script from an hour ago.
 
 The index is committed, so no build step is needed. Open `frontend/index.html`
 directly, or serve it from anywhere — it finds the API via `?api=`, a global, or

@@ -459,6 +459,11 @@ async function submitDream(fixedSource) {
   // Two phases. The lookup costs about 2 ms and the model six to nine seconds,
   // so the citations are shown as soon as they exist rather than being held
   // hostage to the slow half. A reader gets real content in well under a second.
+  // Drop the previous reading before anything else. Without this, any path that
+  // renders before the new one arrives — a stale cached script, a hashchange
+  // firing out of order — can put the last dream's answer back on screen.
+  STATE.last = null;
+  sessionStorage.removeItem("taweel_last");
   STATE.pending = { dream, body, phase: "matching", match: null };
   location.hash = "#/result";
   route();
