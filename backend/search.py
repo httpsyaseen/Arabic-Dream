@@ -31,7 +31,12 @@ INDEX = Path(__file__).resolve().parent.parent / "index"
 _PREFIX = r"(?:وال|بال|كال|فال|لل|ال|و|ف)?"
 # Possessives and sound plurals attach at the end:
 #   بيتي (bayti = "my house") · أسنانه (asnanuhu = "his teeth")
-_SUFFIX = r"(?:ها|هم|هن|كم|كن|نا|تين|ات|ين|ون|ان|ه|ي|ك)?"
+# The bare ا matters more than it looks: Arabic marks an indefinite noun in the
+# accusative with tanwin fath, written as an extra alif — طريقاً (tariqan = "a
+# road"), مطراً (mataran = "rain"). Normalisation strips the tanwin mark but
+# leaves that alif, so without it here every direct object in a dream sentence
+# silently failed to match its own headword.
+_SUFFIX = r"(?:ها|هم|هن|كم|كن|نا|تين|ات|ين|ون|ان|ه|ي|ك|ا)?"
 _ARABIC = r"[؀-ۿ]"
 
 MAX_SYMBOLS = 6

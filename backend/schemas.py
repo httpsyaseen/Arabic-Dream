@@ -43,6 +43,7 @@ class Citation(BaseModel):
     text_ar: str
     source: str
     source_name: Bilingual
+    author: Bilingual
     kind: Literal["classical", "psychological", "adab"]
     printed_page: str | None = None
     url: str | None = None

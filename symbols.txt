@@ -1,0 +1,450 @@
+Symbol,Arabic Translation
+Water,ماء
+Fire,نار
+Gold,ذهب
+Snake,ثعبان
+Lion,أسد
+Sea,بحر
+Death,موت
+Falling Teeth,سقوط الأسنان
+Marriage,زواج
+Flying,طيران
+Cat,قطة
+Bread,خبز
+Clothes,ملابس
+House,منزل
+Rain,مطر
+Sun,شمس
+Moon,قمر
+Stars,نجوم
+Dog,كلب
+Blood,دم
+Sky,سماء
+Key,مفتاح
+Crying,بكاء
+Hair,شعر
+Road,طريق
+Fruit,فاكهة
+Prayer,صلاة
+Child,طفل
+Money,مال
+Horse,حصان
+Cow,بقرة
+Fish,سمك
+Scorpion,عقرب
+Book,كتاب
+Sword,سيف
+Ring,خاتم
+Shoe,حذاء
+Mountain,جبل
+River,نهر
+Grave,قبر
+Milk,حليب / لبن
+Honey,عسل
+Dates,تمر
+Grapes,عنب
+Meat,لحم
+Adhan (Call to Prayer),أذان
+Hajj (Pilgrimage),حج
+Kaaba,كعبة
+Mus'haf (Quran),مصحف
+Satan,شيطان
+Angels,ملائكة
+Jinn,جن
+Magic,سحر
+Knife,سكين
+Needle,إبرة
+Ladder,سلم
+Rope,حبل
+Ship,سفينة
+Well,بئر
+Bridge,جسر
+Citadel,قلعة
+Prison,سجن
+Laughter,ضحك
+Running,ركض
+Drowning,غرق
+Gift,هدية
+Sickness,مرض
+Healing,شفاء
+Head,رأس
+Eye,عين
+Hand,يد
+Foot,قدم
+Heart,قلب
+Tongue,لسان
+Ear,أذن
+Thief,لص
+Doctor,طبيب
+Wine,خمر
+Onion,بصل
+Garlic,ثوم
+Dove,حمامة
+Crow,غراب
+Ants,نمل
+Bees,نحل
+Donkey,حمار
+Apple,تفاح
+Pomegranate,رمان
+Fig,تين
+Olive,زيتون
+Perfume,عطر
+Crown,تاج
+Bracelet,سوار
+Necklace,قلادة
+Turban,عمامة
+Palace,قصر
+Snow,ثلج
+Lightning,برق
+Thunder,رعد
+Mud,طين
+Dust,غبار
+Tears,دموع
+Nose,أنف
+Mouth,فم
+Sheep (Ram),كبش
+Wolf,ذئب
+Fox,ثعلب
+Spider,عنكبوت
+Elephant,فيل
+Camel,جمل
+Cage,قفص
+Coffin,تابوت
+Cheese,جبن
+Sugar,سكر
+Frog,ضفدع
+Turtle,سلحفاة
+Worms,دود
+Dragon,تنين
+Swimming,سباحة
+Resurrection,قيامة
+Mirror,مرآة
+Rainbow,قوس قزح
+Eggs,بيض
+Wheat,قمح
+Vinegar,خل
+Salt,ملح
+Ascending,صعود
+Descending,نزول
+Hammer,مطرقة
+Watch (Clock),ساعة
+Kitchen,مطبخ
+Bathroom (Hammam),حمام
+Wedding,زفاف
+Funeral,جنازة
+Debt,دين
+Iron,حديد
+Silver,فضة
+Fighting,قتال
+Pig,خنزير
+Eagle,نسر
+Kiss,قبلة
+Light,نور
+Darkness,ظلام
+Dancing,رقص
+Falling,سقوط
+Soldier,جندي
+Arrow,سهم
+Lamp,مصباح
+Teacher,معلم
+Farmer,فلاح
+Tailor,خياط
+Butcher,جزار
+Goldsmith,صائغ
+Baker,خباز
+Barber,حلاق
+Singing,غناء
+Fear,خوف
+Joy,فرح
+Sadness,حزن
+Jealousy,غيرة
+Regret,ندم
+City,مدينة
+Village,قرية
+Market,سوق
+Mosque,مسجد
+Church,كنيسة
+Shirt,قميص
+Trousers,سروال
+Hat (Qalansuwa),قلنسوة
+Minaret,مئذنة
+Pulpit (Minbar),منبر
+Niche (Mihrab),محراب
+Hermitage (Sawma'a),صومعة
+Fortress,حصن
+Wall,جدار
+Trench,خندق
+Room,غرفة
+Ceiling,سقف
+Pillar (Column),عمود
+Stairs,درج
+Window,نافذة
+Door,باب
+Chair,كرسي
+Bed,سرير
+Earth,أرض
+Soil (Dust),تراب
+Stone,حجر
+Glass,زجاج
+Paper,ورق
+Pen,قلم
+Inkwell,محبرة
+Wind,رياح
+Tree,شجرة
+Oil,زيت
+Butter,زبدة
+Fat (Tallow),شحم
+Bones,عظام
+Brain (Marrow),مخ
+Horn,قرن
+Feathers,ريش
+Beak,منقار
+Claw,مخلب
+Nest,عش
+Branch,غصن
+Leaves (Tree Leaves),أوراق الشجر
+Root,جذر
+Planting (Farming),زراعة
+Harvest,حصاد
+Garden (Orchard),بستان
+Desert,صحراء
+Valley,وادي
+Hill,تل
+Cave,كهف
+Cloud,سحاب
+Fog,ضباب
+Dew,ندى
+Musk,مسك
+Ambergris,عنبر
+Incense (Bukhoor),بخور
+Saffron,زعفران
+Rose,ورد
+Jasmine,ياسمين
+Basil (Rayhan),ريحان
+Narcissus,نرجس
+Violet,بنفسج
+Myrtle (Al-Aas),آس
+Henna,حناء
+Kohl,كحل
+Ointment (Duhn),دهن
+Soap,صابون
+Comb,مشط
+Tent,خيمة
+Pavilion (Fustat),فسطاط
+Weapon,سلاح
+Armor (Dir'),درع
+Spear,رمح
+Bow,قوس
+Shield (Turs),ترس
+Helmet (Bayda),خوذة
+Banner (Flag),راية
+Pearls,لؤلؤ
+Coral,مرجان
+Ruby (Yaqut),ياقوت
+Emerald,زمرد
+Copper,نحاس
+Lead,رصاص
+Scales (Mizan),ميزان
+Lock,قفل
+Chain,سلسلة
+Oven,تنور
+Ash,رماد
+Coal,فحم
+Flame,لهب
+Rust,صدأ
+Mill (Treadmill),طاحونة
+Millstone (Raha),رحى
+Flour,دقيق
+Dough,عجين
+Yeast (Leaven),خميرة
+Mare (Female Horse),فرس
+Mule,بغل
+Ox (Bull),ثور
+Buffalo,جاموس
+Rabbit,أرنب
+Gazelle,غزال
+Sparrow (Bird),عصفور
+Falcon,صقر
+Hawk (Baz),باز
+Shaheen Falcon,شاهين
+Owl,بومة
+Hoopoe,هدهد
+Swallow (Khattaf),خطاف
+Stork,لقلق
+Ostrich,نعامة
+Peacock,طاووس
+Rooster,ديك
+Hen,دجاجة
+Geese,إوز
+Ducks,بط
+Crane (Kurki),كركي
+Locusts,جراد
+Flies,ذباب
+Mosquitoes,بعوض
+Fleas,براغيث
+Lice,قمل
+Mouse (Rat),فأر
+Chameleon,حرباء
+Mole (Animal),خلد
+Hedgehog,قنفذ
+Hyena,ضبع
+Bat,خفاش
+Weasel,ابن عرس
+Sable,سمور
+Squirrel,سنجاب
+Crocodile,تمساح
+Crab (Animal),سرطان البحر
+Snail,حلزون
+Butterfly,فراشة
+Dragonfly (Ya'sub),يعسوب
+Wing,جناح
+Egg (Bird's Egg),بيضة
+Crying over the Dead,البكاء على الميت
+Laughter of the Dead,ضحك الميت
+Talking with the Dead,التحدث مع الميت
+Eating with the Dead,الأكل مع الميت
+Receiving from the Dead,الأخذ من الميت
+The Dead Taking Something,أخذ الميت لشيء
+Sleeping of the Dead,نوم الميت
+Sickness of the Dead,مرض الميت
+Enemy,عدو
+Friend,صديق
+Neighbor,جار
+Guest,ضيف
+Orphan,يتيم
+Poor Person,فقير
+Rich Person,غني
+Thirst,عطش
+Hunger,جوع
+Satiety (Fullness),شبع
+Eating,أكل
+Drinking,شرب
+Swallowing,بلع
+Vomiting,قيء
+Spitting,بصق
+Sneezing,عطس
+Yawning,تثاؤب
+Sleeping,نوم
+Drowsiness,نعاس
+Madness,جنون
+Epilepsy,صرع
+Leprosy (Judham),جذام
+Vitiligo (Baras),برص
+Scabies (Jarab),جرب
+Itching,حكة
+Sores (Ulcers),قروح
+Wound,جرح
+Fracture,كسر
+Private Parts ('Awra),عورة
+Circumcision,ختان
+Ablution (Wudu),وضوء
+Washing (Ghusl),غسل
+Dry Ablution (Tayammum),تيمم
+Prayer Rug,سجادة صلاة
+Prayer Beads (Subha),سبحة
+Qibla (Direction),قبلة
+Fasting,صيام
+Breaking Fast,إفطار
+Zakat (Alms),زكاة
+Charity (Sadaqa),صدقة
+Supplication (Dua),دعاء
+Praising God (Tasbih),تسبيح
+Declaring Oneness (Tahlil),تهليل
+Declaring Greatness (Takbir),تكبير
+Seeking Forgiveness (Istighfar),استغفار
+Sending Blessings on the Prophet,الصلاة على النبي
+Jihad (Struggle),جهاد
+Martyrdom (Dying as a Martyr),شهادة
+Disbelief (Kufr),كفر
+Apostasy,ردة
+Sins,ذنوب
+Repentance,توبة
+Theft,سرقة
+Killing,قتل
+Adultery (Zina),زنا
+Marrying a Dead Person,الزواج من ميت
+Divorce,طلاق
+Pregnancy,حمل
+Childbirth,ولادة
+Breastfeeding,رضاعة
+Beard,لحية
+Mustache,شارب
+Eyebrow,حاجب
+Eyelashes,رموش
+Cheek,خد
+Chin,ذقن
+Neck,رقبة
+Shoulder,كتف
+Arm,ذراع
+Palm (Hand),كف
+Fingers,أصابع
+Nails,أظافر
+Chest,صدر
+Breast,ثدي
+Belly,بطن
+Back,ظهر
+Navel,سرة
+Thigh,فخذ
+Leg (Shin),ساق
+Knee,ركبة
+Heel,عقب
+Boils,دمامل
+Pimples (Pustules),بثور
+Wart,ثؤلول
+Swelling,ورم
+Nosebleed,رعاف
+Cough,سعال
+Cold (Zukam),زكام
+Fever,حمى
+Plague,طاعون
+Shroud,كفن
+Bier,نعش
+Graveyard,مقبرة
+Resurrection from Graves,البعث من القبور
+Gathering (Hashr),حشر
+Reckoning (Hisab),حساب
+The Path (Sirat),صراط
+Paradise (Jannah),جنة
+Hellfire (Jahannam),جهنم
+King (Ruler),ملك
+Vizier (Minister),وزير
+Judge,قاضي
+Policeman,شرطي
+Executioner,جلاد
+Shop,دكان
+Gutter (Mizab),ميزاب
+Sweeping,كنس
+Washing (Objects),غسيل
+Hanging Laundry,نشر الغسيل
+Ironing (Cauterizing),كي
+Cupping (Hijama),حجامة
+Bloodletting (Fasd),فصد
+Medicine,دواء
+Poison,سم
+Shackles (Fetters),قيود
+Yokes (Aghlal),أغلال
+Staff (Cane),عصا
+Rod (Qadib),قضيب
+Whip,سوط
+Tambourine (Duff),دف
+Flute (Mizmar),مزمار
+Oud (Lute),عود
+Drum,طبل
+Chess,شطرنج
+Backgammon (Nard),نرد
+Image (Picture),صورة
+Statue,تمثال
+Cross,صليب
+Sailor,بحار
+Anchor,مرساة
+Sail,شراع
+Oar,مجداف
+Island,جزيرة
+Beach,شاطئ
+Sand,رمل
+Wave,موج
+Foam (Sea Foam),زبد البحر
+Whirlpool (in the Sea),دوامة
+Flood,طوفان
+Torrent (Flash Flood),سيل
+Pond (Ghadir),غدير

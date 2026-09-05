@@ -21,8 +21,13 @@ const API_BASE = (() => {
   const q = new URLSearchParams(location.search).get("api");
   if (q) return q.replace(/\/$/, "");
   if (window.API_BASE) return window.API_BASE.replace(/\/$/, "");
+  // Served from somewhere other than the API's own port (a static dev server,
+  // or opened as a file). Use the same hostname so it still works when the page
+  // is opened from another device on the network, not just this machine.
   const dev = location.protocol === "file:" || (location.port && location.port !== "3000");
-  return dev ? "http://localhost:3000" : "";
+  if (!dev) return "";
+  const host = location.hostname || "localhost";
+  return `http://${host}:3000`;
 })();
 const API = API_BASE + "/api/v1";
 
@@ -49,6 +54,14 @@ const T = {
     go: "فسّر الرؤيا", clear: "مسح", searching: "يُبحث في الكتب…",
     empty: "اكتب رؤياك أولاً.",
     yourDream: "رؤياك", changeDream: "تعديل الرؤيا",
+    verdictPill: (kind, n) => `${kind} · مبنيّ على ${n} ${n === 1 ? "نصّ أصلي" : "نصوص أصلية"}`,
+    verdictPillNoText: kind => `${kind} · لا نصّ له في كتبنا`,
+    basedOn: "اعتماداً على",
+    plusPsych: "مع قراءة نفسية مضافة",
+    lensOnly: name => `أنت تطالع تفسيراً مقصوراً على مسلك ${name} وحده. والرمز الذي لا نصّ له عند هذا المفسّر في فهرسنا يُوسَم بذلك، ولا يُؤخذ من مصدر آخر.`,
+    givenSituation: "بحسب حالك",
+    addedPsych: "قراءة نفسية مضافة",
+    fromSource: "من",
     tasnif: "تصنيف الرؤيا", basis: "أساس الجواب",
     mukhifah: "رؤيا مكروهة — هدي السنة",
     mukhifahNote: "هذه الرؤيا فيها ما يُكره، ومن هدي النبي ﷺ ألّا تُفسَّر، وأن يفعل الرائي ما يلي.",
@@ -91,6 +104,14 @@ const T = {
     go: "Interpret", clear: "Clear", searching: "Searching the books…",
     empty: "Write your dream first.",
     yourDream: "Your dream", changeDream: "Edit dream",
+    verdictPill: (kind, n) => `${kind} · built on ${n} original ${n === 1 ? "text" : "texts"}`,
+    verdictPillNoText: kind => `${kind} · no text for it in our books`,
+    basedOn: "Based on",
+    plusPsych: "plus an added psychological reading",
+    lensOnly: name => `You are viewing a reading restricted to ${name}'s method only. Symbols with no direct text from this interpreter in our database are flagged as such, instead of pulling from another source.`,
+    givenSituation: "Given your situation",
+    addedPsych: "Added psychological reading",
+    fromSource: "From",
     tasnif: "Classification", basis: "Basis of the answer",
     mukhifah: "A distressing dream — the sunna response",
     mukhifahNote: "This dream contains what is disliked. The Prophet ﷺ taught that such a dream is not interpreted; the dreamer does the following instead.",
@@ -425,28 +446,81 @@ function viewResult() {
   if (!a) {
     h += `<div class="card err">${esc(meta.error || "no answer")}</div>`;
   } else {
-    h += `<div class="card">
-      <h2>${L.tasnif}</h2>
-      <span class="badge ${a.tasnif.naw === "رؤيا صالحة" ? "good" : a.tasnif.naw === "حلم من الشيطان" ? "warn" : ""}">${esc(a.tasnif.naw)}</span>
-      <div class="why">${esc(a.tasnif.sabab)}</div>
-      <div class="srcs"><span class="badge ${a.asas_aljawab === "من الكتب المفهرسة" ? "book" : ""}">${L.basis}: ${esc(a.asas_aljawab)}</span></div>
+    // Which books actually backed this reading, for the line under the verdict.
+    const citedSlugs = [...new Set((d.symbols || []).flatMap(s => s.citations.map(c => c.source)))];
+    const citedCount = (d.symbols || []).reduce((n, s) => n + s.citations.length, 0);
+    const classicalNames = citedSlugs
+      .filter(sl => (STATE.sources.find(x => x.slug === sl) || {}).kind !== "psychological")
+      .map(sl => {
+        const s = STATE.sources.find(x => x.slug === sl) || {};
+        const author = s.author?.[lang];
+        return author ? `${s.name?.[lang]} — ${author}` : s.name?.[lang];
+      })
+      .filter(Boolean);
+    const hasPsych = citedSlugs.some(sl => (STATE.sources.find(x => x.slug === sl) || {}).kind === "psychological");
+
+    const tone = a.tasnif.naw === "رؤيا صالحة" ? "good"
+               : a.tasnif.naw === "حلم من الشيطان" ? "warn" : "neutral";
+
+    h += `<div class="verdict verdict-${tone}">
+      <span class="verdict-pill">${citedCount
+        ? L.verdictPill(esc(a.tasnif.naw), citedCount)
+        : L.verdictPillNoText(esc(a.tasnif.naw))}</span>
+      <h2 class="verdict-title serif">${esc(a.unwan || a.tasnif.naw)}</h2>
+      ${a.tamhid ? `<p class="verdict-sub">${esc(a.tamhid)}</p>` : ""}
+      ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}</p>` : ""}
     </div>`;
+
+    if (meta.source && srcName) {
+      h += `<div class="lens-banner">${L.lensOnly(esc(srcName))}</div>`;
+    }
 
     if (a.mukhifah) h += `<div class="card">
       <h2>${L.mukhifah}</h2><div class="alert">${L.mukhifahNote}</div>
       <ul>${(a.adab || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul>
       ${a.dua ? `<div class="dua">${esc(a.dua)}</div>` : ""}</div>`;
 
-    if (a.rumuz?.length) h += `<div class="card"><h2>${L.rumuz}</h2>` + a.rumuz.map(r => `
-      <div class="symbol-card">
-        <h3 class="symbol-name">${esc(r.ramz)}
-          <span class="badge ${r.min_alkutub ? "book" : ""}">${r.min_alkutub ? L.fromBooks : L.fromGeneral}</span></h3>
-        <div>${esc(r.khulasah)}</div>
-        ${(r.tafsil || []).map(c => `<div class="cond"><b>${esc(c.halah)}</b> — ${esc(c.dalalah)}</div>`).join("")}
-        ${r.athar_hal_alraai ? `<div class="hal">${L.byState}: ${esc(r.athar_hal_alraai)}</div>` : ""}
-        ${r.manhaj ? `<div class="method-note"><b>${L.manhaj}:</b> ${esc(r.manhaj)}${r.bayan_almanhaj ? ` — ${esc(r.bayan_almanhaj)}` : ""}</div>` : ""}
-        ${r.masadir?.length ? `<div class="srcs">${L.masadir}: ${r.masadir.map(esc).join(" · ")}</div>` : ""}
-      </div>`).join("") + `</div>`;
+    if (a.rumuz?.length) {
+      h += `<h2 class="section-label">${L.rumuz}</h2>`;
+      h += a.rumuz.map(r => {
+        // Pair each symbol with the citations the lookup found for it, so the
+        // quote box can name the exact book and page under the meaning.
+        const hit = (d.symbols || []).find(s => s.symbol_ar === r.ramz) || {};
+        const cites = hit.citations || [];
+        const classical = cites.filter(c => c.kind !== "psychological");
+        const psych = cites.filter(c => c.kind === "psychological");
+        // Book, then author, then page — the reader needs the name of whose
+        // opinion this is, not only which volume it sits in.
+        const srcLine = c => {
+          const author = c.author && (c.author[lang] || c.author.ar);
+          return `«${esc(c.source_name[lang] || c.source_name.ar)}»`
+            + (author ? ` — ${esc(author)}` : "")
+            + (c.printed_page ? ` (${L.page} ${esc(c.printed_page)})` : "")
+            + (c.url ? ` · <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : "");
+        };
+
+        return `<div class="card symbol-card">
+          <div class="symbol-head">
+            <div class="symbol-icon serif">${esc((r.ramz || "؟").trim().charAt(0))}</div>
+            <h3 class="symbol-name">${esc(r.ramz)}
+              <span class="badge ${r.min_alkutub ? "book" : ""}">${r.min_alkutub ? L.fromBooks : L.fromGeneral}</span></h3>
+          </div>
+
+          <div class="quote-box">
+            <p>${esc(r.khulasah)}</p>
+            ${(r.tafsil || []).map(c => `<p class="cond-line"><b>${esc(c.halah)}</b> — ${esc(c.dalalah)}</p>`).join("")}
+            ${classical.length ? `<div class="quote-src">${L.fromSource}: ${srcLine(classical[0])}</div>` : ""}
+          </div>
+
+          ${r.athar_hal_alraai ? `<div class="hal"><b>${L.givenSituation}:</b> ${esc(r.athar_hal_alraai)}</div>` : ""}
+          ${r.manhaj ? `<div class="method-note"><b>${L.manhaj}:</b> ${esc(r.manhaj)}${r.bayan_almanhaj ? ` — ${esc(r.bayan_almanhaj)}` : ""}</div>` : ""}
+          ${psych.length ? `<div class="psych-block"><span class="badge psych">${L.addedPsych}</span>
+            <p class="serif">${esc(psych[0].text_ar.slice(0, 320))}${psych[0].text_ar.length > 320 ? "…" : ""}</p>
+            <div class="quote-src">${srcLine(psych[0])}</div></div>` : ""}
+          ${r.masadir?.length ? `<div class="srcs">${L.masadir}: ${r.masadir.map(esc).join(" · ")}</div>` : ""}
+        </div>`;
+      }).join("");
+    }
 
     if (a.qiraat?.length) h += `<div class="card"><h2>${L.qiraat}</h2>` + a.qiraat.map(q => `
       <div class="qira"><h4>${esc(q.almanhaj)}
@@ -478,7 +552,7 @@ function viewResult() {
       ${s.citations.map(c => `<div class="cite">
         <div class="txt serif">${esc(c.text_ar)}</div>
         <div class="meta"><span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${c.kind === "psychological" ? L.psych : L.classical}</span>
-          ${esc(c.source_name[lang] || c.source_name.ar)}${c.printed_page ? ` (${L.page} ${esc(c.printed_page)})` : ""}
+          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${esc(c.printed_page)})` : ""}
           ${c.url ? `· <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
       </div>`).join("")}</details>`).join("") + `</div>`;
 

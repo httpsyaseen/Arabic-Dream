@@ -207,3 +207,46 @@ summary{cursor:pointer;font-weight:700}
   .hero h1{font-size:1.6rem} h1{font-size:1.55rem}
   .nav-links a{font-size:.82rem;padding:.3rem .5rem}
 }
+
+/* ------------------------------------------------------- verdict hero
+ * The first thing shown after a reading: the judgement said as a sentence,
+ * over the deep field so it reads as a conclusion rather than another card. */
+.verdict{background:var(--bg-deep);color:#F1E7D2;border-radius:var(--radius);
+  padding:2rem 1.8rem 1.6rem;margin-top:1.2rem;text-align:center}
+.verdict-pill{display:inline-block;background:rgba(255,255,255,.10);color:#D8CDB2;
+  border:1px solid rgba(255,255,255,.16);border-radius:999px;
+  padding:.3rem 1rem;font-size:.82rem;margin-bottom:1rem}
+.verdict-title{font-size:1.7rem;line-height:1.55;margin:0 0 .9rem;color:#F9F1DE;
+  max-width:34ch;margin-inline:auto}
+.verdict-sub{color:#C6BCA4;font-size:.98rem;line-height:1.85;margin:0 auto;max-width:52ch}
+.verdict-foot{color:#958C76;font-size:.82rem;margin:1.2rem 0 0;
+  border-top:1px solid rgba(255,255,255,.10);padding-top:.9rem}
+.verdict-good .verdict-pill{color:#A7D8BE;border-color:rgba(167,216,190,.35)}
+.verdict-warn .verdict-pill{color:#E0A98F;border-color:rgba(224,169,143,.35)}
+
+/* Shown when the reader restricted the reading to one interpreter. */
+.lens-banner{background:var(--bg-parchment);border:1px solid var(--gold);
+  border-radius:12px;padding:.95rem 1.2rem;margin-top:1rem;
+  color:var(--gold-deep);font-size:.9rem;line-height:1.8;text-align:center}
+
+/* ------------------------------------------------------- symbol cards */
+.symbol-card{padding:1.3rem 1.45rem}
+.symbol-head{display:flex;align-items:center;gap:.85rem;margin-bottom:.9rem}
+.symbol-icon{width:46px;height:46px;flex:none;border-radius:50%;
+  background:var(--bg-parchment);border:1px solid var(--line);
+  display:grid;place-items:center;font-size:1.3rem;color:var(--gold-deep)}
+.symbol-card .symbol-name{margin:0;font-size:1.18rem;font-family:"Amiri",serif}
+html[dir=ltr] .symbol-card .symbol-name{font-family:"Lora",serif}
+.quote-box{background:var(--bg-parchment);border-inline-start:4px solid var(--gold);
+  border-radius:10px;padding:.95rem 1.15rem}
+.quote-box p{margin:0 0 .6rem;line-height:1.95}
+.quote-box p:last-of-type{margin-bottom:0}
+.cond-line{font-size:.95rem}
+.cond-line b{color:var(--gold-deep)}
+.quote-src{color:var(--ink-soft);font-size:.8rem;margin-top:.75rem;
+  border-top:1px solid var(--line-soft);padding-top:.55rem}
+.psych-block{background:var(--bg-parchment);border-inline-start:3px solid var(--purple);
+  border-radius:10px;padding:.85rem 1.1rem;margin-top:.7rem}
+.psych-block p{margin:.55rem 0 0;font-size:.95rem;line-height:1.95}
+.symbol-card .hal{border-inline-start-color:var(--teal)}
+.symbol-card .hal b{color:var(--teal)}

@@ -104,6 +104,24 @@ ANSWER_SCHEMA = {
             },
             "required": ["naw", "sabab"],
         },
+        # The headline a reader sees first. A bare classification label
+        # ("jumbled dreams") tells them nothing; this is the same judgement said
+        # as a sentence, which is what someone came to the page for.
+        "unwan": {
+            "type": "string",
+            "description": (
+                "حكم مُجمل في جملة واحدة بلغة السائل، لا مصطلحاً مجرداً. "
+                "مثال: «رؤيا طيّبة تبشّر بانتقالك إلى حالٍ أفضل، بإذن الله». "
+                "ولا تجزم بالغيب، واستعمل مثل «بإذن الله» و«والله أعلم»."
+            ),
+        },
+        "tamhid": {
+            "type": "string",
+            "description": (
+                "سطران أو ثلاثة تحت العنوان: ما الذي اجتمع في هذه الرؤيا من "
+                "المعاني، بإيجاز، قبل التفصيل."
+            ),
+        },
         "mukhifah": {"type": "boolean"},
         "rumuz": {"type": "array", "items": SYMBOL},
         "qiraat": {"type": "array", "items": QIRAAH},
@@ -127,8 +145,9 @@ ANSWER_SCHEMA = {
             "enum": ["من الكتب المفهرسة", "من المعرفة العامة", "من الاثنين"],
         },
     },
-    "required": ["tasnif", "mukhifah", "rumuz", "khulasah_ammah", "muashirat",
-                 "adab", "nasihah", "tanbih", "asas_aljawab"],
+    "required": ["tasnif", "unwan", "tamhid", "mukhifah", "rumuz",
+                 "khulasah_ammah", "muashirat", "adab", "nasihah", "tanbih",
+                 "asas_aljawab"],
 }
 
 # The rules, in English, in the order they appear in the prompt below:
@@ -157,6 +176,10 @@ SYSTEM = """\
    كتاب أو صفحة بعينها. **ولا تترك السائل بلا جواب أبداً.**
 
 ٣- صنّف الرؤيا أولاً: رؤيا صالحة / حلم من الشيطان / أضغاث أحلام. والتصنيف ظنّي.
+   ثم اكتب في `unwan` حكماً مُجملاً **في جملة واحدة بلغة السائل**، لا مصطلحاً
+   مجرداً؛ فإن السائل جاء ليعرف ماذا تعني رؤياه لا ليقرأ تصنيفاً.
+   واكتب في `tamhid` سطرين أو ثلاثة يجمعان ما اجتمع فيها من المعاني.
+   ولا تجزم بالغيب: قل «بإذن الله» و«والله أعلم» وما أشبههما.
 
 ٤- إن كانت مفزعة أو مكروهة فاجعل `mukhifah` = true، ولا تُفصّل في تأويل المكروه،
    واكتفِ في `adab` بهدي السنة: الاستعاذة بالله من الشيطان الرجيم ومن شرها،

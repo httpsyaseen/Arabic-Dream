@@ -31,6 +31,7 @@ def _citations(match: dict) -> list[dict]:
             "text_ar": text,
             "source": slug,
             "source_name": pub.get("name", {"ar": slug, "en": slug}),
+            "author": pub.get("author", {"ar": "", "en": ""}),
             "kind": kind,
             "printed_page": page,
             "url": url or None,
