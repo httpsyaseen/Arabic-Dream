@@ -407,3 +407,20 @@ textarea{padding:var(--s4) var(--s4);min-height:9.5rem}
 .verdict-title,h1,.hero h1,.symbol-name,.card h2{text-wrap:balance}
 .verdict-sub,.sub,.quote-box p,.personal-note{text-wrap:pretty}
 .build{opacity:.35;font-size:.7rem;margin-top:var(--s3);font-family:ui-monospace,monospace}
+
+/* ------------------------------------------------------------ topic pages */
+.topic-card{padding:var(--s5)}
+.topic-head{display:flex;align-items:center;justify-content:space-between;
+  gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s3)}
+.topic-head h3{margin:0;font-size:1.12rem;font-family:"Amiri",serif}
+html[dir=ltr] .topic-head h3{font-family:"Lora",serif}
+.topic-dream{background:var(--bg-parchment);border-inline-start:4px solid var(--gold);
+  border-radius:10px;padding:var(--s4);margin:0 0 var(--s4);font-size:1.05rem;line-height:2}
+.topic-queries{border-top:1px solid var(--line-soft);margin-top:var(--s4);padding-top:var(--s3)}
+.topic-queries > summary{color:var(--ink-soft);font-size:.88rem;font-weight:400;
+  display:flex;align-items:center;gap:var(--s2)}
+.qlist{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3)}
+.q{background:var(--bg-parchment);border:1px solid var(--line-soft);border-radius:999px;
+  padding:var(--s1) var(--s3);font-size:.84rem;color:var(--ink-soft);
+  display:inline-flex;align-items:center;gap:var(--s2)}
+.q-n{color:var(--gold-deep);font-size:.74rem;font-variant-numeric:tabular-nums}

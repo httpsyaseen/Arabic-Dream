@@ -1,7 +1,10 @@
 """Health, sources, and form options — everything a frontend needs to render
 itself without hardcoding Arabic or duplicating the source list."""
 
-from fastapi import APIRouter
+import json
+from pathlib import Path
+
+from fastapi import APIRouter, HTTPException
 
 from pipeline import sources
 
@@ -89,3 +92,32 @@ def unmatched(top: int = 60) -> dict:
         "distinct_unmatched_words": len(data["words"]),
         "words": [{"word": w, "count": n} for w, n in ranked],
     }
+
+
+PAGES = Path(__file__).resolve().parent.parent.parent / "index" / "pages"
+
+
+@router.get("/pages")
+def list_pages() -> dict:
+    """Topic pages built from a keyword sheet."""
+    if not PAGES.exists():
+        return {"pages": []}
+    out = []
+    for f in sorted(PAGES.glob("*.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        out.append({"slug": d["slug"], "totals": d.get("totals", {})})
+    return {"pages": out}
+
+
+@router.get("/pages/{slug}")
+def get_page(slug: str) -> dict:
+    """One topic page: its clusters, each with the dream a reader would type.
+
+    The searches people run are not dreams — nobody types "interpretation of
+    dream of teeth falling for single woman". Each cluster therefore carries the
+    sentence a person would actually write, which is what the site can act on.
+    """
+    path = PAGES / f"{slug}.json"
+    if not path.exists() or "/" in slug or ".." in slug:
+        raise HTTPException(404, f"no page {slug!r}")
+    return json.loads(path.read_text(encoding="utf-8"))

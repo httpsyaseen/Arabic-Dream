@@ -71,13 +71,20 @@ const DREAMS = { ar: ["رؤيا واحدة", "رؤيان", "رؤى", "رؤيا"]
 const esc = s => (s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 let lang = localStorage.getItem("taweel_lang") || "ar";
-let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null };
+let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null, pages: {} };
 
 /* ------------------------------------------------------------------ i18n */
 const T = {
   ar: {
     dir: "rtl", brand: "تأويل",
-    nav: { home: "الرئيسية", result: "آخر تفسير", interpreters: "المفسّرون", about: "مصادرنا", faq: "الأسئلة الشائعة", journal: "سجل أحلامي" },
+    nav: { home: "الرئيسية", teeth: "سقوط الأسنان", result: "آخر تفسير", interpreters: "المفسّرون", about: "مصادرنا", faq: "الأسئلة الشائعة", journal: "سجل أحلامي" },
+    teethH1: "تفسير حلم سقوط الأسنان",
+    teethSub: "من أكثر ما يُسأل عنه من الرؤى. اختر ما يشبه رؤياك، أو اكتبها بنفسك — والجواب مبنيّ على ما ورد في كتب أهل التعبير بنصّه ومصدره.",
+    teethPick: "اختر ما يشبه رؤياك",
+    teethAsked: "ما يبحث عنه الناس في هذا الباب",
+    teethOwn: "أو اكتب رؤياك بنفسك",
+    interpretThis: "فسّر هذه الرؤيا",
+    searchesLabel: "عبارة بحث",
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
     symbols: "رمزًا", passages: "نصًا", hadith: "حديثًا في آداب الرؤيا",
@@ -134,7 +141,14 @@ const T = {
   },
   en: {
     dir: "ltr", brand: "Ta'weel",
-    nav: { home: "Home", result: "Last reading", interpreters: "Interpreters", about: "Our sources", faq: "FAQ", journal: "My dreams" },
+    nav: { home: "Home", teeth: "Falling teeth", result: "Last reading", interpreters: "Interpreters", about: "Our sources", faq: "FAQ", journal: "My dreams" },
+    teethH1: "Dreams of teeth falling out",
+    teethSub: "One of the most asked-about dreams there is. Pick whichever is closest to yours, or write your own — the answer rests on what the classical books say, with the text and its source shown.",
+    teethPick: "Pick the one closest to your dream",
+    teethAsked: "What people search for here",
+    teethOwn: "Or write your own dream",
+    interpretThis: "Interpret this dream",
+    searchesLabel: "searches",
     heroH1: "Write your dream — its symbols are looked up in the classical books",
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
     symbols: "symbols", passages: "passages", hadith: "hadith on dream etiquette",
@@ -241,6 +255,7 @@ function buildShell() {
       </a>
       <nav class="nav-links">
         <a href="#/" data-route="#/">${L.nav.home}</a>
+        <a href="#/teeth" data-route="#/teeth">${L.nav.teeth}</a>
         <a href="#/result" data-route="#/result">${L.nav.result}</a>
         <a href="#/interpreters" data-route="#/interpreters">${L.nav.interpreters}</a>
         <a href="#/about" data-route="#/about">${L.nav.about}</a>
@@ -288,7 +303,8 @@ function route() {
     return;
   }
   ({
-    "#/": viewHome, "#/result": viewResult, "#/interpreters": viewInterpreters,
+    "#/": viewHome, "#/teeth": viewTeeth, "#/result": viewResult,
+    "#/interpreters": viewInterpreters,
     "#/about": viewAbout, "#/faq": viewFaq, "#/journal": viewJournal,
   }[h] || viewHome)();
 
@@ -375,6 +391,66 @@ function viewHome() {
       <h2 class="section-label">${L.interpretersH1}</h2>
       <div class="hub-grid">${STATE.sources.filter(s => s.role !== "hadith").map(sourceCard).join("")}</div>
     </div>`);
+}
+
+/* A topic page built from a keyword sheet: the dreams people are actually
+ * asking about, grouped by meaning, each one runnable. */
+async function viewTeeth() {
+  const L = t();
+  if (!STATE.pages.teeth) {
+    chrome(`<div class="wrap page"><h1>${L.teethH1}</h1>
+      <div class="card"><div class="skel" style="width:45%"></div>
+        <div class="skel"></div><div class="skel" style="width:75%"></div></div></div>`);
+    try {
+      STATE.pages.teeth = await fetch(API + "/pages/teeth").then(r => r.json());
+    } catch (e) {
+      return chrome(`<div class="wrap page"><div class="card err">${esc(e.message)}</div></div>`);
+    }
+    if (!location.hash.startsWith("#/teeth")) return;   // moved on while loading
+  }
+
+  const page = STATE.pages.teeth;
+  const cards = page.clusters.map((c, i) => `
+    <div class="card topic-card">
+      <div class="topic-head">
+        <h3>${esc(c.title[lang])}</h3>
+        ${c.volume ? `<span class="badge">${num(c.volume)} ${L.searchesLabel}</span>` : ""}
+      </div>
+      <p class="topic-dream serif" dir="rtl" lang="ar">${esc(c.dream_ar)}</p>
+      <div class="row">
+        <button class="btn btn-gold" onclick="runDream(${i})">${L.interpretThis}</button>
+      </div>
+      <details class="topic-queries">
+        <summary>${L.teethAsked} <span class="badge">${num(c.queries.length)}</span></summary>
+        <div class="qlist">${c.queries.slice(0, 24).map(q =>
+          `<span class="q" dir="rtl" lang="ar">${esc(q.ar)}${q.volume
+            ? `<span class="q-n">${num(q.volume)}</span>` : ""}</span>`).join("")}</div>
+      </details>
+    </div>`).join("");
+
+  chrome(`<div class="wrap page">
+    <h1>${L.teethH1}</h1>
+    <p class="sub">${L.teethSub}</p>
+    <h2 class="section-label">${L.teethPick}</h2>
+    ${cards}
+    <h2 class="section-label">${L.teethOwn}</h2>
+    ${dreamForm(null)}
+    <div id="pending"></div>
+  </div>`);
+}
+
+/* Send one of the page's dreams through the normal flow — same endpoint, same
+   citations, so nothing here is a special case. */
+function runDream(i) {
+  const c = STATE.pages.teeth?.clusters[i];
+  if (!c) return;
+  const el = document.getElementById("dream");
+  if (el) el.value = c.dream_ar;
+  else {
+    // The form is further down the page; stage the text and submit directly.
+    STATE.stagedDream = c.dream_ar;
+  }
+  submitDream("", c.dream_ar);
 }
 
 function viewInterpreters() {
@@ -486,9 +562,14 @@ function viewFaq() {
 }
 
 /* ------------------------------------------------------------ interpret */
-async function submitDream(fixedSource) {
-  const L = t(), dream = $("#dream").value.trim();
-  if (dream.length < 3) { $("#pending").innerHTML = `<div class="card err">${L.empty}</div>`; return; }
+async function submitDream(fixedSource, explicitDream) {
+  const L = t();
+  const dream = (explicitDream ?? $("#dream")?.value ?? "").trim();
+  if (dream.length < 3) {
+    const box = $("#pending");
+    if (box) box.innerHTML = `<div class="card err">${L.empty}</div>`;
+    return;
+  }
 
   const body = { dream };
   const src = fixedSource || ($("#f-source") ? $("#f-source").value : "");
@@ -823,6 +904,7 @@ console.info(`%cتأويل build ${BUILD}%c  API: ${API}`,
 
 window.setLang = setLang;
 window.submitDream = submitDream;
+window.runDream = runDream;
 window.jdel = jdel;
 window.jclear = jclear;
 boot();

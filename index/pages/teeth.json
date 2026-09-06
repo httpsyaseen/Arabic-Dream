@@ -1,0 +1,2199 @@
+{
+ "slug": "teeth",
+ "clusters": [
+  {
+   "title": {
+    "ar": "سقوط الأسنان عموماً",
+    "en": "General falling teeth dreams"
+   },
+   "dream_ar": "حلمت أن أسناني كلها تسقط على الأرض وكنت خائفاً جداً مما يحدث لفمي في ذلك المنام.",
+   "volume": 58280,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط الاسنان",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 21000
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 14000
+    },
+    {
+     "ar": "حلم سقوط الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 3100
+    },
+    {
+     "ar": "سقوط الاسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 2400
+    },
+    {
+     "ar": "سقوط الأسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 1900
+    },
+    {
+     "ar": "تفسير الاحلام سقوط الاسنان",
+     "en": "Dream interpretation of teeth falling",
+     "volume": 1600
+    },
+    {
+     "ar": "تفسير سقوط الاسنان في المنام",
+     "en": "Interpretation of teeth falling in a dream",
+     "volume": 1400
+    },
+    {
+     "ar": "تفسير منام سقوط الاسنان",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 1000
+    },
+    {
+     "ar": "وقوع الاسنان في الحلم",
+     "en": "Teeth falling in the dream",
+     "volume": 1000
+    },
+    {
+     "ar": "تفسير حلم تساقط الاسنان",
+     "en": "Interpretation of dream of teeth falling out",
+     "volume": 750
+    },
+    {
+     "ar": "رؤية سقوط الاسنان في المنام",
+     "en": "Seeing teeth falling in a dream",
+     "volume": 710
+    },
+    {
+     "ar": "حلم وقوع الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 700
+    },
+    {
+     "ar": "ما تفسير حلم وقوع الاسنان",
+     "en": "What is the interpretation of a dream of teeth falling",
+     "volume": 600
+    },
+    {
+     "ar": "تفسير وقوع الاسنان في الحلم",
+     "en": "Interpretation of teeth falling in the dream",
+     "volume": 560
+    },
+    {
+     "ar": "حلمت ان اسناني وقعت",
+     "en": "I dreamed that my teeth fell out",
+     "volume": 500
+    },
+    {
+     "ar": "ماتفسير حلم سقوط الاسنان",
+     "en": "What's the interpretation of dream of teeth falling",
+     "volume": 490
+    },
+    {
+     "ar": "سقوط الاسنان في الحلم",
+     "en": "Teeth falling in the dream",
+     "volume": 470
+    },
+    {
+     "ar": "وقوع الاسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 420
+    },
+    {
+     "ar": "تفسير سقوط الاسنان في الحلم",
+     "en": "Interpretation of teeth falling in the dream",
+     "volume": 390
+    },
+    {
+     "ar": "حلم تساقط الاسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 370
+    },
+    {
+     "ar": "حلم الاسنان تطيح",
+     "en": "Dream of teeth falling out",
+     "volume": 300
+    },
+    {
+     "ar": "تفسير رؤية سقوط الاسنان في المنام",
+     "en": "Interpretation of vision of teeth falling in a dream",
+     "volume": 300
+    },
+    {
+     "ar": "ما تفسير حلم سقوط الاسنان",
+     "en": "What is the interpretation of a dream of teeth falling",
+     "volume": 290
+    },
+    {
+     "ar": "تفسير الاحلام سقوط الاسنان",
+     "en": "Dream interpretation of teeth falling",
+     "volume": 250
+    },
+    {
+     "ar": "ماهو تفسير حلم سقوط الاسنان",
+     "en": "What is the interpretation of dream of teeth falling",
+     "volume": 250
+    },
+    {
+     "ar": "تفسير وقوع الاسنان في المنام",
+     "en": "Interpretation of teeth falling in a dream",
+     "volume": 240
+    },
+    {
+     "ar": "تساقط الاسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 230
+    },
+    {
+     "ar": "تفسير سقوط الاسنان",
+     "en": "Interpretation of teeth falling",
+     "volume": 220
+    },
+    {
+     "ar": "الحلم بسقوط الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 210
+    },
+    {
+     "ar": "تفسير الاحلام تساقط الاسنان",
+     "en": "Dream interpretation of teeth falling",
+     "volume": 210
+    },
+    {
+     "ar": "حلمت ان اسناني طاحت",
+     "en": "I dreamed that my teeth fell",
+     "volume": 200
+    },
+    {
+     "ar": "تفسير حلم الاسنان تسقط",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 120
+    },
+    {
+     "ar": "ماتفسير سقوط الاسنان في المنام",
+     "en": "What's the interpretation of teeth falling in a dream",
+     "volume": 110
+    },
+    {
+     "ar": "تفسير حلم الاسنان بتقع",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 100
+    },
+    {
+     "ar": "حلم الاسنان بتقع",
+     "en": "Dream of teeth falling",
+     "volume": 100
+    },
+    {
+     "ar": "منام سقوط الاسنان",
+     "en": "Teeth falling in a dream",
+     "volume": 100
+    },
+    {
+     "ar": "الحلم بوقوع الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم الاسنان تطيح",
+     "en": "Interpretation of dream of teeth falling out",
+     "volume": 100
+    },
+    {
+     "ar": "ما هو تفسير حلم وقوع الاسنان",
+     "en": "What is the interpretation of dream of teeth falling",
+     "volume": 90
+    },
+    {
+     "ar": "ماتفسير حلم وقوع الاسنان",
+     "en": "What's the interpretation of dream of teeth falling",
+     "volume": 80
+    },
+    {
+     "ar": "ما تفسير سقوط الاسنان في المنام",
+     "en": "What is the interpretation of teeth falling in a dream",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان",
+     "en": "Interpretation of dream of teeth falling",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم اسناني بتقع",
+     "en": "Interpretation of dream, my teeth are falling",
+     "volume": 80
+    },
+    {
+     "ar": "تساقط الاسنان في الحلم",
+     "en": "Teeth falling in the dream",
+     "volume": 70
+    },
+    {
+     "ar": "ما معنى سقوط الاسنان في المنام",
+     "en": "What does teeth falling in a dream mean",
+     "volume": 70
+    },
+    {
+     "ar": "حلم طيح الاسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 60
+    },
+    {
+     "ar": "حلمت ان اسناني بتقع",
+     "en": "I dreamed my teeth are falling",
+     "volume": 50
+    },
+    {
+     "ar": "حلم اسناني تطيح",
+     "en": "Dream of teeth falling out",
+     "volume": 50
+    },
+    {
+     "ar": "ما هو تفسير حلم سقوط الاسنان",
+     "en": "What is the interpretation of a dream about teeth falling out",
+     "volume": 40
+    },
+    {
+     "ar": "تفسير حلم اسناني تسقط",
+     "en": "Interpretation of a dream that my teeth are falling out",
+     "volume": 40
+    },
+    {
+     "ar": "سقوط اسنان في المنام",
+     "en": "Teeth falling out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "رؤية اسناني تسقط في المنام",
+     "en": "Seeing my teeth fall out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير وقوع الاسنان",
+     "en": "Interpretation of teeth falling out",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير تساقط الاسنان في المنام",
+     "en": "Interpretation of teeth falling out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "سقوط الاسنان بالحلم",
+     "en": "Teeth falling out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "حلمت اسناني طاحت",
+     "en": "I dreamed my teeth fell out",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم طيح الاسنان",
+     "en": "Interpretation of a dream about teeth falling",
+     "volume": 30
+    },
+    {
+     "ar": "حلم تفسير سقوط الاسنان",
+     "en": "Dream interpretation - teeth falling out",
+     "volume": 20
+    },
+    {
+     "ar": "ما تفسير وقوع الاسنان في المنام",
+     "en": "What is the interpretation of teeth falling in a dream?",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم اسنان تسقط",
+     "en": "Interpretation of a dream about teeth falling",
+     "volume": 20
+    },
+    {
+     "ar": "معنى وقوع الاسنان فى الحلم",
+     "en": "Meaning of teeth falling in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "طيح الاسنان بالحلم",
+     "en": "Teeth falling in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم وقع الاسنان",
+     "en": "Interpretation of a dream about teeth falling",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم ان اسناني بتقع",
+     "en": "Interpretation of a dream that my teeth are falling",
+     "volume": 20
+    },
+    {
+     "ar": "الحلم بتساقط الاسنان",
+     "en": "Dreaming of teeth falling out",
+     "volume": 20
+    },
+    {
+     "ar": "حلم تكسير الاسنان",
+     "en": "Dream of breaking teeth",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير الاحلام وقع الاسنان",
+     "en": "Dream interpretation - teeth falling",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير الأحلام سقوط الأسنان",
+     "en": "Dream interpretation - teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط اسنان",
+     "en": "Interpretation of a dream about teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية وقوع الاسنان في المنام",
+     "en": "Seeing teeth fall in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية الاسنان تسقط في المنام",
+     "en": "Seeing teeth fall out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلم الاسنان تقع",
+     "en": "Dream of teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "معنى سقوط الاسنان في الحلم",
+     "en": "Meaning of teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "ماهو تفسير سقوط الاسنان في المنام",
+     "en": "What is the interpretation of teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلم بسقوط الاسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم وقوع الأسنان",
+     "en": "Interpretation of a dream about teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "معنى سقوط الاسنان في المنام",
+     "en": "Meaning of teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية الاسنان تتساقط في المنام",
+     "en": "Seeing teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم الاسنان تتساقط",
+     "en": "Interpretation of a dream about teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت اني اسناني وقعت",
+     "en": "I dreamed my teeth fell out",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية تساقط الاسنان في المنام",
+     "en": "Seeing teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم رؤية سقوط الاسنان",
+     "en": "Interpretation of a dream about seeing teeth fall out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير الاحلام تساقط الاسنان",
+     "en": "Dream interpretation - teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "حلم الاسنان تسقط",
+     "en": "Dream of teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم اسناني طاحت",
+     "en": "Interpretation of a dream that my teeth fell",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم اسناني تقع",
+     "en": "Interpretation of a dream that my teeth are falling",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير طيح الاسنان",
+     "en": "Interpretation of teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير تساقط الاسنان في الحلم",
+     "en": "Interpretation of teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية سقوط الاسنان",
+     "en": "Seeing teeth fall out",
+     "volume": 10
+    },
+    {
+     "ar": "حلم اسنان تطيح",
+     "en": "Dream of teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "حلم وقع الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية في المنام سقوط الاسنان",
+     "en": "Seeing teeth fall out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلم طيحة الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت ان سناني بتقع",
+     "en": "I dreamed my teeth were falling",
+     "volume": 10
+    },
+    {
+     "ar": "طيح الاسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "وقوع الاسنان فى الحلم",
+     "en": "Teeth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير منام سقوط اسنان",
+     "en": "Dream interpretation teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم الاسنان تقع",
+     "en": "Dream interpretation teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية سقوط الاسنان",
+     "en": "Interpretation of seeing teeth fall out",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية اسنان تسقط في المنام",
+     "en": "Seeing teeth fall out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "حلم بوقوع الاسنان",
+     "en": "Dream of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم فقدان الاسنان",
+     "en": "Dream interpretation losing teeth",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير الاحلام وقوع الاسنان",
+     "en": "Dream interpretation teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير الحلم بوقوع الاسنان",
+     "en": "Interpretation of the dream of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية تساقط الاسنان",
+     "en": "Interpretation of seeing teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم تساقط الأسنان",
+     "en": "Dream interpretation teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "الحلم بالأسنان تسقط",
+     "en": "The dream of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "حلمت اسناني وقعت",
+     "en": "I dreamed my teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "تساقط الأسنان في المنام",
+     "en": "Teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الاسنان بالمنام",
+     "en": "Teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم الاسنان وقعت",
+     "en": "Dream interpretation teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية الاسنان تسقط",
+     "en": "Interpretation of seeing teeth fall out",
+     "volume": 0
+    },
+    {
+     "ar": "حلمت اسناني تطيح",
+     "en": "I dreamed my teeth were falling",
+     "volume": 0
+    },
+    {
+     "ar": "حلم اسنان تسقط",
+     "en": "Dream teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير المنام سقوط الاسنان",
+     "en": "Dream interpretation teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "معنى حلم سقوط الاسنان",
+     "en": "The meaning of dreaming about teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "حلمت ان اسناني سقطت",
+     "en": "I dreamed my teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط اسنان",
+     "en": "Interpretation of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط الاسنان بالمنام",
+     "en": "Interpretation of teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "حلم اسنان تقع",
+     "en": "Dream teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية وقوع الاسنان",
+     "en": "Interpretation of seeing teeth fall",
+     "volume": 0
+    },
+    {
+     "ar": "حلم سقوط الأسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "وقوع الاسنان بالحلم",
+     "en": "Teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية وقوع الاسنان",
+     "en": "Seeing teeth fall",
+     "volume": 0
+    },
+    {
+     "ar": "ما معنى وقوع الاسنان في المنام",
+     "en": "What is the meaning of teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم فقدان الأسنان",
+     "en": "Dream interpretation losing teeth",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير الاحلام الاسنان تسقط",
+     "en": "Dream interpretation teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير الاسنان تطيح",
+     "en": "Interpretation of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم اسنان تطيح",
+     "en": "Dream interpretation teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "نوم سقوط الاسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سناني بتقع",
+     "en": "Dream interpretation my teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير الحلم بسقوط الاسنان",
+     "en": "Interpretation of the dream of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "هر الاسنان في المنام",
+     "en": "Teeth in a dream (unclear term)",
+     "volume": 0
+    },
+    {
+     "ar": "الحلم بطيح الاسنان",
+     "en": "The dream of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية سقوط الاسنان في الحلم",
+     "en": "Seeing teeth fall out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "مامعنى سقوط الاسنان في المنام",
+     "en": "What is the meaning of teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "وقع الاسنان في المنام",
+     "en": "Teeth falling in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "حلم اسناني وقعت",
+     "en": "Dream my teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "حلم سقوط اسنان",
+     "en": "Dream of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "الحلم بسقوط الأسنان",
+     "en": "The dream of teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير وقع الاسنان",
+     "en": "Interpretation of teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "وقوع الاسنان بالمنام",
+     "en": "Teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير احلام وقوع الاسنان",
+     "en": "Dream interpretation teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "tafsir ahlam asnan",
+     "en": "Dream interpretation - teeth",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم ان اسناني وقعت",
+     "en": "Dream interpretation my teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية الاسنان تسقط",
+     "en": "Seeing teeth fall out",
+     "volume": 0
+    },
+    {
+     "ar": "نوم سقوط الاسنان في المنام",
+     "en": "Dream of teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم اسنان تقع",
+     "en": "Dream interpretation teeth falling",
+     "volume": 0
+    },
+    {
+     "ar": "هل سقوط الأسنان في الحلم خير",
+     "en": "Is teeth falling out in a dream a good sign",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط سن واحد فقط",
+    "en": "Falling of a single tooth"
+   },
+   "dream_ar": "حلمت أن سنّاً واحداً فقط قد سقط من فمي وبقي الباقي في مكانه سليماً دون أن تتأثر.",
+   "volume": 6730,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط سن واحد",
+     "en": "Interpretation of dream of one tooth falling",
+     "volume": 1500
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد من الفك العلوي",
+     "en": "Interpretation of dream of one tooth falling from upper jaw",
+     "volume": 970
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط",
+     "en": "Interpretation of dream of only one tooth falling",
+     "volume": 600
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد سفلي",
+     "en": "Interpretation of dream of one lower tooth falling",
+     "volume": 410
+    },
+    {
+     "ar": "سقوط السن في المنام",
+     "en": "Tooth falling in a dream",
+     "volume": 340
+    },
+    {
+     "ar": "وقوع السن في المنام",
+     "en": "Tooth falling in a dream",
+     "volume": 270
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط بدون ألم",
+     "en": "Interpretation of dream of only one tooth falling without pain",
+     "volume": 260
+    },
+    {
+     "ar": "حلمت ان سني طاح",
+     "en": "I dreamed that my tooth fell",
+     "volume": 250
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط للمتزوجة",
+     "en": "Interpretation of dream of only one tooth falling for married woman",
+     "volume": 250
+    },
+    {
+     "ar": "سقوط سن في المنام",
+     "en": "Tooth falling in a dream",
+     "volume": 230
+    },
+    {
+     "ar": "تفسير حلم وقوع سنه من الفم",
+     "en": "Interpretation of dream of a tooth falling from the mouth",
+     "volume": 150
+    },
+    {
+     "ar": "حلم سقوط سن واحد",
+     "en": "Dream of one tooth falling",
+     "volume": 130
+    },
+    {
+     "ar": "حلمت سني طاح",
+     "en": "I dreamed my tooth fell",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم وقوع السن",
+     "en": "Interpretation of dream of a tooth falling",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم سني وقع",
+     "en": "Interpretation of dream, my tooth fell",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم سقوط سن",
+     "en": "Interpretation of dream of a tooth falling",
+     "volume": 100
+    },
+    {
+     "ar": "حلمت ان سنتى وقعت",
+     "en": "I dreamed my tooth fell",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط من الفك العلوي للمتزوجة",
+     "en": "Interpretation of dream of only one tooth falling from upper jaw for married woman",
+     "volume": 100
+    },
+    {
+     "ar": "سقوط سن واحد في المنام",
+     "en": "One tooth falling in a dream",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم سن يوكع",
+     "en": "Interpretation of dream of a tooth falling",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير منام سقوط سن واحد",
+     "en": "Interpretation of dream of one tooth falling",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم سقوط السن",
+     "en": "Interpretation of dream of tooth falling",
+     "volume": 60
+    },
+    {
+     "ar": "تفسير حلم سني طاح",
+     "en": "Interpretation of dream, my tooth fell",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير حلم وكع السن",
+     "en": "Interpretation of dream of tooth falling",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير حلم السن يطيح",
+     "en": "Interpretation of a dream about a tooth falling",
+     "volume": 40
+    },
+    {
+     "ar": "حلم سقوط سن",
+     "en": "Dream of a tooth falling out",
+     "volume": 40
+    },
+    {
+     "ar": "حلمت اني سنتي وقعت",
+     "en": "I dreamed my tooth fell",
+     "volume": 30
+    },
+    {
+     "ar": "حلم السن يطيح",
+     "en": "Dream of a tooth falling",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم سن طاح",
+     "en": "Interpretation of a dream about a tooth falling",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير سقوط السن في المنام",
+     "en": "Interpretation of a tooth falling out in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم وقوع سنه",
+     "en": "Interpretation of a dream about a tooth falling",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم وقوع سن واحد",
+     "en": "Interpretation of a dream about one tooth falling",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير سقوط سن في المنام",
+     "en": "Interpretation of a tooth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "وقع السن في المنام",
+     "en": "Tooth fell out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلم سقوط السن",
+     "en": "Dream of a tooth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير سقوط السن",
+     "en": "Interpretation of a tooth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية سقوط سن في المنام",
+     "en": "Seeing a tooth fall out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "ماتفسير وقوع السن في المنام",
+     "en": "What is the interpretation of a tooth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "وقوع سنه في الحلم",
+     "en": "A tooth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم السنه وقعت",
+     "en": "Interpretation of a dream that the tooth fell",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت انه سني طاح",
+     "en": "I dreamed my tooth fell",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير وقوع السن في الحلم",
+     "en": "Interpretation of a tooth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "ما معنى وقوع السن في المنام",
+     "en": "What is the meaning of a tooth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم وقوع سن",
+     "en": "Interpretation of a dream about a tooth falling",
+     "volume": 10
+    },
+    {
+     "ar": "ما تفسير وقوع السن في المنام",
+     "en": "What is the interpretation of a tooth falling in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت ان سنتي وقعت",
+     "en": "I dreamed my tooth fell",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم طيح السن",
+     "en": "Interpretation of a dream about a tooth falling",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت ان سنه من اسناني وقعت",
+     "en": "I dreamed one of my teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط من الفك العلوي",
+     "en": "Dream interpretation one tooth falling from the upper jaw",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية سقوط السن في المنام",
+     "en": "Seeing a tooth fall out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية سقوط سن في المنام",
+     "en": "Interpretation of seeing a tooth fall out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية وقوع السن في المنام",
+     "en": "Seeing a tooth fall in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد سفلي في اليد",
+     "en": "Dream interpretation one lower tooth falling into the hand",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سنة وقعت",
+     "en": "Dream interpretation a tooth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سنه من الفك السفلي",
+     "en": "Dream interpretation a tooth falling from the lower jaw",
+     "volume": 0
+    },
+    {
+     "ar": "طيح السن في المنام",
+     "en": "Tooth falling in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط السن في المنام للعزباء",
+     "en": "Tooth falling out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم طيحة السن",
+     "en": "Dream interpretation a tooth falling",
+     "volume": 0
+    },
+    {
+     "ar": "الحلم بسقوط السن",
+     "en": "The dream of a tooth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير وقوع سنه في المنام",
+     "en": "Interpretation of a tooth falling in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط السن في المنام للعزباء",
+     "en": "Interpretation of a tooth falling out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع سنه للعزباء",
+     "en": "Dream interpretation a tooth falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد مع دم",
+     "en": "Dream interpretation one tooth falling with blood",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع السنه",
+     "en": "Dream interpretation the tooth falling",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط سن في المنام للعزباء",
+     "en": "A tooth falling out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقع سنه",
+     "en": "Dream interpretation a tooth fell",
+     "volume": 0
+    },
+    {
+     "ar": "طيحة السن بالحلم",
+     "en": "A tooth falling in a dream",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان في اليد",
+    "en": "Falling teeth into the hand"
+   },
+   "dream_ar": "حلمت أن أسناني تسقط وتتجمع كلها في كفي ويدي ولم تقع على الأرض أبداً طوال الحلم.",
+   "volume": 5930,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد بدون ألم",
+     "en": "Interpretation of dream of teeth falling in hand without pain",
+     "volume": 4200
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد للمتزوجة",
+     "en": "Interpretation of dream of teeth falling in hand for married woman",
+     "volume": 700
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد بدون ألم للعزباء",
+     "en": "Interpretation of dream of teeth falling in hand without pain for single woman",
+     "volume": 410
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد بدون ألم للمتزوجه",
+     "en": "Interpretation of dream of teeth falling in hand without pain for married woman",
+     "volume": 250
+    },
+    {
+     "ar": "حلمت ان اسناني وقعت في ايدي",
+     "en": "I dreamed my teeth fell in my hand",
+     "volume": 90
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد بدون دم",
+     "en": "Interpretation of dream of teeth falling in hand without blood",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان في اليد",
+     "en": "Interpretation of dream of teeth falling in hand",
+     "volume": 80
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان الأمامية العلوية في اليد",
+     "en": "Interpretation of dream of upper front teeth falling in hand",
+     "volume": 60
+    },
+    {
+     "ar": "سقوط الاسنان في اليد في المنام",
+     "en": "Teeth falling into the hand in a dream",
+     "volume": 40
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان والامساك بها",
+     "en": "Interpretation of a dream about teeth falling out and holding them",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد",
+     "en": "Dream interpretation teeth falling into the hand",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الأسنان في المنام بدون دم",
+     "en": "Teeth falling out in a dream without blood",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان بدون دم وألم",
+     "en": "Dream interpretation teeth falling out without blood or pain",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان للعزباء",
+    "en": "Falling teeth for single women"
+   },
+   "dream_ar": "حلمت أن أسناني تسقط وأنا فتاة عزباء وكنت أقلق من تفسير ذلك على مستقبل عائلتي.",
+   "volume": 5060,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط الأسنان للعزباء",
+     "en": "Interpretation of dream of teeth falling for single woman",
+     "volume": 3500
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان بدون دم للعزباء",
+     "en": "Interpretation of dream of teeth falling without blood for single woman",
+     "volume": 620
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان الأمامية العلوية للعزباء",
+     "en": "Interpretation of dream of upper front teeth falling for single woman",
+     "volume": 580
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان والامساك بها للعزباء",
+     "en": "Interpretation of dream of teeth falling and holding them for single woman",
+     "volume": 140
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد فقط للعزباء",
+     "en": "Interpretation of dream of only one tooth falling for single woman",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان السفلية للعزباء",
+     "en": "Interpretation of a dream about lower teeth falling out for a single woman",
+     "volume": 30
+    },
+    {
+     "ar": "سقوط الأسنان في المنام للعزباء",
+     "en": "Teeth falling out in a dream for a single woman",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد للعزباء",
+     "en": "Interpretation of a dream about teeth falling into the hand for a single woman",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سقوط الاسنان للبنت العزباء",
+     "en": "Interpretation of a dream about teeth falling out for a single girl",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير سقوط الاسنان في المنام للعزباء",
+     "en": "Interpretation of teeth falling out in a dream for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم وقوع الأسنان للعزباء",
+     "en": "Interpretation of a dream about teeth falling for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير منام سقوط الاسنان للعزباء",
+     "en": "Interpretation of a dream about teeth falling out for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "وقوع الاسنان في المنام للعزباء",
+     "en": "Teeth falling in a dream for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم رؤية سقوط الاسنان للعزباء",
+     "en": "Interpretation of a dream about seeing teeth fall out for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "سقوط الأسنان الاصطناعية في المنام للعزباء",
+     "en": "Artificial teeth falling out in a dream for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد بدون دم للعزباء",
+     "en": "Interpretation of a dream about teeth falling into the hand without blood for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "رؤية سقوط الاسنان في المنام للعزباء",
+     "en": "Seeing teeth fall out in a dream for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "وقوع السن في المنام للعزباء",
+     "en": "A tooth falling in a dream for a single woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الاسنان للعزباء",
+     "en": "Dream interpretation teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم تساقط الأسنان للعزباء",
+     "en": "Dream interpretation teeth falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "حلم وقوع الاسنان للعزباء",
+     "en": "Dream of teeth falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير رؤية سقوط الاسنان في المنام للعزباء",
+     "en": "Interpretation of seeing teeth fall out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان للعزباء",
+     "en": "Dream interpretation teeth falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "حلم سقوط الاسنان للعزباء",
+     "en": "Dream of teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الأسنان الأمامية في المنام للعزباء",
+     "en": "Front teeth falling out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الاسنان العلوية للعزباء",
+     "en": "Dream interpretation upper teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الاسنان في منام العزباء",
+     "en": "Teeth falling out in a single woman's dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان مع البكاء للعزباء",
+     "en": "Dream interpretation teeth falling out with crying for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان والضروس للعزباء",
+     "en": "Dream interpretation teeth and molars falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان العلوية للعزباء",
+     "en": "Dream interpretation upper teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الأسنان في المنام للعزباء مع دم",
+     "en": "Teeth falling out in a dream for a single woman with blood",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم الاسنان تسقط للعزباء",
+     "en": "Dream interpretation teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الاسنان الامامية للعزباء",
+     "en": "Dream interpretation front teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم الاسنان بتقع للعزباء",
+     "en": "Dream interpretation teeth falling for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان السفلى للعزباء",
+     "en": "Dream interpretation lower teeth falling out for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط الاسنان في الحلم للعزباء",
+     "en": "Interpretation of teeth falling out in a dream for a single woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع السن للعزباء",
+     "en": "Dream interpretation tooth falling for a single woman",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الضرس",
+    "en": "Falling molar"
+   },
+   "dream_ar": "حلمت أن ضرسي العلوي قد سقط فجأة وشعرت بفراغ كبير في مكانه داخل فمي.",
+   "volume": 2880,
+   "queries": [
+    {
+     "ar": "وقوع الضرس في المنام للمتزوجة",
+     "en": "Molar falling in a dream for married woman",
+     "volume": 900
+    },
+    {
+     "ar": "تفسير حلم وقوع الضرس",
+     "en": "Interpretation of dream of molar falling",
+     "volume": 700
+    },
+    {
+     "ar": "سقوط الضرس في المنام للمتزوجة بدون ألم",
+     "en": "Molar falling in a dream for married woman without pain",
+     "volume": 700
+    },
+    {
+     "ar": "تفسير حلم سقوط ضرس",
+     "en": "Interpretation of dream of molar falling",
+     "volume": 200
+    },
+    {
+     "ar": "حلمت ضرسي طاح",
+     "en": "I dreamed my molar fell",
+     "volume": 70
+    },
+    {
+     "ar": "تفسير حلم سقوط الضرس",
+     "en": "Interpretation of dream of molar falling",
+     "volume": 60
+    },
+    {
+     "ar": "حلم الضرس يطيح",
+     "en": "Dream of molar falling out",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير الاحلام ضرس يسقط",
+     "en": "Dream interpretation - a molar falling out",
+     "volume": 40
+    },
+    {
+     "ar": "تفسير حلم سقوط الضرس العلوي",
+     "en": "Interpretation of a dream about an upper molar falling out",
+     "volume": 30
+    },
+    {
+     "ar": "سقوط الرحى في المنام",
+     "en": "Molar falling out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير الاحلام كسر الضرس",
+     "en": "Dream interpretation - breaking a molar",
+     "volume": 30
+    },
+    {
+     "ar": "سقوط الضرس في المنام",
+     "en": "Molar falling out in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير سقوط الضرس في المنام",
+     "en": "Interpretation of a molar falling out in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير الاحلام سقوط الضرس",
+     "en": "Dream interpretation - molar falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير سقوط الضرس",
+     "en": "Interpretation of a molar falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الضرس العلوي الأيسر",
+     "en": "Interpretation of a dream about the upper left molar falling out",
+     "volume": 10
+    },
+    {
+     "ar": "حلم سقوط الضرس بدون ألم",
+     "en": "Dream of a molar falling out without pain",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع الأسنان والضروس",
+     "en": "Dream interpretation teeth and molars falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان والضروس",
+     "en": "Dream interpretation teeth and molars falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الرحى للعزباء",
+     "en": "Dream interpretation molar falling out for a single woman",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "رؤية الأسنان عموماً",
+    "en": "General teeth dreams"
+   },
+   "dream_ar": "حلمت أنني أرى أسناني في المنام وكنت أطيل النظر إليها وأتأمل حالها وشكلها طوال الوقت.",
+   "volume": 2820,
+   "queries": [
+    {
+     "ar": "الاسنان في المنام",
+     "en": "Teeth in a dream",
+     "volume": 1700
+    },
+    {
+     "ar": "تفسير حلم الأسنان للعزباء",
+     "en": "Interpretation of dream of teeth for single woman",
+     "volume": 330
+    },
+    {
+     "ar": "تفسير حلم الاسنان",
+     "en": "Interpretation of dream of teeth",
+     "volume": 270
+    },
+    {
+     "ar": "الأسنان في المنام للمتزوجة",
+     "en": "Teeth in a dream for married woman",
+     "volume": 210
+    },
+    {
+     "ar": "حلم الاسنان",
+     "en": "Dream of teeth",
+     "volume": 110
+    },
+    {
+     "ar": "السن في المنام",
+     "en": "Tooth in a dream",
+     "volume": 50
+    },
+    {
+     "ar": "الأسنان في المنام",
+     "en": "Teeth in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "الاسنان في الحلم",
+     "en": "Teeth in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "رؤية الأسنان في المنام",
+     "en": "Seeing teeth in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "اسنان في المنام",
+     "en": "Teeth in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "الحلم بالاسنان",
+     "en": "Dreaming about teeth",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير الاسنان في الحلم",
+     "en": "Interpretation of teeth in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير الاحلام الاسنان",
+     "en": "Dream interpretation - teeth",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير الاسنان في المنام",
+     "en": "Interpretation of teeth in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير الاحلام ظهور اسنان طفل رضيع",
+     "en": "Dream interpretation - a baby's teeth appearing",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير الاسنان بالحلم",
+     "en": "Interpretation of teeth in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم تنظيف الأسنان بالفرشاة والمعجون",
+     "en": "Dream interpretation brushing teeth with toothbrush and toothpaste",
+     "volume": 0
+    },
+    {
+     "ar": "حلمت ان بنتي الرضيعة طلع لها أسنان",
+     "en": "I dreamed my infant daughter got teeth",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان للمتزوجة",
+    "en": "Falling teeth for married women"
+   },
+   "dream_ar": "حلمت أن أسناني تسقط وأنا امرأة متزوجة وأهتم كثيراً بما يعنيه هذا المنام لبيتي.",
+   "volume": 2600,
+   "queries": [
+    {
+     "ar": "سقوط الأسنان في المنام للمتزوجة",
+     "en": "Teeth falling in a dream for married woman",
+     "volume": 2200
+    },
+    {
+     "ar": "سقوط الأسنان في المنام للمتزوجة بدون دم",
+     "en": "Teeth falling in a dream for married woman without blood",
+     "volume": 350
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان الأمامية العلوية للمتزوجه",
+     "en": "Interpretation of a dream about upper front teeth falling out for a married woman",
+     "volume": 30
+    },
+    {
+     "ar": "الأسنان الأمامية في المنام للمتزوجة",
+     "en": "Front teeth in a dream for a married woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان للمتزوجه",
+     "en": "Interpretation of a dream about teeth falling for a married woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان للمتزوجة",
+     "en": "Dream interpretation teeth falling out for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد للمتزوجه",
+     "en": "Dream interpretation teeth falling into the hand for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير وقوع الاسنان للمتزوجه",
+     "en": "Interpretation of teeth falling for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان مع البكاء للمتزوجة",
+     "en": "Dream interpretation teeth falling out with crying for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان بدون دم للمتزوجه",
+     "en": "Dream interpretation teeth falling out without blood for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان مع الدم للمتزوجة",
+     "en": "Dream interpretation teeth falling out with blood for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد علوي للمتزوجه",
+     "en": "Dream interpretation one upper tooth falling for a married woman",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط سن واحد بدون دم للمتزوجه",
+     "en": "Dream interpretation one tooth falling without blood for a married woman",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان لابن سيرين",
+    "en": "Falling teeth interpreted by Ibn Sirin"
+   },
+   "dream_ar": "رأيت في منامي أن أسناني تتساقط وتذكرت تأويلات الإمام ابن سيرين لهذه الرؤيا المقلقة.",
+   "volume": 1670,
+   "queries": [
+    {
+     "ar": "سقوط الأسنان في المنام لابن سيرين",
+     "en": "Teeth falling in a dream by Ibn Sirin",
+     "volume": 1400
+    },
+    {
+     "ar": "تفسير الاحلام لابن سيرين سقوط الاسنان",
+     "en": "Dream interpretation by Ibn Sirin, teeth falling",
+     "volume": 170
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان لابن سيرين",
+     "en": "Interpretation of dream of teeth falling by Ibn Sirin",
+     "volume": 90
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان لابن سيرين",
+     "en": "Interpretation of a dream about teeth falling by Ibn Sirin",
+     "volume": 10
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "تكسر الأسنان وتشققها",
+    "en": "Breaking or chipping teeth"
+   },
+   "dream_ar": "حلمت أن أسناني تتكسر وتتفتت إلى قطع صغيرة داخل فمي وأنا ألتقطها بأصابعي.",
+   "volume": 1470,
+   "queries": [
+    {
+     "ar": "كسر السن في المنام",
+     "en": "Breaking a tooth in a dream",
+     "volume": 340
+    },
+    {
+     "ar": "تكسر الاسنان في المنام",
+     "en": "Teeth breaking in a dream",
+     "volume": 170
+    },
+    {
+     "ar": "حلم كسر السن",
+     "en": "Dream of tooth breaking",
+     "volume": 150
+    },
+    {
+     "ar": "تفسير الاحلام كسر الاسنان",
+     "en": "Dream interpretation of teeth breaking",
+     "volume": 140
+    },
+    {
+     "ar": "تفسير الاحلام كسر السن",
+     "en": "Dream interpretation of tooth breaking",
+     "volume": 140
+    },
+    {
+     "ar": "حلم تكسر الاسنان",
+     "en": "Dream of teeth breaking",
+     "volume": 100
+    },
+    {
+     "ar": "تفسير حلم تكسر الاسنان",
+     "en": "Interpretation of dream of teeth breaking",
+     "volume": 90
+    },
+    {
+     "ar": "تفسير كسر السن في المنام",
+     "en": "Interpretation of tooth breaking in a dream",
+     "volume": 80
+    },
+    {
+     "ar": "حلمت ان سنتي اتكسرت",
+     "en": "I dreamed my tooth broke",
+     "volume": 60
+    },
+    {
+     "ar": "انكسار السن في المنام",
+     "en": "Tooth breaking in a dream",
+     "volume": 60
+    },
+    {
+     "ar": "ما تفسير كسر السن في المنام",
+     "en": "What is the interpretation of tooth breaking in a dream",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير حلم كسر الاسنان",
+     "en": "Interpretation of a dream about breaking teeth",
+     "volume": 40
+    },
+    {
+     "ar": "تفسير حلم تكسير الاسنان",
+     "en": "Interpretation of a dream about breaking teeth",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم كسر السن",
+     "en": "Interpretation of a dream about breaking a tooth",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير كسر السن",
+     "en": "Interpretation of breaking a tooth",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم تكسير الأسنان بدون دم",
+     "en": "Dream interpretation teeth breaking without blood",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان الأمامية",
+    "en": "Falling front teeth"
+   },
+   "dream_ar": "حلمت أن أسناني الأمامية تسقط أمام مرآة الحمام وبدت ملامحي غريبة جداً بدونها.",
+   "volume": 1210,
+   "queries": [
+    {
+     "ar": "تفسير حلم وقوع الاسنان الامامية",
+     "en": "Interpretation of dream of front teeth falling",
+     "volume": 300
+    },
+    {
+     "ar": "حلم سقوط الاسنان الامامية",
+     "en": "Dream of front teeth falling",
+     "volume": 230
+    },
+    {
+     "ar": "سقوط الأسنان الأمامية في المنام للمتزوجة",
+     "en": "Front teeth falling in a dream for married woman",
+     "volume": 200
+    },
+    {
+     "ar": "الاسنان الامامية في المنام",
+     "en": "Front teeth in a dream",
+     "volume": 120
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان الأمامية العلوية",
+     "en": "Interpretation of dream of upper front teeth falling",
+     "volume": 60
+    },
+    {
+     "ar": "سقوط السن الامامي في المنام",
+     "en": "Front tooth falling out in a dream",
+     "volume": 40
+    },
+    {
+     "ar": "سقوط الاسنان الامامية العلوية في المنام",
+     "en": "Upper front teeth falling out in a dream",
+     "volume": 30
+    },
+    {
+     "ar": "حلمت ان سني الامامي طاح",
+     "en": "I dreamed my front tooth fell",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم سقوط السن الامامي",
+     "en": "Interpretation of a dream about a front tooth falling out",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم وقوع السنة الامامية",
+     "en": "Interpretation of a dream about the front tooth falling",
+     "volume": 30
+    },
+    {
+     "ar": "وقوع الاسنان الامامية في المنام",
+     "en": "Front teeth falling in a dream",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سقوط الاسنان الاماميه",
+     "en": "Interpretation of a dream about front teeth falling out",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سقوط سنتين من الفك العلوي",
+     "en": "Interpretation of a dream about two teeth falling from the upper jaw",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت ان اسناني الاماميه وقعت",
+     "en": "I dreamed my front teeth fell out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان الأمامية",
+     "en": "Interpretation of a dream about front teeth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم الأسنان الأمامية",
+     "en": "Interpretation of a dream about front teeth",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط سنه من الفك العلوي",
+     "en": "Interpretation of a dream about a tooth falling from the upper jaw",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير سقوط السن الامامي",
+     "en": "Interpretation of a front tooth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "حلمت سني الامامي طاح",
+     "en": "I dreamed my front tooth fell",
+     "volume": 10
+    },
+    {
+     "ar": "سقوط الناب في المنام",
+     "en": "Canine tooth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الناب",
+     "en": "Interpretation of a dream about a canine tooth falling out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم وقوع الناب",
+     "en": "Interpretation of a dream about a canine tooth falling",
+     "volume": 10
+    },
+    {
+     "ar": "سقوط الاسنان الاماميه",
+     "en": "Front teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط الاسنان الامامية",
+     "en": "Interpretation of front teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "حلمت ان اسناني الاماميه طاحت",
+     "en": "I dreamed my front teeth fell out",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية سقوط الاسنان الامامية في المنام",
+     "en": "Seeing front teeth fall out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الأسنان الأمامية في المنام",
+     "en": "Front teeth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم وقوع الأسنان الأمامية",
+     "en": "Dream interpretation front teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط السن الامامي في المنام للعزباء",
+     "en": "Front tooth falling out in a dream for a single woman",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "خلع الأسنان والضروس",
+    "en": "Extraction of teeth and molars"
+   },
+   "dream_ar": "حلمت أنني أخلع ضرسي بيدي في العيادة ولم أكن أشعر بأي وجع أو تعب.",
+   "volume": 1210,
+   "queries": [
+    {
+     "ar": "تفسير الاحلام خلع الاسنان",
+     "en": "Dream interpretation of teeth extraction",
+     "volume": 260
+    },
+    {
+     "ar": "تفسير الاحلام خلع السن",
+     "en": "Dream interpretation of tooth extraction",
+     "volume": 260
+    },
+    {
+     "ar": "تفسير الاحلام خلع الضرس",
+     "en": "Dream interpretation of molar extraction",
+     "volume": 260
+    },
+    {
+     "ar": "قلع السن بالمنام",
+     "en": "Tooth extraction in a dream",
+     "volume": 150
+    },
+    {
+     "ar": "تفسير حلم خلع الضرس بدون ألم للعزباء",
+     "en": "Interpretation of dream of molar extraction without pain for single woman",
+     "volume": 150
+    },
+    {
+     "ar": "تفسير الاحلام نزع الضرس",
+     "en": "Dream interpretation of molar extraction",
+     "volume": 50
+    },
+    {
+     "ar": "تفسير الاحلام خلع الضرس في المنام",
+     "en": "Dream interpretation - tooth extraction in a dream",
+     "volume": 40
+    },
+    {
+     "ar": "حلمت ان سنتى اتخلعت",
+     "en": "I dreamed my tooth got knocked out",
+     "volume": 20
+    },
+    {
+     "ar": "تفسير حلم سنه اتخلعت",
+     "en": "Interpretation of a dream about a tooth getting knocked out",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم السن المخلوع",
+     "en": "Interpretation of a dream about an extracted tooth",
+     "volume": 10
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط كل الأسنان",
+    "en": "Falling of all teeth"
+   },
+   "dream_ar": "حلمت أن جميع أسناني تساقطت دفعة واحدة ولم يتبق في فمي أي سنّ نهائياً.",
+   "volume": 170,
+   "queries": [
+    {
+     "ar": "تفسير حلم وقوع الاسنان كلها",
+     "en": "Interpretation of dream of all teeth falling",
+     "volume": 100
+    },
+    {
+     "ar": "حلمت ان اسناني كلها وقعت",
+     "en": "I dreamed all my teeth fell",
+     "volume": 50
+    },
+    {
+     "ar": "سقوط جميع الاسنان في المنام",
+     "en": "All teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "حلم فقدان الاسنان",
+     "en": "Dream of losing teeth",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط جميع الاسنان",
+     "en": "Dream interpretation all teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "حلم سقوط الأسنان كلها",
+     "en": "Dream of all teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الأسنان كلها في المنام",
+     "en": "All teeth falling out in a dream",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان السفلية",
+    "en": "Falling lower teeth"
+   },
+   "dream_ar": "حلمت أن أسناني السفلية هي التي تسقط وتتطاير في فمي دون العليا.",
+   "volume": 160,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط الاسنان السفلية",
+     "en": "Interpretation of dream of lower teeth falling",
+     "volume": 60
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان السفلية",
+     "en": "Interpretation of a dream about lower teeth falling out",
+     "volume": 40
+    },
+    {
+     "ar": "حلم سقوط الاسنان السفلية",
+     "en": "Dream of lower teeth falling out",
+     "volume": 30
+    },
+    {
+     "ar": "تفسير حلم وقوع الاسنان السفليه",
+     "en": "Interpretation of a dream about lower teeth falling",
+     "volume": 20
+    },
+    {
+     "ar": "سقوط الاسنان السفليه بالمنام",
+     "en": "Lower teeth falling out in a dream",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان السفلي بدون دم",
+     "en": "Dream interpretation lower teeth falling out without blood",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير سقوط الاسنان السفلى",
+     "en": "Interpretation of lower teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الاسنان السفلى في المنام",
+     "en": "Lower teeth falling out in a dream",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الأسنان للرجل",
+    "en": "Falling teeth for men"
+   },
+   "dream_ar": "حلمت أن أسناني تسقط وأنا رجل أعمال أخشى أن يلحق الضرر بعملي ومالي، وكنت حائراً.",
+   "volume": 130,
+   "queries": [
+    {
+     "ar": "سقوط الأسنان في المنام للرجل",
+     "en": "Teeth falling in a dream for a man",
+     "volume": 100
+    },
+    {
+     "ar": "سقوط الأسنان في المنام للرجل المتزوج",
+     "en": "Teeth falling out in a dream for a married man",
+     "volume": 10
+    },
+    {
+     "ar": "سقوط الأسنان في المنام بدون دم للحامل",
+     "en": "Teeth falling out without blood in a dream for a pregnant woman",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان ومحاولة إرجاعها",
+     "en": "Dream interpretation teeth falling out and trying to put them back",
+     "volume": 10
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان في اليد للرجل",
+     "en": "Dream interpretation teeth falling into the hand for a man",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان مع البكاء",
+     "en": "Dream interpretation teeth falling out with crying",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط أسنان شخص آخر",
+    "en": "Another person's teeth falling"
+   },
+   "dream_ar": "حلمت أن أسنان شخص آخر أعرفه سقطت أمامي في المنام، ورأيت أسنان صديقي تتطاير وتقع على الأرض.",
+   "volume": 0,
+   "queries": [
+    {
+     "ar": "تفسير حلم سقوط أسنان شخص آخر",
+     "en": "Dream interpretation another person's teeth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "رؤية أسنان شخص آخر في المنام",
+     "en": "Seeing another person's teeth in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "تفسير حلم سقوط الأسنان لشخص آخر",
+     "en": "Dream interpretation another person's teeth falling out",
+     "volume": 0
+    }
+   ]
+  },
+  {
+   "title": {
+    "ar": "سقوط الناب",
+    "en": "Canine falling"
+   },
+   "dream_ar": "حلمت أن نابي العلوي سقط مني فجأة أثناء الأكل، وكنت خائفة أن يتأثر شكلي بذلك.",
+   "volume": 0,
+   "queries": [
+    {
+     "ar": "حلم سقوط الناب العلوي",
+     "en": "Dream of upper canine tooth falling out",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط ناب في المنام",
+     "en": "A canine tooth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "وقوع الناب في الحلم",
+     "en": "A canine tooth falling out in a dream",
+     "volume": 0
+    },
+    {
+     "ar": "سقوط الناب العلوي في المنام للمتزوجة",
+     "en": "Upper canine tooth falling out in a dream for a married woman",
+     "volume": 0
+    }
+   ]
+  }
+ ],
+ "totals": {
+  "keywords": 410,
+  "grouped": 404,
+  "clusters": 16,
+  "volume": 92870
+ },
+ "ungrouped": [
+  "تفسير حلم سقوط الأسنان بدون دم",
+  "تفسير الاحلام وقوع الاسنان",
+  "تفسير حلم سقوط الاسنان العلوية",
+  "سقوط الاسنان العلوية في المنام",
+  "تفسير تساقط الاسنان",
+  "هل سقوط الأسنان يدل على الموت"
+ ]
+}
