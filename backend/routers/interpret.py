@@ -24,6 +24,48 @@ from ..search import looks_distressing
 router = APIRouter(tags=["interpret"])
 
 
+# The model sets the indicator percentages, and left alone it sometimes
+# contradicts its own classification — a dream it called distressing coming back
+# with low anxiety. The two sit side by side on the page, so an incoherent pair
+# is worse than an approximate one. These bounds are the floor and ceiling each
+# classification implies; anything inside them is left exactly as the model set
+# it, and only a genuine contradiction is corrected.
+_BOUNDS = {
+    #                     tafaul      raja       qalaq
+    "رؤيا صالحة":       ((55, 100), (55, 100), (0, 45)),
+    "حلم من الشيطان":   ((0, 45),   (0, 55),   (55, 100)),
+    "أضغاث أحلام":      ((20, 70),  (20, 75),  (25, 80)),
+}
+
+
+def _coherent(answer: dict) -> dict:
+    """Keep the indicators consistent with the classification they sit beside."""
+    ind = answer.get("muashirat")
+    if not isinstance(ind, dict):
+        return answer
+
+    bounds = _BOUNDS.get((answer.get("tasnif") or {}).get("naw"))
+    adjusted = []
+    for field, span in zip(("tafaul", "raja", "qalaq"), bounds or ()):
+        try:
+            value = int(ind.get(field, 0))
+        except (TypeError, ValueError):
+            value = 0
+        clamped = max(span[0], min(span[1], value))
+        if clamped != value:
+            adjusted.append(field)
+        ind[field] = clamped
+
+    # A dream the model itself called distressing cannot read as calm.
+    if answer.get("mukhifah") and ind.get("qalaq", 0) < 55:
+        ind["qalaq"] = 55
+        adjusted.append("qalaq")
+
+    if adjusted:
+        ind["adjusted"] = sorted(set(adjusted))
+    return answer
+
+
 def _citations(match: dict) -> list[dict]:
     """The headword entry first, then its supporting passages."""
     def cite(text, slug, kind, page, url):
@@ -107,10 +149,10 @@ def interpret(payload: DreamRequest):
     last_error = None
     for model in config.MODELS:
         try:
-            result = answer_mod.generate(
+            result = _coherent(answer_mod.generate(
                 dream, matches, adab, model, context, source_names_ar(),
                 payload.source,
-            )
+            ))
         except Exception as e:            # quota, transport, malformed JSON
             last_error = e
             continue

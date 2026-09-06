@@ -77,7 +77,23 @@ let STATE = { stats: null, options: null, sources: [], nonSources: [], last: nul
 const T = {
   ar: {
     dir: "rtl", brand: "تأويل",
-    nav: { home: "الرئيسية", teeth: "سقوط الأسنان", result: "آخر تفسير", interpreters: "المفسّرون", about: "مصادرنا", faq: "الأسئلة الشائعة", journal: "سجل أحلامي" },
+    nav: { home: "الرئيسية", teeth: "سقوط الأسنان", symbols: "الرموز", history: "سجلي", interpreters: "المفسّرون", about: "مصادرنا", faq: "الأسئلة الشائعة" },
+    sourceLabel: "على مرجعية",
+    sourceAllTitle: "كل المصادر",
+    sourceAllNote: "يُجمع ما ورد في الكتب الستة",
+    sourceHint: "اختر مرجعية واحدة لتقتصر عليها، أو اتركها على «كل المصادر».",
+    ctxToggle: "أضف شيئاً عن حالك",
+    ctxWhy: "الكتب تفرّق بين الرجل والمرأة، والمتزوج والأعزب — فذكرُ حالك يغيّر التأويل.",
+    fixedSourceNote: name => `التفسير هنا مقصور على مرجعية ${name} وحدها.`,
+    symbolsH1: "الرموز",
+    symbolsSoon: "قاموس الرموز — من الألف إلى الياء — قيد الإعداد.",
+    symbolsCount: n => `${n} رمزاً في الفهرس، وستُعرض هنا مرتّبة بحروفها مع نصوصها ومصادرها.`,
+    historyH1: "سجلي",
+    historySub: "رؤاك وتفاسيرها، محفوظة في متصفحك وحده ولا تُرسل إلى أي خادم.",
+    historyEmpty: "لم تحفظ رؤيا بعد. بعد كل تفسير اضغط «حفظ في سجلي».",
+    open: "افتح التفسير", remove: "احذف", clearAll: "احذف السجل كله",
+    savedOn: "حُفظت في",
+    searchThis: "فسّر هذه الرؤيا",
     teethH1: "تفسير حلم سقوط الأسنان",
     teethSub: "من أكثر ما يُسأل عنه من الرؤى. اختر ما يشبه رؤياك، أو اكتبها بنفسك — والجواب مبنيّ على ما ورد في كتب أهل التعبير بنصّه ومصدره.",
     teethPick: "اختر ما يشبه رؤياك",
@@ -141,7 +157,23 @@ const T = {
   },
   en: {
     dir: "ltr", brand: "Ta'weel",
-    nav: { home: "Home", teeth: "Falling teeth", result: "Last reading", interpreters: "Interpreters", about: "Our sources", faq: "FAQ", journal: "My dreams" },
+    nav: { home: "Home", teeth: "Falling teeth", symbols: "Symbols", history: "My dreams", interpreters: "Interpreters", about: "Our sources", faq: "FAQ" },
+    sourceLabel: "Interpreted by",
+    sourceAllTitle: "All sources",
+    sourceAllNote: "Draws on all six books together",
+    sourceHint: "Pick one authority to read on its approach alone, or leave it on All sources.",
+    ctxToggle: "Add something about yourself",
+    ctxWhy: "The books read a symbol differently for a man and a woman, the married and the unmarried — so telling us changes the reading.",
+    fixedSourceNote: name => `This page reads your dream on ${name}'s approach alone.`,
+    symbolsH1: "Symbols",
+    symbolsSoon: "The A–Z symbol dictionary is being prepared.",
+    symbolsCount: n => `${n} symbols are indexed; they will appear here in order, each with its texts and sources.`,
+    historyH1: "My dreams",
+    historySub: "Your dreams and their readings, kept in your browser alone and never sent to any server.",
+    historyEmpty: "Nothing saved yet. After a reading, press “Save”.",
+    open: "Open reading", remove: "Remove", clearAll: "Delete everything",
+    savedOn: "Saved",
+    searchThis: "Interpret this dream",
     teethH1: "Dreams of teeth falling out",
     teethSub: "One of the most asked-about dreams there is. Pick whichever is closest to yours, or write your own — the answer rests on what the classical books say, with the text and its source shown.",
     teethPick: "Pick the one closest to your dream",
@@ -256,11 +288,11 @@ function buildShell() {
       <nav class="nav-links">
         <a href="#/" data-route="#/">${L.nav.home}</a>
         <a href="#/teeth" data-route="#/teeth">${L.nav.teeth}</a>
-        <a href="#/result" data-route="#/result">${L.nav.result}</a>
         <a href="#/interpreters" data-route="#/interpreters">${L.nav.interpreters}</a>
+        <a href="#/symbols" data-route="#/symbols">${L.nav.symbols}</a>
+        <a href="#/history" data-route="#/history">${L.nav.history}</a>
         <a href="#/about" data-route="#/about">${L.nav.about}</a>
         <a href="#/faq" data-route="#/faq">${L.nav.faq}</a>
-        <a href="#/journal" data-route="#/journal">${L.nav.journal}</a>
         <span class="lang-switch">
           <button data-lang="ar" onclick="setLang('ar')">AR</button>
           <button data-lang="en" onclick="setLang('en')">EN</button>
@@ -304,8 +336,8 @@ function route() {
   }
   ({
     "#/": viewHome, "#/teeth": viewTeeth, "#/result": viewResult,
-    "#/interpreters": viewInterpreters,
-    "#/about": viewAbout, "#/faq": viewFaq, "#/journal": viewJournal,
+    "#/interpreters": viewInterpreters, "#/symbols": viewSymbols,
+    "#/history": viewHistory, "#/about": viewAbout, "#/faq": viewFaq,
   }[h] || viewHome)();
 
   // Jumping to the top on every render would yank the reader back up each time
@@ -319,26 +351,55 @@ function route() {
 /* ------------------------------------------------------------ components */
 function dreamForm(fixedSource) {
   const L = t(), o = STATE.options;
-  const sourceRow = fixedSource ? "" : `
-    <label class="field field-source">
-      <span>${L.sourceLabel}</span>
-      <select id="f-source">
-        <option value="">${L.sourceAll}</option>
-        ${STATE.sources.filter(s => s.role !== "hadith")
-          .map(s => `<option value="${s.slug}">${esc(s.display[lang])}</option>`).join("")}
-      </select>
-    </label>`;
+  const fixed = fixedSource ? STATE.sources.find(s => s.slug === fixedSource) : null;
+
+  // Six named authorities is a browsing decision, not a form field. A select
+  // hides five of them behind a click and gives no room for who they are; laid
+  // out as cards, the choice is visible and carries its own explanation.
+  const picker = fixed ? `
+    <div class="fixed-source">
+      <span class="dot dot-${fixed.color}"></span>
+      <div>
+        <b>${esc(fixed.display[lang])}</b>
+        <div class="why">${L.fixedSourceNote(esc(fixed.display[lang]))}</div>
+      </div>
+    </div>` : `
+    <fieldset class="picker">
+      <legend>${L.sourceLabel}</legend>
+      <label class="pick pick-all">
+        <input type="radio" name="src" value="" checked>
+        <span class="pick-body">
+          <b>${L.sourceAllTitle}</b>
+          <span class="why">${L.sourceAllNote}</span>
+        </span>
+      </label>
+      <div class="picker-grid" role="radiogroup">
+        ${STATE.sources.filter(s => s.role !== "hadith").map(s => `
+        <label class="pick">
+          <input type="radio" name="src" value="${s.slug}">
+          <span class="pick-body">
+            <b><span class="dot dot-${s.color}"></span>${esc(s.display[lang])}</b>
+            <span class="why">${esc(s.author[lang])}</span>
+          </span>
+        </label>`).join("")}
+      </div>
+      <p class="picker-hint">${L.sourceHint}</p>
+    </fieldset>`;
 
   return `
     <div class="card form-card">
       <label class="field">
         <span>${L.dreamLabel}</span>
-        <textarea id="dream" dir="rtl" lang="ar" placeholder="${L.placeholder}"></textarea>
-        <small>${L.dreamHint}</small>
+        <textarea id="dream" dir="rtl" lang="ar" rows="5"
+          placeholder="${L.placeholder}" aria-describedby="dreamHint"></textarea>
+        <small id="dreamHint">${L.dreamHint}</small>
       </label>
-      ${sourceRow}
-      <details class="ctx" ${fixedSource ? "" : "open"}>
-        <summary>${L.ctxHead}</summary>
+
+      ${picker}
+
+      <details class="ctx">
+        <summary>${L.ctxToggle}</summary>
+        <p class="why">${L.ctxWhy}</p>
         <div class="ctx-grid">
           ${o.fields.map(f => `
             <label><span>${esc(f.label[lang])}</span>
@@ -347,12 +408,15 @@ function dreamForm(fixedSource) {
               </select></label>`).join("")}
         </div>
       </details>
-      <div class="row">
+
+      <div class="row submit-row">
         <button class="btn btn-gold" onclick="submitDream('${fixedSource || ""}')">${L.go}</button>
         <button class="btn ghost" onclick="document.getElementById('dream').value=''">${L.clear}</button>
       </div>
+
       <div class="examples">
-        ${o.examples.map(e => `<span class="ex" onclick="document.getElementById('dream').value=this.textContent">${esc(e)}</span>`).join("")}
+        ${o.examples.map(e => `<button type="button" class="ex"
+          onclick="document.getElementById('dream').value=this.textContent.trim()">${esc(e)}</button>`).join("")}
       </div>
     </div>`;
 }
@@ -418,13 +482,14 @@ async function viewTeeth() {
       </div>
       <p class="topic-dream serif" dir="rtl" lang="ar">${esc(c.dream_ar)}</p>
       <div class="row">
-        <button class="btn btn-gold" onclick="runDream(${i})">${L.interpretThis}</button>
+        <button class="btn btn-gold" onclick="runDream(${i})">${L.searchThis}</button>
       </div>
       <details class="topic-queries">
         <summary>${L.teethAsked} <span class="badge">${num(c.queries.length)}</span></summary>
-        <div class="qlist">${c.queries.slice(0, 24).map(q =>
-          `<span class="q" dir="rtl" lang="ar">${esc(q.ar)}${q.volume
-            ? `<span class="q-n">${num(q.volume)}</span>` : ""}</span>`).join("")}</div>
+        <div class="qlist">${c.queries.slice(0, 24).map((q, j) =>
+          `<button type="button" class="q q-btn" dir="rtl" lang="ar"
+             onclick="runQuery(${i},${j})" title="${L.searchThis}">${esc(q.ar)}${q.volume
+            ? `<span class="q-n">${num(q.volume)}</span>` : ""}</button>`).join("")}</div>
       </details>
     </div>`).join("");
 
@@ -451,6 +516,13 @@ function runDream(i) {
     STATE.stagedDream = c.dream_ar;
   }
   submitDream("", c.dream_ar);
+}
+
+/* A raw search phrase, run as itself. Someone who clicks their exact wording
+   expects to be answered on that wording, not on a tidied paraphrase of it. */
+function runQuery(ci, qi) {
+  const q = STATE.pages.teeth?.clusters[ci]?.queries[qi];
+  if (q) submitDream("", q.ar);
 }
 
 function viewInterpreters() {
@@ -572,7 +644,8 @@ async function submitDream(fixedSource, explicitDream) {
   }
 
   const body = { dream };
-  const src = fixedSource || ($("#f-source") ? $("#f-source").value : "");
+  const picked = document.querySelector('input[name="src"]:checked');
+  const src = fixedSource || (picked ? picked.value : "");
   if (src) body.source = src;
   (STATE.options.fields || []).forEach(f => {
     const el = $("#f-" + f.key);
@@ -803,7 +876,9 @@ function viewResult() {
 
   chrome(h);
   $("#copyBtn").onclick = copyResult;
-  $("#saveBtn").onclick = () => { saveToJournal(); $("#saveBtn").textContent = L.saved; };
+  $("#saveBtn").onclick = () => {
+    $("#saveBtn").textContent = saveToHistory() ? L.saved : L.copy;
+  };
 }
 
 function citationsBlock(symbols) {
@@ -831,42 +906,142 @@ function adabBlock(d) {
   return h;
 }
 
-/* ------------------------------------------------------------- journal */
-const JKEY = "taweel_journal_v1";
-const jload = () => { try { return JSON.parse(localStorage.getItem(JKEY) || "[]"); } catch { return []; } };
-const jsave = a => localStorage.setItem(JKEY, JSON.stringify(a.slice(0, 60)));
+/* ------------------------------------------------------------- history
+ * The whole reading is kept, not a summary, so a saved dream can be reopened
+ * and read again months later — including its citations, which is the part
+ * worth keeping. It lives in localStorage and goes nowhere else; the page says
+ * so, and that has to stay true.
+ *
+ * localStorage is a few megabytes, and a reading with its citations is tens of
+ * kilobytes, so the list is capped and the oldest are dropped when the browser
+ * refuses a write.
+ */
+const HKEY = "taweel_history_v2";
+const HISTORY_MAX = 40;
 
-function saveToJournal() {
-  const d = STATE.last; if (!d) return;
-  const a = jload();
-  a.unshift({ t: Date.now(), dream: d.dream, naw: d.answer?.tasnif?.naw || "",
-              source: d.meta?.source || null, rumuz: (d.symbols || []).map(s => s.symbol_ar) });
-  jsave(a);
+const hload = () => { try { return JSON.parse(localStorage.getItem(HKEY) || "[]"); } catch { return []; } };
+
+function hsave(list) {
+  let items = list.slice(0, HISTORY_MAX);
+  while (items.length) {
+    try {
+      localStorage.setItem(HKEY, JSON.stringify(items));
+      return true;
+    } catch {
+      items = items.slice(0, Math.floor(items.length * 0.7));   // quota: shed the oldest
+    }
+  }
+  return false;
 }
 
-function viewJournal() {
-  const L = t(), a = jload();
+function saveToHistory() {
+  const d = STATE.last;
+  if (!d?.answer) return false;
+  const items = hload();
+  const entry = {
+    id: `${Date.now()}`,
+    at: Date.now(),
+    dream: d.dream,
+    source: d.meta?.source || null,
+    answer: d.answer,
+    symbols: d.symbols || [],
+    adab_sources: d.adab_sources || [],
+    context: d.context || {},
+    meta: d.meta || {},
+  };
+  // Re-saving the same reading should update it, not duplicate it.
+  const at = items.findIndex(x => x.dream === entry.dream && x.source === entry.source);
+  if (at >= 0) items.splice(at, 1);
+  items.unshift(entry);
+  return hsave(items);
+}
+
+function viewHistory() {
+  const L = t(), items = hload();
+
+  if (!items.length) {
+    return chrome(`<div class="wrap page">
+      <h1>${L.historyH1}</h1><p class="sub">${L.historySub}</p>
+      <div class="card empty"><p>${L.historyEmpty}</p>
+      <a class="btn btn-gold" href="#/">${L.nav.home}</a></div></div>`);
+  }
+
   const counts = {};
-  a.forEach(x => (x.rumuz || []).forEach(r => counts[r] = (counts[r] || 0) + 1));
-  const rec = Object.entries(counts).filter(([, n]) => n > 1).sort((x, y) => y[1] - x[1]).slice(0, 12);
+  items.forEach(x => (x.symbols || []).forEach(s => counts[s.symbol_ar] = (counts[s.symbol_ar] || 0) + 1));
+  const recurring = Object.entries(counts).filter(([, n]) => n > 1)
+    .sort((a, b) => b[1] - a[1]).slice(0, 12);
+
+  const rows = items.map(x => {
+    const src = x.source ? (STATE.sources.find(s => s.slug === x.source) || {}).display?.[lang] : null;
+    const naw = x.answer?.tasnif?.naw || "";
+    const tone = naw === "رؤيا صالحة" ? "good" : naw === "حلم من الشيطان" ? "warn" : "";
+    return `<article class="hrow">
+      <div class="hrow-main">
+        <div class="hrow-top">
+          ${naw ? `<span class="badge ${tone}">${esc(naw)}</span>` : ""}
+          ${src ? `<span class="badge">${esc(src)}</span>` : ""}
+          <span class="jmeta">${L.savedOn} ${new Date(x.at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB")}</span>
+        </div>
+        <p class="hrow-dream serif" dir="rtl" lang="ar">${esc(x.dream)}</p>
+        ${x.answer?.unwan ? `<p class="hrow-verdict">${esc(x.answer.unwan)}</p>` : ""}
+        ${x.symbols?.length ? `<div class="hrow-syms">${x.symbols.map(s =>
+          `<span class="q" dir="rtl" lang="ar">${esc(s.symbol_ar)}</span>`).join("")}</div>` : ""}
+      </div>
+      <div class="hrow-actions">
+        <button class="btn ghost" onclick="openSaved('${x.id}')">${L.open}</button>
+        <button class="btn ghost danger" onclick="removeSaved('${x.id}')">${L.remove}</button>
+      </div>
+    </article>`;
+  }).join("");
 
   chrome(`<div class="wrap page">
-    <h1>${L.journalH1}</h1>
-    <p class="sub">${L.journalNote}</p>
-    ${rec.length ? `<div class="card"><div class="why">${L.recurring}</div>
-      <div class="recur">${rec.map(([r, n]) => `<span class="r">${esc(r)} · ${num(n)}</span>`).join("")}</div></div>` : ""}
-    ${a.length ? `<div class="card">${a.map((x, i) => `
-      <div class="jrow"><div><b dir="rtl" lang="ar">${esc(x.dream.slice(0, 130))}</b>
-        ${x.rumuz?.length ? `<div class="why">${x.rumuz.map(esc).join(" · ")}</div>` : ""}</div>
-        <div class="jmeta">${new Date(x.t).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB")}
-          <button onclick="jdel(${i})">✕</button></div></div>`).join("")}
-      </div><button class="btn ghost" onclick="jclear()">${L.jclear}</button>`
-      : `<div class="card">${L.noJournal}</div>`}
+    <h1>${L.historyH1}</h1>
+    <p class="sub">${L.historySub}</p>
+    ${recurring.length ? `<div class="card"><div class="why">${L.recurring}</div>
+      <div class="recur">${recurring.map(([r, n]) =>
+        `<span class="r">${esc(r)} · ${num(n)}</span>`).join("")}</div></div>` : ""}
+    <div class="card hlist">${rows}</div>
+    <div class="actions"><button class="btn ghost danger" onclick="clearHistory()">${L.clearAll}</button></div>
   </div>`);
 }
 
-function jdel(i) { const a = jload(); a.splice(i, 1); jsave(a); route(); }
-function jclear() { localStorage.removeItem(JKEY); route(); }
+/* Reopen a saved reading in the ordinary result view — same rendering, so a
+   remembered dream and a fresh one look identical. */
+function openSaved(id) {
+  const item = hload().find(x => x.id === id);
+  if (!item) return;
+  STATE.pending = null;
+  STATE.last = {
+    answer: item.answer, symbols: item.symbols, adab_sources: item.adab_sources,
+    context: item.context, meta: item.meta, dream: item.dream,
+  };
+  sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
+  location.hash = "#/result";
+  if (location.hash === "#/result") route();
+}
+
+function removeSaved(id) {
+  hsave(hload().filter(x => x.id !== id));
+  route();
+}
+
+function clearHistory() {
+  localStorage.removeItem(HKEY);
+  route();
+}
+
+/* ------------------------------------------------------------- symbols */
+function viewSymbols() {
+  const L = t(), n = STATE.stats?.symbols || 0;
+  chrome(`<div class="wrap page">
+    <h1>${L.symbolsH1}</h1>
+    <p class="sub">${L.symbolsCount(num(n))}</p>
+    <div class="card empty">
+      <p>${L.symbolsSoon}</p>
+      <a class="btn btn-gold" href="#/">${L.nav.home}</a>
+    </div>
+  </div>`);
+}
 
 function copyResult() {
   const d = STATE.last, a = d?.answer, L = t(); if (!a) return;
@@ -905,6 +1080,8 @@ console.info(`%cتأويل build ${BUILD}%c  API: ${API}`,
 window.setLang = setLang;
 window.submitDream = submitDream;
 window.runDream = runDream;
-window.jdel = jdel;
-window.jclear = jclear;
+window.runQuery = runQuery;
+window.openSaved = openSaved;
+window.removeSaved = removeSaved;
+window.clearHistory = clearHistory;
 boot();
