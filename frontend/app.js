@@ -139,7 +139,8 @@ const T = {
     manhaj: "مسلك التأويل", byState: "بحسب حالك", masadir: "المصادر",
     tafaul: "التفاؤل", raja: "الرجاء", qalaq: "القلق",
     noCorpusNote: "لم يُعثر على نصٍّ لهذه الرؤيا في الكتب المفهرسة، فالجواب مبنيّ على ما استقرّ عند أهل التعبير لا على نصٍّ بعينه.",
-    copy: "نسخ", print: "طباعة", save: "حفظ في سجلي", saved: "حُفظت ✓", copied: "نُسخ ✓",
+    copy: "نسخ", print: "طباعة", save: "حفظ في سجلي", saved: "حُفظت ✓",
+    savedAuto: "محفوظة في سجلي ←", rerun: "فسّرها من جديد", copied: "نُسخ ✓",
     interpretersH1: "المفسّرون والمراجع",
     interpretersSub: "لكلٍّ مسلكه. اختر مرجعية لتقرأ عنها، أو لتُفسَّر رؤياك على مسلكها وحدها.",
     otherAuthorities: "مرجعيات أخرى",
@@ -221,7 +222,8 @@ const T = {
     manhaj: "Method", byState: "For your situation", masadir: "Sources",
     tafaul: "Optimism", raja: "Hope", qalaq: "Anxiety",
     noCorpusNote: "No text for this dream was found in the indexed books, so the answer rests on what is settled among interpreters rather than on a specific passage.",
-    copy: "Copy", print: "Print", save: "Save", saved: "Saved ✓", copied: "Copied ✓",
+    copy: "Copy", print: "Print", save: "Save", saved: "Saved ✓",
+    savedAuto: "Saved to my dreams →", rerun: "Interpret again", copied: "Copied ✓",
     interpretersH1: "Interpreters and authorities",
     interpretersSub: "Each has its own method. Pick one to read about it, or to have your dream read on its approach alone.",
     otherAuthorities: "Other authorities",
@@ -690,6 +692,10 @@ async function submitDream(fixedSource, explicitDream) {
     STATE.last.dream = dream;
     STATE.pending = null;
     sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
+    // Kept automatically. Someone who reads their dream and then opens their
+    // own list expects it to be there; making that depend on noticing a button
+    // at the foot of a long page is a way of losing people's dreams.
+    saveToHistory();
     if (location.hash === "#/result") route(); else location.hash = "#/result";
   } catch (e) {
     STATE.pending = { ...STATE.pending, phase: "error", error: e.message };
@@ -884,13 +890,10 @@ function viewResult() {
   h += `<div class="actions">
     <button class="btn ghost" id="copyBtn">${L.copy}</button>
     <button class="btn ghost" onclick="window.print()">${L.print}</button>
-    <button class="btn ghost" id="saveBtn">${L.save}</button></div></div>`;
+    <a class="btn ghost" href="#/history">${L.savedAuto}</a></div></div>`;
 
   chrome(h);
   $("#copyBtn").onclick = copyResult;
-  $("#saveBtn").onclick = () => {
-    $("#saveBtn").textContent = saveToHistory() ? L.saved : L.copy;
-  };
 }
 
 function citationsBlock(symbols) {
@@ -952,7 +955,25 @@ function adabBlock(d) {
 const HKEY = "taweel_history_v2";
 const HISTORY_MAX = 40;
 
-const hload = () => { try { return JSON.parse(localStorage.getItem(HKEY) || "[]"); } catch { return []; } };
+const hload = () => {
+  try {
+    const items = JSON.parse(localStorage.getItem(HKEY) || "[]");
+    if (items.length) return items;
+    // Anything kept under the earlier key held only a summary, but the dream
+    // and its date are still the reader's, so they are carried across rather
+    // than quietly dropped.
+    const old = JSON.parse(localStorage.getItem("taweel_journal_v1") || "[]");
+    if (!old.length) return [];
+    const moved = old.map(x => ({
+      id: String(x.t || Date.now()), at: x.t || Date.now(), dream: x.dream || "",
+      source: x.source || null, answer: null,
+      symbols: (x.rumuz || []).map(s => ({ symbol_ar: s, citations: [] })),
+      adab_sources: [], context: {}, meta: {}, legacy: true,
+    })).filter(x => x.dream);
+    if (moved.length) { hsave(moved); localStorage.removeItem("taweel_journal_v1"); }
+    return moved;
+  } catch { return []; }
+};
 
 function hsave(list) {
   let items = list.slice(0, HISTORY_MAX);
@@ -1021,7 +1042,8 @@ function viewHistory() {
           `<span class="q" dir="rtl" lang="ar">${esc(s.symbol_ar)}</span>`).join("")}</div>` : ""}
       </div>
       <div class="hrow-actions">
-        <button class="btn ghost" onclick="openSaved('${x.id}')">${L.open}</button>
+        ${x.answer ? `<button class="btn ghost" onclick="openSaved('${x.id}')">${L.open}</button>`
+                   : `<button class="btn ghost" onclick="rerun('${x.id}')">${L.rerun}</button>`}
         <button class="btn ghost danger" onclick="removeSaved('${x.id}')">${L.remove}</button>
       </div>
     </article>`;
@@ -1051,6 +1073,13 @@ function openSaved(id) {
   sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
   location.hash = "#/result";
   if (location.hash === "#/result") route();
+}
+
+/* An entry saved before the full reading was kept has only the dream left, so
+   the honest action is to interpret it again rather than pretend to reopen it. */
+function rerun(id) {
+  const item = hload().find(x => x.id === id);
+  if (item) submitDream(item.source || "", item.dream);
 }
 
 function removeSaved(id) {
@@ -1123,5 +1152,6 @@ window.useExample = el => {
 };
 window.openSaved = openSaved;
 window.removeSaved = removeSaved;
+window.rerun = rerun;
 window.clearHistory = clearHistory;
 boot();
