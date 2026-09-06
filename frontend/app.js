@@ -140,7 +140,8 @@ const T = {
     tafaul: "التفاؤل", raja: "الرجاء", qalaq: "القلق",
     noCorpusNote: "لم يُعثر على نصٍّ لهذه الرؤيا في الكتب المفهرسة، فالجواب مبنيّ على ما استقرّ عند أهل التعبير لا على نصٍّ بعينه.",
     copy: "نسخ", print: "طباعة", save: "حفظ في سجلي", saved: "حُفظت ✓",
-    savedAuto: "محفوظة في سجلي ←", rerun: "فسّرها من جديد", copied: "نُسخ ✓",
+    savedAuto: "محفوظة في سجلي ←", rerun: "فسّرها من جديد",
+    notDone: "لم يكتمل", pendingStill: "قيد التفسير", copied: "نُسخ ✓",
     interpretersH1: "المفسّرون والمراجع",
     interpretersSub: "لكلٍّ مسلكه. اختر مرجعية لتقرأ عنها، أو لتُفسَّر رؤياك على مسلكها وحدها.",
     otherAuthorities: "مرجعيات أخرى",
@@ -223,7 +224,8 @@ const T = {
     tafaul: "Optimism", raja: "Hope", qalaq: "Anxiety",
     noCorpusNote: "No text for this dream was found in the indexed books, so the answer rests on what is settled among interpreters rather than on a specific passage.",
     copy: "Copy", print: "Print", save: "Save", saved: "Saved ✓",
-    savedAuto: "Saved to my dreams →", rerun: "Interpret again", copied: "Copied ✓",
+    savedAuto: "Saved to my dreams →", rerun: "Interpret again",
+    notDone: "Not completed", pendingStill: "Still interpreting", copied: "Copied ✓",
     interpretersH1: "Interpreters and authorities",
     interpretersSub: "Each has its own method. Pick one to read about it, or to have your dream read on its approach alone.",
     otherAuthorities: "Other authorities",
@@ -670,6 +672,7 @@ async function submitDream(fixedSource, explicitDream) {
   STATE.last = null;
   sessionStorage.removeItem("taweel_last");
   STATE.pending = { dream, body, phase: "matching", match: null };
+  STATE.historyId = startHistoryEntry(dream, body.source, payloadContext(body));
   location.hash = "#/result";
   route();
 
@@ -680,6 +683,8 @@ async function submitDream(fixedSource, explicitDream) {
     if (STATE.pending?.dream !== dream) return;      // a newer dream took over
     STATE.pending.match = m;
     STATE.pending.phase = "interpreting";
+    // Citations exist now even if the model never answers; keep them.
+    updateHistoryEntry(STATE.historyId, { symbols: m.symbols || [], status: "matched" });
     if (location.hash === "#/result") route();
   } catch { /* fall through to the full call */ }
 
@@ -692,15 +697,19 @@ async function submitDream(fixedSource, explicitDream) {
     STATE.last.dream = dream;
     STATE.pending = null;
     sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
-    // Kept automatically. Someone who reads their dream and then opens their
-    // own list expects it to be there; making that depend on noticing a button
-    // at the foot of a long page is a way of losing people's dreams.
     saveToHistory();
     if (location.hash === "#/result") route(); else location.hash = "#/result";
   } catch (e) {
+    updateHistoryEntry(STATE.historyId, { status: "failed" });
     STATE.pending = { ...STATE.pending, phase: "error", error: e.message };
     if (location.hash === "#/result") route();
   }
+}
+
+/* Only the context keys, without the dream or the source. */
+function payloadContext(body) {
+  const { dream, source, ...rest } = body;
+  return rest;
 }
 
 /* The dream echoed back, shown in every phase so the page never looks empty. */
@@ -988,26 +997,43 @@ function hsave(list) {
   return false;
 }
 
+/* The dream is recorded the moment interpret is pressed, before anything has
+ * come back, and the same entry is filled in as each stage arrives. A reading
+ * that fails, or a tab closed while it was still working, therefore still
+ * leaves the dream in the reader's list rather than vanishing — which is what
+ * they typed it for.
+ */
+function startHistoryEntry(dream, source, context) {
+  const items = hload();
+  // The same dream on the same authority updates in place rather than piling up.
+  const existing = items.findIndex(x => x.dream === dream && (x.source || null) === (source || null));
+  const id = existing >= 0 ? items[existing].id : String(Date.now());
+  if (existing >= 0) items.splice(existing, 1);
+  items.unshift({
+    id, at: Date.now(), dream, source: source || null, context: context || {},
+    answer: null, symbols: [], adab_sources: [], meta: {}, status: "pending",
+  });
+  hsave(items);
+  return id;
+}
+
+function updateHistoryEntry(id, patch) {
+  const items = hload();
+  const at = items.findIndex(x => x.id === id);
+  if (at < 0) return false;
+  items[at] = { ...items[at], ...patch };
+  return hsave(items);
+}
+
 function saveToHistory() {
   const d = STATE.last;
-  if (!d?.answer) return false;
-  const items = hload();
-  const entry = {
-    id: `${Date.now()}`,
-    at: Date.now(),
-    dream: d.dream,
-    source: d.meta?.source || null,
-    answer: d.answer,
-    symbols: d.symbols || [],
-    adab_sources: d.adab_sources || [],
-    context: d.context || {},
-    meta: d.meta || {},
-  };
-  // Re-saving the same reading should update it, not duplicate it.
-  const at = items.findIndex(x => x.dream === entry.dream && x.source === entry.source);
-  if (at >= 0) items.splice(at, 1);
-  items.unshift(entry);
-  return hsave(items);
+  if (!d) return false;
+  const id = STATE.historyId || startHistoryEntry(d.dream, d.meta?.source, d.context);
+  return updateHistoryEntry(id, {
+    answer: d.answer || null, symbols: d.symbols || [],
+    adab_sources: d.adab_sources || [], meta: d.meta || {},
+    status: d.answer ? "done" : "failed",
+  });
 }
 
 function viewHistory() {
@@ -1029,10 +1055,12 @@ function viewHistory() {
     const src = x.source ? (STATE.sources.find(s => s.slug === x.source) || {}).display?.[lang] : null;
     const naw = x.answer?.tasnif?.naw || "";
     const tone = naw === "رؤيا صالحة" ? "good" : naw === "حلم من الشيطان" ? "warn" : "";
+    const unfinished = !x.answer;
     return `<article class="hrow">
       <div class="hrow-main">
         <div class="hrow-top">
-          ${naw ? `<span class="badge ${tone}">${esc(naw)}</span>` : ""}
+          ${naw ? `<span class="badge ${tone}">${esc(naw)}</span>`
+                : `<span class="badge">${x.status === "failed" ? L.notDone : L.pendingStill}</span>`}
           ${src ? `<span class="badge">${esc(src)}</span>` : ""}
           <span class="jmeta">${L.savedOn} ${new Date(x.at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB")}</span>
         </div>
@@ -1043,7 +1071,7 @@ function viewHistory() {
       </div>
       <div class="hrow-actions">
         ${x.answer ? `<button class="btn ghost" onclick="openSaved('${x.id}')">${L.open}</button>`
-                   : `<button class="btn ghost" onclick="rerun('${x.id}')">${L.rerun}</button>`}
+                   : `<button class="btn btn-gold" onclick="rerun('${x.id}')">${L.rerun}</button>`}
         <button class="btn ghost danger" onclick="removeSaved('${x.id}')">${L.remove}</button>
       </div>
     </article>`;
@@ -1153,5 +1181,6 @@ window.useExample = el => {
 window.openSaved = openSaved;
 window.removeSaved = removeSaved;
 window.rerun = rerun;
+window.saveToHistory = saveToHistory;
 window.clearHistory = clearHistory;
 boot();
