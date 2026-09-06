@@ -130,8 +130,10 @@ const T = {
     mukhifah: "رؤيا مكروهة — هدي السنة",
     mukhifahNote: "هذه الرؤيا فيها ما يُكره، ومن هدي النبي ﷺ ألّا تُفسَّر، وأن يفعل الرائي ما يلي.",
     rumuz: "الرموز ودلالاتها", qiraat: "الرؤيا على مسالك أهل التعبير",
-    khulasah: "الخلاصة", adab: "آداب الرؤيا", nasihah: "نصيحة",
-    nusus: "النصوص الأصلية من الكتب", ahadith: "من أحاديث الرؤيا وآدابها",
+    khulasah: "الخلاصة", adab: "آداب الرؤيا", nasihah: "ماذا تفعل الآن",
+    nasihahSub: "خطواتٌ عملية بحسب رؤياك وحالك",
+    nusus: "النصوص الأصلية من الكتب",
+    nususSub: "نصوص الكتب كما وردت، بلا تصرّف. اضغط الرمز لتراها.", ahadith: "من أحاديث الرؤيا وآدابها",
     fromBooks: "من الكتب", fromGeneral: "من المعروف المستقر",
     classical: "من كتب التعبير", psych: "قراءة نفسية",
     manhaj: "مسلك التأويل", byState: "بحسب حالك", masadir: "المصادر",
@@ -210,8 +212,10 @@ const T = {
     mukhifah: "A distressing dream — the sunna response",
     mukhifahNote: "This dream contains what is disliked. The Prophet ﷺ taught that such a dream is not interpreted; the dreamer does the following instead.",
     rumuz: "Symbols and their meanings", qiraat: "The dream across the interpretive schools",
-    khulasah: "Summary", adab: "Etiquette of dreams", nasihah: "Advice",
-    nusus: "Original texts from the books", ahadith: "From the hadith on dreams and their etiquette",
+    khulasah: "Summary", adab: "Etiquette of dreams", nasihah: "What to do now",
+    nasihahSub: "Practical steps, given your dream and your situation",
+    nusus: "Original texts from the books",
+    nususSub: "The books' own words, unaltered. Tap a symbol to read them.", ahadith: "From the hadith on dreams and their etiquette",
     fromBooks: "cited", fromGeneral: "general knowledge",
     classical: "interpretation books", psych: "psychological",
     manhaj: "Method", byState: "For your situation", masadir: "Sources",
@@ -416,7 +420,8 @@ function dreamForm(fixedSource) {
 
       <div class="examples">
         ${o.examples.map(e => `<button type="button" class="ex"
-          onclick="document.getElementById('dream').value=this.textContent.trim()">${esc(e)}</button>`).join("")}
+          data-dream="${esc(e.ar)}" onclick="useExample(this)"
+          >${esc(e[lang] || e.ar)}</button>`).join("")}
       </div>
     </div>`;
 }
@@ -785,7 +790,11 @@ function viewResult() {
       <span class="verdict-pill">${citedCount
         ? L.verdictPill(esc(a.tasnif.naw), citedCount)
         : L.verdictPillNoText(esc(a.tasnif.naw))}</span>
-      <h2 class="verdict-title serif">${esc(a.unwan || a.tasnif.naw)}</h2>
+      <h2 class="verdict-title serif">
+        <span class="verdict-kind">${esc(a.tasnif.naw)}</span>
+        <span class="verdict-dash">—</span>
+        ${esc(a.unwan || "")}
+      </h2>
       ${a.tamhid ? `<p class="verdict-sub">${esc(a.tamhid)}</p>` : ""}
       ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}</p>` : ""}
     </div>`;
@@ -841,10 +850,17 @@ function viewResult() {
       }).join("");
     }
 
-    if (a.qiraat?.length) h += `<div class="card"><h2>${L.qiraat}</h2>` + a.qiraat.map(q => `
-      <div class="qira"><h4>${esc(q.almanhaj)}
-        <span class="badge ${q.min_alkutub ? "book" : ""}">${q.min_alkutub ? L.fromBooks : L.fromGeneral}</span></h4>
-        <div>${esc(q.nass)}</div></div>`).join("") + `</div>`;
+
+    // What to do now comes before the summary: a reader who has just been told
+    // their dream is distressing wants the response, not a recap.
+    const steps = [...(a.mukhifah ? [] : (a.adab || []))];
+    if (a.nasihah || steps.length || a.dua) {
+      h += `<div class="card"><h2>${L.nasihah}</h2>
+        <p class="sub">${L.nasihahSub}</p>
+        ${a.nasihah ? `<div class="personal-note">${esc(a.nasihah)}</div>` : ""}
+        ${steps.length ? `<ul class="steps">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        ${a.dua ? `<div class="dua">${esc(a.dua)}</div>` : ""}</div>`;
+    }
 
     if (a.khulasah_ammah) {
       h += `<div class="card"><h2>${L.khulasah}</h2><div>${esc(a.khulasah_ammah)}</div>`;
@@ -858,11 +874,7 @@ function viewResult() {
       h += `${a.tanbih ? `<div class="tanbih">${esc(a.tanbih)}</div>` : ""}</div>`;
     }
 
-    if (!a.mukhifah && a.adab?.length) h += `<div class="card"><h2>${L.adab}</h2>
-      <ul>${a.adab.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
-      ${a.dua ? `<div class="dua">${esc(a.dua)}</div>` : ""}</div>`;
 
-    if (a.nasihah) h += `<div class="card"><h2>${L.nasihah}</h2><div class="personal-note">${esc(a.nasihah)}</div></div>`;
     if (meta.used_corpus === false) h += `<div class="note">${L.noCorpusNote}</div>`;
   }
 
@@ -883,14 +895,35 @@ function viewResult() {
 
 function citationsBlock(symbols) {
   const L = t();
-  return `<div class="card"><h2>${L.nusus}</h2>` + symbols.map(s => `
-    <details><summary>${esc(s.symbol_ar)} <span class="badge">${count(s.citations.length, TEXTS)}</span></summary>
-      ${s.citations.map(c => `<div class="cite">
-        <div class="txt serif">${esc(c.text_ar)}</div>
-        <div class="meta"><span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${c.kind === "psychological" ? L.psych : L.classical}</span>
-          «${esc(c.source_name[lang] || c.source_name.ar)}»${c.author && (c.author[lang] || c.author.ar) ? ` — ${esc(c.author[lang] || c.author.ar)}` : ""}${c.printed_page ? ` (${L.page} ${num(c.printed_page)})` : ""}
-          ${c.url ? `· <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
-      </div>`).join("")}</details>`).join("") + `</div>`;
+  // Long classical prose in one undifferentiated column is unreadable. Each
+  // quotation becomes a card with the book across the top and the page beneath,
+  // so the eye can find where one ends and the next begins — and the source is
+  // attached to its text rather than trailing after it.
+  return `<div class="card"><h2>${L.nusus}</h2>
+    <p class="sub">${L.nususSub}</p>` + symbols.map((s, i) => `
+    <details class="texts" ${i === 0 ? "open" : ""}>
+      <summary>
+        <span class="texts-sym">${num(i + 1)} · ${esc(s.symbol_ar)}</span>
+        <span class="badge">${count(s.citations.length, TEXTS)}</span>
+      </summary>
+      <div class="texts-grid">
+        ${s.citations.map(c => `
+          <figure class="quote ${c.kind === "psychological" ? "quote-psych" : ""}">
+            <figcaption class="quote-top">
+              <span class="badge ${c.kind === "psychological" ? "psych" : "book"}">${
+                c.kind === "psychological" ? L.psych : L.classical}</span>
+              <b>${esc(c.source_name[lang] || c.source_name.ar)}</b>
+            </figcaption>
+            <blockquote class="serif" dir="rtl" lang="ar">${esc(c.text_ar)}</blockquote>
+            <figcaption class="quote-bottom">
+              ${c.author && (c.author[lang] || c.author.ar)
+                ? esc(c.author[lang] || c.author.ar) : ""}
+              ${c.printed_page ? `<span class="pg">${L.page} ${num(c.printed_page)}</span>` : ""}
+              ${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink} ↗</a>` : ""}
+            </figcaption>
+          </figure>`).join("")}
+      </div>
+    </details>`).join("") + `</div>`;
 }
 
 function adabBlock(d) {
@@ -1081,6 +1114,13 @@ window.setLang = setLang;
 window.submitDream = submitDream;
 window.runDream = runDream;
 window.runQuery = runQuery;
+/* The Arabic sits in a data attribute rather than inline in the handler: the
+   text contains quotes and the attribute is quoted, so inlining it broke the
+   markup silently — the button rendered and did nothing. */
+window.useExample = el => {
+  const box = document.getElementById("dream");
+  if (box) { box.value = el.dataset.dream || ""; box.focus(); }
+};
 window.openSaved = openSaved;
 window.removeSaved = removeSaved;
 window.clearHistory = clearHistory;

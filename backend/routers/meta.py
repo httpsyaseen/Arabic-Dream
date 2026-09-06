@@ -65,13 +65,16 @@ def options() -> dict:
             {"key": "takrar", "label": {"ar": "تتكرر الرؤيا", "en": "Recurring"},
              "values": [{"ar": "نعم", "en": "Yes"}, {"ar": "لا", "en": "No"}]},
         ],
+        # Paired, because the dream itself is always written in Arabic: the
+        # English label is what an English reader reads, `ar` is what gets typed
+        # into the box.
         "examples": [
-            "رأيت حية",
-            "رأيت في المنام حية كبيرة دخلت بيتي وكنت خائفاً",
-            "حلمت أن أسناني تسقط في يدي",
-            "رأيت أبي المتوفى حياً يبتسم لي",
-            "حلمت أني أسقط من بناية عالية",
-            "رأيت الكعبة وأنا أصلي",
+            {"ar": "رأيت أفعى تطاردني",
+             "en": "I dreamed a snake was chasing me"},
+            {"ar": "رأيت أسناني تتساقط",
+             "en": "I dreamed my teeth were falling out"},
+            {"ar": "رأيت أبي المتوفى يبتسم لي",
+             "en": "I dreamed my late father smiled at me"},
         ],
     }
 

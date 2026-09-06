@@ -493,3 +493,43 @@ html[dir=ltr] .topic-head h3{font-family:"Lora",serif}
   .hrow-actions{width:100%}
   .hrow-actions .btn{flex:1}
 }
+
+/* ================================================ classification in the head */
+.verdict-kind{display:inline-block;color:var(--gold);font-size:.62em;
+  letter-spacing:.5px;vertical-align:middle}
+.verdict-dash{color:rgba(255,255,255,.3);margin:0 .35em;font-size:.62em;vertical-align:middle}
+.verdict-good .verdict-kind{color:#A7D8BE}
+.verdict-warn .verdict-kind{color:#E0A98F}
+
+/* ================================================ what to do now */
+.steps{margin:var(--s4) 0 0;padding-inline-start:var(--s5)}
+.steps li{margin:var(--s2) 0;line-height:1.95}
+
+/* ================================================ the quoted texts
+ * One long column of classical prose is unreadable. Each quotation is a card
+ * with its book across the top and its page beneath, so the boundaries are
+ * visible and the source stays attached to the words it belongs to. */
+details.texts{border-top:1px solid var(--line-soft);padding:var(--s3) 0}
+details.texts:first-of-type{border-top:0}
+details.texts > summary{display:flex;align-items:center;gap:var(--s3);
+  cursor:pointer;list-style:none}
+details.texts > summary::-webkit-details-marker{display:none}
+details.texts > summary::after{content:"▾";color:var(--gold-deep);
+  margin-inline-start:auto;transition:transform .18s}
+details.texts[open] > summary::after{transform:rotate(180deg)}
+.texts-sym{font-weight:700;font-size:1.05rem;font-family:"Amiri",serif}
+html[dir=ltr] .texts-sym{font-family:"Lora",serif}
+.texts-grid{display:grid;gap:var(--s3);margin-top:var(--s4)}
+.quote{margin:0;background:var(--bg-parchment);border:1px solid var(--line-soft);
+  border-inline-start:4px solid var(--gold);border-radius:12px;overflow:hidden}
+.quote-psych{border-inline-start-color:var(--purple)}
+.quote-top{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;
+  padding:var(--s3) var(--s4);border-bottom:1px solid var(--line-soft);
+  background:color-mix(in srgb, var(--white) 55%, transparent);font-size:.86rem}
+.quote blockquote{margin:0;padding:var(--s4);font-size:1rem;line-height:2.15;
+  max-width:none}
+.quote-bottom{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+  padding:var(--s2) var(--s4) var(--s3);color:var(--ink-soft);font-size:.79rem;
+  border-top:1px dashed var(--line-soft)}
+.quote-bottom .pg{font-variant-numeric:tabular-nums}
+.quote-bottom a{margin-inline-start:auto}

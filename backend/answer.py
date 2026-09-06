@@ -82,17 +82,6 @@ SYMBOL = {
     "required": ["ramz", "khulasah", "manhaj", "bayan_almanhaj", "min_alkutub"],
 }
 
-QIRAAH = {
-    "type": "object",
-    "properties": {
-        "almanhaj": {"type": "string",
-                     "description": "اسم المسلك أو الكتاب الذي بُنيت عليه هذه القراءة"},
-        "nass": {"type": "string", "description": "قراءة الرؤيا على هذا المسلك"},
-        "min_alkutub": {"type": "boolean"},
-    },
-    "required": ["almanhaj", "nass", "min_alkutub"],
-}
-
 ANSWER_SCHEMA = {
     "type": "object",
     "properties": {
@@ -124,7 +113,6 @@ ANSWER_SCHEMA = {
         },
         "mukhifah": {"type": "boolean"},
         "rumuz": {"type": "array", "items": SYMBOL},
-        "qiraat": {"type": "array", "items": QIRAAH},
         "khulasah_ammah": {"type": "string"},
         "muashirat": {
             "type": "object",
@@ -197,11 +185,10 @@ SYSTEM = """\
 ٧- إن ذكر السائل شيئاً من حاله فاربط التأويل بذلك في `athar_hal_alraai`،
    ولا تخترع من حاله ما لم يذكره.
 
-٨- في `qiraat` اعرض الرؤيا على المسالك التي وردت في النصوص، كلٌّ باسم كتابه.
-   وأفرد قراءة نفسية مستقلة. وإن أُرفقت نصوص موسومة بـ«قراءة نفسية» فاعتمدها
-   واجعل `min_alkutub` = true لها، وإلا فاجعلها false.
-   ولا تخلط بين المسلكين أبداً: لا تنسب معنى نفسياً إلى كتب التعبير ولا العكس.
-   وإن ورد نص من التراث الشيعي فانسبه إلى كتابه ولا تخلطه بغيره.
+٨- إن أُرفقت نصوص موسومة بـ«قراءة نفسية» فاذكر ما فيها ضمن الرمز نفسه، موسوماً
+   بأنه قراءة نفسية لا قولاً من كتب التعبير. ولا تخلط بين المسلكين أبداً:
+   لا تنسب معنى نفسياً إلى كتب التعبير ولا العكس، وإن ورد نص من التراث الشيعي
+   فانسبه إلى كتابه ولا تخلطه بغيره.
 
 ٩- في `muashirat` قدّر دلالة الرؤيا بالنسب، **وليكن التقدير موافقاً لما قلته قبله**:
    - إن كانت `naw` = «رؤيا صالحة» فالتفاؤل والرجاء مرتفعان والقلق منخفض.
@@ -242,10 +229,15 @@ def build_prompt(dream: str, matches: list[dict], adab: list[dict],
     # explicit about staying within the known manner of that school and saying
     # when it is doing so from general knowledge rather than a supplied text.
     if source:
+        name = source_names.get(source, source)
         parts.append(
-            f"اختار السائل مرجعية واحدة: **{source_names.get(source, source)}**.\n"
-            "فاقصر الجواب على مسلك هذه المرجعية وحدها، ولا تخلط معها غيرها،\n"
-            "واجعل اسمها في `qiraat[].almanhaj`.\n"
+            f"اختار السائل مرجعية واحدة: **{name}**.\n"
+            f"فأجب على مسلك {name} وحده، مستعيناً بما تعرفه من منهجه وأصوله في التأويل،\n"
+            "ولا تخلط معه غيره من الكتب.\n\n"
+            "**والنصوص المرفقة أدناه هي الأصل الذي لا يُخالَف**؛ فهي منقولة من الكتاب\n"
+            "بنصّها، فإن وافقتْ ما تعرفه فاعتمدها ولفظَها، وإن خالفتْه فالنصّ أولى\n"
+            "ومعرفتك تابعة له لا حاكمة عليه. وما زاد عن النصوص فاجعله موسوماً بأنه\n"
+            "من المعروف عند أهل هذا المسلك لا من نصٍّ بعينه.\n"
         )
 
     lines = [
