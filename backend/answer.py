@@ -13,7 +13,6 @@ English here so the schema can be reviewed by someone who does not read Arabic.
     athar_hal_alraai = how the dreamer's own circumstances change the reading
     masadir          = sources (which books)
     min_alkutub      = "from the books?" — the honesty flag, true or false
-    qiraat           = readings, one per lens
     muashirat        = indicators (optimism / hope / anxiety)
     adab             = the etiquette response from the sunna
     dua              = a supplication

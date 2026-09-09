@@ -21,6 +21,25 @@ from ..deps import CORPUS, source_names_ar, source_public
 from ..schemas import DreamRequest, InterpretResponse
 from ..search import looks_distressing
 
+from fastapi import HTTPException
+
+from pipeline import sources
+
+
+def _check_source(slug: str | None) -> None:
+    """Reject a source we do not have.
+
+    An unknown slug used to pass: the symbols still matched, but nothing was
+    attached to them, so the answer quietly fell back to general knowledge as
+    though the books held nothing on the subject. A typo degraded the product
+    invisibly, which is worse than refusing the request.
+    """
+    if slug and slug not in sources.SOURCES:
+        raise HTTPException(422, {
+            "error": f"unknown source {slug!r}",
+            "valid": sorted(sources.SOURCES),
+        })
+
 router = APIRouter(tags=["interpret"])
 
 
@@ -101,6 +120,7 @@ def match_only(payload: DreamRequest) -> dict:
     returns six to nine seconds later. Waiting on the model to show text that
     was already on disk is a self-inflicted delay.
     """
+    _check_source(payload.source)
     started = time.time()
     dream = payload.dream.strip()
     matches = CORPUS.match(dream, source=payload.source)
@@ -121,6 +141,7 @@ def match_only(payload: DreamRequest) -> dict:
 
 @router.post("/interpret", response_model=InterpretResponse)
 def interpret(payload: DreamRequest):
+    _check_source(payload.source)
     started = time.time()
     dream = payload.dream.strip()
     context = payload.context()
