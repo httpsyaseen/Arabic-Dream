@@ -71,7 +71,7 @@ const DREAMS = { ar: ["رؤيا واحدة", "رؤيان", "رؤى", "رؤيا"]
 const esc = s => (s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 let lang = localStorage.getItem("taweel_lang") || "ar";
-let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null, pages: {} };
+let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null, pages: {}, cached: {} };
 
 /* ------------------------------------------------------------------ i18n */
 const T = {
@@ -99,6 +99,7 @@ const T = {
     teethPick: "اختر ما يشبه رؤياك",
     teethAsked: "ما يبحث عنه الناس في هذا الباب",
     teethOwn: "أو اكتب رؤياك بنفسك",
+    readReading: "اقرأ التفسير",
     interpretThis: "فسّر هذه الرؤيا",
     searchesLabel: "عبارة بحث",
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
@@ -183,6 +184,7 @@ const T = {
     teethPick: "Pick the one closest to your dream",
     teethAsked: "What people search for here",
     teethOwn: "Or write your own dream",
+    readReading: "Read the reading",
     interpretThis: "Interpret this dream",
     searchesLabel: "searches",
     heroH1: "Write your dream — its symbols are looked up in the classical books",
@@ -337,6 +339,11 @@ let lastRoute = null;
 function route() {
   const h = location.hash || "#/";
   const moved = h !== lastRoute;
+  if (h.startsWith("#/teeth/")) {
+    viewTopicReading("teeth", decodeURIComponent(h.slice(8)));
+    if (moved) { window.scrollTo(0, 0); lastRoute = h; }
+    return;
+  }
   if (h.startsWith("#/lens/") || h.startsWith("#/note/")) {
     (h.startsWith("#/lens/") ? viewLens : viewNonSource)(decodeURIComponent(h.slice(7)));
     if (moved) { window.scrollTo(0, 0); lastRoute = h; }
@@ -479,38 +486,57 @@ async function viewTeeth() {
     } catch (e) {
       return chrome(`<div class="wrap page"><div class="card err">${esc(e.message)}</div></div>`);
     }
-    if (!location.hash.startsWith("#/teeth")) return;   // moved on while loading
+    if (!location.hash.startsWith("#/teeth")) return;
   }
 
-  const page = STATE.pages.teeth;
-  const cards = page.clusters.map((c, i) => `
-    <div class="card topic-card">
-      <div class="topic-head">
-        <h3>${esc(c.title[lang])}</h3>
-        ${c.volume ? `<span class="badge">${num(c.volume)} ${L.searchesLabel}</span>` : ""}
-      </div>
+  // Just the sixteen. The search volumes and the 410 raw keywords behind them
+  // are working data, not something a reader came here for.
+  const cards = STATE.pages.teeth.clusters.map((c, i) => `
+    <a class="card topic-card" href="#/teeth/${esc(querySlug(c))}">
+      <h3>${num(i + 1)} · ${esc(c.title[lang])}</h3>
       <p class="topic-dream serif" dir="rtl" lang="ar">${esc(c.dream_ar)}</p>
-      <div class="row">
-        <button class="btn btn-gold" onclick="runDream(${i})">${L.searchThis}</button>
-      </div>
-      <details class="topic-queries">
-        <summary>${L.teethAsked} <span class="badge">${num(c.queries.length)}</span></summary>
-        <div class="qlist">${c.queries.slice(0, 24).map((q, j) =>
-          `<button type="button" class="q q-btn" dir="rtl" lang="ar"
-             onclick="runQuery(${i},${j})" title="${L.searchThis}">${esc(q.ar)}${q.volume
-            ? `<span class="q-n">${num(q.volume)}</span>` : ""}</button>`).join("")}</div>
-      </details>
-    </div>`).join("");
+      <span class="arrow">${L.readReading} →</span>
+    </a>`).join("");
 
   chrome(`<div class="wrap page">
     <h1>${L.teethH1}</h1>
     <p class="sub">${L.teethSub}</p>
-    <h2 class="section-label">${L.teethPick}</h2>
-    ${cards}
+    <div class="topic-list">${cards}</div>
     <h2 class="section-label">${L.teethOwn}</h2>
     ${dreamForm(null)}
     <div id="pending"></div>
   </div>`);
+}
+
+/* Same slug the pre-render step used, so a card and its stored reading agree. */
+function querySlug(c) {
+  return (c.title.en || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "").replace(/-{2,}/g, "-").slice(0, 48) || "query";
+}
+
+/* One of the sixteen, read from disk. No model call, so it is instant and costs
+   nothing however many people open it. */
+async function viewTopicReading(slug, qslug) {
+  const L = t();
+  const key = `${slug}/${qslug}`;
+  if (!STATE.cached[key]) {
+    chrome(`<div class="wrap page"><div class="card">
+      <div class="skel" style="width:50%"></div><div class="skel"></div></div></div>`);
+    try {
+      const r = await fetch(`${API}/pages/${slug}/${qslug}`);
+      if (!r.ok) throw new Error(String(r.status));
+      STATE.cached[key] = await r.json();
+    } catch {
+      location.hash = "#/teeth";
+      return;
+    }
+    if (!location.hash.includes(qslug)) return;
+  }
+
+  const d = STATE.cached[key];
+  STATE.pending = null;
+  STATE.last = { ...d, dream: d.dream, context: {} };
+  renderReading(STATE.last, `<a class="home-link" href="#/teeth">← ${L.nav.teeth}</a>`);
 }
 
 /* Send one of the page's dreams through the normal flow — same endpoint, same
@@ -713,12 +739,12 @@ function payloadContext(body) {
 }
 
 /* The dream echoed back, shown in every phase so the page never looks empty. */
-function dreamEcho(dream, srcName) {
+function dreamEcho(dream, srcName, editable = true) {
   const L = t();
   return `<div class="card dream-echo">
       <div class="echo-label">${L.yourDream}${srcName ? ` · ${esc(srcName)}` : ""}</div>
       <p dir="rtl" lang="ar" class="serif">${esc(dream || "")}</p>
-      <a class="btn ghost" href="#/">${L.changeDream}</a>
+      ${editable ? `<a class="btn ghost" href="#/">${L.changeDream}</a>` : ""}
     </div>`;
 }
 
@@ -778,13 +804,21 @@ function viewResult() {
   }
   const d = STATE.last;
   if (!d) return viewHome();
+  renderReading(d);
+}
 
+/* The one renderer for a reading, whether it just came back from the model or
+   was generated ahead of time and read from disk. Two renderers would drift,
+   and a stored reading that looked different would look less trustworthy for
+   no reason. */
+function renderReading(d, prefix = "") {
+  const L = t();
   const a = d.answer, meta = d.meta || {};
   const srcName = meta.source
     ? (STATE.sources.find(s => s.slug === meta.source) || {}).display?.[lang]
     : null;
 
-  let h = `<div class="wrap page">${dreamEcho(d.dream, srcName)}`;
+  let h = `<div class="wrap page">${prefix}${dreamEcho(d.dream, srcName, !prefix)}`;
 
   if (!a) {
     h += `<div class="card err">${esc(meta.error || "no answer")}</div>`;
@@ -899,7 +933,7 @@ function viewResult() {
   h += `<div class="actions">
     <button class="btn ghost" id="copyBtn">${L.copy}</button>
     <button class="btn ghost" onclick="window.print()">${L.print}</button>
-    <a class="btn ghost" href="#/history">${L.savedAuto}</a></div></div>`;
+    ${prefix ? "" : `<a class="btn ghost" href="#/history">${L.savedAuto}</a>`}</div></div>`;
 
   chrome(h);
   $("#copyBtn").onclick = copyResult;

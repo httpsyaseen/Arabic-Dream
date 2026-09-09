@@ -533,3 +533,16 @@ html[dir=ltr] .texts-sym{font-family:"Lora",serif}
   border-top:1px dashed var(--line-soft)}
 .quote-bottom .pg{font-variant-numeric:tabular-nums}
 .quote-bottom a{margin-inline-start:auto}
+
+/* The topic list: sixteen dreams, nothing else. The search volumes and the
+   keywords behind them are working data, not something a reader came for. */
+.topic-list{display:grid;gap:var(--s3);margin-top:var(--s4)}
+a.topic-card{display:block;color:inherit;background:var(--white);
+  border:1px solid var(--line);border-radius:var(--radius);padding:var(--s5)}
+a.topic-card:hover{border-color:var(--gold);text-decoration:none;
+  box-shadow:0 4px 16px rgba(18,43,42,.08);transform:translateY(-1px)}
+a.topic-card h3{margin:0 0 var(--s3);font-size:1.1rem;font-family:"Amiri",serif;
+  color:var(--gold-deep)}
+html[dir=ltr] a.topic-card h3{font-family:"Lora",serif}
+a.topic-card .topic-dream{margin:0 0 var(--s3)}
+a.topic-card .arrow{display:inline-block;margin:0}

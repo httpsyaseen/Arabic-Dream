@@ -108,7 +108,12 @@ def list_pages() -> dict:
     out = []
     for f in sorted(PAGES.glob("*.json")):
         d = json.loads(f.read_text(encoding="utf-8"))
-        out.append({"slug": d["slug"], "totals": d.get("totals", {})})
+        cached = PAGES / d["slug"]
+        out.append({
+            "slug": d["slug"],
+            "totals": d.get("totals", {}),
+            "prerendered": len(list(cached.glob("*.json"))) - 1 if cached.exists() else 0,
+        })
     return {"pages": out}
 
 
@@ -123,4 +128,22 @@ def get_page(slug: str) -> dict:
     path = PAGES / f"{slug}.json"
     if not path.exists() or "/" in slug or ".." in slug:
         raise HTTPException(404, f"no page {slug!r}")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@router.get("/pages/{slug}/{query}")
+def get_prerendered(slug: str, query: str) -> dict:
+    """A reading generated ahead of time, served from disk.
+
+    The topic pages carry the most traffic and the least variation — the same
+    sixteen dreams asked over and over — so answering each one live would spend
+    a model call per visitor for a reading identical to the last. These were
+    produced by the same endpoint, so what is stored is what a live call would
+    have returned.
+    """
+    if any(bad in part for part in (slug, query) for bad in ("/", "..")):
+        raise HTTPException(404, "not found")
+    path = PAGES / slug / f"{query}.json"
+    if not path.exists():
+        raise HTTPException(404, f"no cached reading {slug}/{query}")
     return json.loads(path.read_text(encoding="utf-8"))
