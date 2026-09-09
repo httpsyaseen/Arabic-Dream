@@ -30,6 +30,38 @@ OUT_DIR = ROOT / "index" / "pages"
 
 BATCH = 140       # keywords per call; the model has to see enough to group well
 
+SYMBOL_SYSTEM = """\
+تنظّم قائمة عبارات بحث عربية عن رؤى مختلفة، لتُبنى منها صفحاتُ رموز.
+
+اجمع العبارات **بحسب الرمز الذي تدور عليه**، لا بحسب ألفاظها. فـ«ثعبان»
+و«الثعبان» و«الأفعى» و«الحية» رمز واحد، و«الميت» و«رؤية الميت» و«رؤية الميت في
+المنام» رمز واحد، و«قص الشعر» و«حلاقة الشعر» رمز واحد.
+
+واستبعد ما ليس رمزاً أصلاً، ولا تُنشئ له مجموعة، ومنه:
+- ما يطلب معبّراً أو رقم هاتف أو تطبيقاً («رقم مفسر أحلام»).
+- ما يسأل عن طريقة التفسير لا عن رمز («تفسير الأحلام حسب الأيام»، «تفسير الأحلام
+  بالحروف»).
+- ما هو حال للرائي لا رمزاً في الرؤيا («تفسير حلم للعزباء» وحدها بلا رمز).
+- العبارات العامة التي لا رمز فيها («تفسير الأحلام في المنام»).
+اجعل أرقام هذه في `excluded` مع سبب موجز.
+
+لكل رمز:
+- `title_ar`: اسم الرمز بالعربية مفرداً، كما يُعنون به مدخل في معجم («الثعبان»،
+  «الذهب»، «رؤية الميت»).
+- `title_en`: ترجمته بالإنجليزية.
+- `dream_ar`: **الجملة التي يكتبها صاحب الرؤيا** عن هذا الرمز، لا عبارة البحث.
+  بصيغة المتكلم، طبيعية، بين ست وعشرين كلمة، مثل:
+  «حلمت أنني أرى ثعباناً كبيراً في بيتي وكنت خائفاً منه».
+- `keywords`: أرقام العبارات الداخلة في هذا الرمز.
+
+قواعد:
+- كل عبارة تدخل في رمز واحد فقط أو في `excluded`.
+- لا تجمع رمزين مختلفين في واحد لمجرد تقارب المعنى: الذهب غير الفضة، والقطة غير
+  الكلب.
+- ولا تفرّق الرمز الواحد لاختلاف اللفظ أو لزيادة قيدٍ عليه.
+- رتّب الرموز من الأكثر بحثاً إلى الأقل.
+"""
+
 SYSTEM = """\
 تنظّم قائمة عبارات بحث عربية عن رؤيا واحدة، لتُعرض في صفحة واحدة على موقع
 لتعبير الرؤيا.
@@ -61,6 +93,14 @@ SYSTEM = """\
 SCHEMA = {
     "type": "object",
     "properties": {
+        "excluded": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"n": {"type": "integer"}, "why": {"type": "string"}},
+                "required": ["n", "why"],
+            },
+        },
         "clusters": {
             "type": "array",
             "items": {
@@ -115,9 +155,11 @@ def models() -> list[str]:
     return [first] + [m for m in rest if m != first]
 
 
-def cluster(rows: list[dict]) -> list[dict]:
+def cluster(rows: list[dict], mode: str = "topic") -> tuple[list[dict], list[dict]]:
     cli = client()
+    system = SYMBOL_SYSTEM if mode == "symbols" else SYSTEM
     clusters: list[dict] = []
+    excluded: list[dict] = []
 
     for start in range(0, len(rows), BATCH):
         chunk = rows[start:start + BATCH]
@@ -133,13 +175,15 @@ def cluster(rows: list[dict]) -> list[dict]:
                 out = cli.interactions.create(
                     model=model,
                     input=listing + note,
-                    system_instruction=SYSTEM,
+                    system_instruction=system,
                     response_format={"type": "text", "mime_type": "application/json",
                                      "schema": SCHEMA},
                     generation_config={"thinking_level": "low"},
                     store=False,
                 )
-                new = json.loads(out.output_text)["clusters"]
+                parsed = json.loads(out.output_text)
+                new = parsed["clusters"]
+                excluded += parsed.get("excluded", [])
             except Exception:
                 continue
             # Merge into an existing cluster when the model reused its title.
@@ -153,20 +197,21 @@ def cluster(rows: list[dict]) -> list[dict]:
                     by_title[c["title_ar"]] = c
             break
         print(f"  {min(start + BATCH, len(rows)):>4}/{len(rows)} keywords grouped "
-              f"({len(clusters)} clusters)")
-    return clusters
+              f"({len(clusters)} clusters, {len(excluded)} excluded)")
+    return clusters, excluded
 
 
-def build(sheet: Path, slug: str) -> dict:
+def build(sheet: Path, slug: str, mode: str = "topic") -> dict:
     rows = read_sheet(sheet)
     print(f"{len(rows)} keywords, {sum(r['volume'] for r in rows):,} total volume")
-    clusters = cluster(rows)
+    clusters, excluded = cluster(rows, mode)
+    dropped = {e["n"] for e in excluded}
 
     out, seen = [], set()
     for c in clusters:
         members = []
         for n in c["keywords"]:
-            if 1 <= n <= len(rows) and n not in seen:
+            if 1 <= n <= len(rows) and n not in seen and n not in dropped:
                 seen.add(n)
                 members.append(rows[n - 1])
         if not members:
@@ -194,6 +239,8 @@ def build(sheet: Path, slug: str) -> dict:
         # Listed rather than dropped: a keyword nothing covers is a gap, and a
         # silent one is worse than a visible one.
         "ungrouped": [r["keyword"] for r in ungrouped],
+        "excluded": [{"keyword": rows[e["n"] - 1]["keyword"], "why": e["why"]}
+                     for e in excluded if 1 <= e["n"] <= len(rows)],
     }
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -212,5 +259,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Cluster a keyword sheet by meaning")
     ap.add_argument("sheet")
     ap.add_argument("--slug", required=True)
+    ap.add_argument("--mode", choices=["topic", "symbols"], default="topic",
+                    help="topic: one dream, many variations. symbols: many different symbols.")
     a = ap.parse_args()
-    build(Path(a.sheet), a.slug)
+    build(Path(a.sheet), a.slug, a.mode)

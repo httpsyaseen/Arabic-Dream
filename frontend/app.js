@@ -86,8 +86,7 @@ const T = {
     ctxWhy: "الكتب تفرّق بين الرجل والمرأة، والمتزوج والأعزب — فذكرُ حالك يغيّر التأويل.",
     fixedSourceNote: name => `التفسير هنا مقصور على مرجعية ${name} وحدها.`,
     symbolsH1: "الرموز",
-    symbolsSoon: "قاموس الرموز — من الألف إلى الياء — قيد الإعداد.",
-    symbolsCount: n => `${n} رمزاً في الفهرس، وستُعرض هنا مرتّبة بحروفها مع نصوصها ومصادرها.`,
+    symbolsSub: n => `${n} رمزاً، لكلٍّ تفسيره من كتب أهل التعبير بنصّه ومصدره.`,
     historyH1: "سجلي",
     historySub: "رؤاك وتفاسيرها، محفوظة في متصفحك وحده ولا تُرسل إلى أي خادم.",
     historyEmpty: "لم تحفظ رؤيا بعد. بعد كل تفسير اضغط «حفظ في سجلي».",
@@ -141,7 +140,8 @@ const T = {
     tafaul: "التفاؤل", raja: "الرجاء", qalaq: "القلق",
     noCorpusNote: "لم يُعثر على نصٍّ لهذه الرؤيا في الكتب المفهرسة، فالجواب مبنيّ على ما استقرّ عند أهل التعبير لا على نصٍّ بعينه.",
     copy: "نسخ", print: "طباعة", save: "حفظ في سجلي", saved: "حُفظت ✓",
-    savedAuto: "محفوظة في سجلي ←", rerun: "فسّرها من جديد",
+    savedAuto: "محفوظة في سجلي ←",
+    fromStorage: "هذا تفسير محفوظ من قبل، عُرض دون طلبٍ جديد.", askAgain: "اطلبه من جديد", rerun: "فسّرها من جديد",
     notDone: "لم يكتمل", pendingStill: "قيد التفسير", copied: "نُسخ ✓",
     interpretersH1: "المفسّرون والمراجع",
     interpretersSub: "لكلٍّ مسلكه. اختر مرجعية لتقرأ عنها، أو لتُفسَّر رؤياك على مسلكها وحدها.",
@@ -171,8 +171,7 @@ const T = {
     ctxWhy: "The books read a symbol differently for a man and a woman, the married and the unmarried — so telling us changes the reading.",
     fixedSourceNote: name => `This page reads your dream on ${name}'s approach alone.`,
     symbolsH1: "Symbols",
-    symbolsSoon: "The A–Z symbol dictionary is being prepared.",
-    symbolsCount: n => `${n} symbols are indexed; they will appear here in order, each with its texts and sources.`,
+    symbolsSub: n => `${n} symbols, each read from the classical books with its text and source shown.`,
     historyH1: "My dreams",
     historySub: "Your dreams and their readings, kept in your browser alone and never sent to any server.",
     historyEmpty: "Nothing saved yet. After a reading, press “Save”.",
@@ -226,7 +225,8 @@ const T = {
     tafaul: "Optimism", raja: "Hope", qalaq: "Anxiety",
     noCorpusNote: "No text for this dream was found in the indexed books, so the answer rests on what is settled among interpreters rather than on a specific passage.",
     copy: "Copy", print: "Print", save: "Save", saved: "Saved ✓",
-    savedAuto: "Saved to my dreams →", rerun: "Interpret again",
+    savedAuto: "Saved to my dreams →",
+    fromStorage: "A reading you have seen before, shown from storage.", askAgain: "Ask again", rerun: "Interpret again",
     notDone: "Not completed", pendingStill: "Still interpreting", copied: "Copied ✓",
     interpretersH1: "Interpreters and authorities",
     interpretersSub: "Each has its own method. Pick one to read about it, or to have your dream read on its approach alone.",
@@ -339,6 +339,11 @@ let lastRoute = null;
 function route() {
   const h = location.hash || "#/";
   const moved = h !== lastRoute;
+  if (h.startsWith("#/symbols/")) {
+    viewTopicReading("symbols", decodeURIComponent(h.slice(10)));
+    if (moved) { window.scrollTo(0, 0); lastRoute = h; }
+    return;
+  }
   if (h.startsWith("#/teeth/")) {
     viewTopicReading("teeth", decodeURIComponent(h.slice(8)));
     if (moved) { window.scrollTo(0, 0); lastRoute = h; }
@@ -669,7 +674,7 @@ function viewFaq() {
 }
 
 /* ------------------------------------------------------------ interpret */
-async function submitDream(fixedSource, explicitDream) {
+async function submitDream(fixedSource, explicitDream, force = false) {
   const L = t();
   const dream = (explicitDream ?? $("#dream")?.value ?? "").trim();
   if (dream.length < 3) {
@@ -678,20 +683,50 @@ async function submitDream(fixedSource, explicitDream) {
     return;
   }
 
-  const body = { dream };
-  const picked = document.querySelector('input[name="src"]:checked');
-  const src = fixedSource || (picked ? picked.value : "");
-  if (src) body.source = src;
-  (STATE.options.fields || []).forEach(f => {
-    const el = $("#f-" + f.key);
-    if (el && el.value) body[f.key] = el.value;
-  });
+  // Asking again from the result page has no form to read, so the original
+  // request is carried over instead. Losing the reader's stated circumstances
+  // on a re-ask would quietly answer a different question.
+  let body, src;
+  if (STATE.forcedBody) {
+    body = { ...STATE.forcedBody };
+    src = body.source || "";
+    STATE.forcedBody = null;
+  } else {
+    body = { dream };
+    const picked = document.querySelector('input[name="src"]:checked');
+    src = fixedSource || (picked ? picked.value : "");
+    if (src) body.source = src;
+    (STATE.options.fields || []).forEach(f => {
+      const el = $("#f-" + f.key);
+      if (el && el.value) body[f.key] = el.value;
+    });
+  }
 
   // A skeleton of the shape that is coming reads as progress; a bare spinner
   // reads as a stall, and this call takes six seconds or more.
   // Two phases. The lookup costs about 2 ms and the model six to nine seconds,
   // so the citations are shown as soon as they exist rather than being held
   // hostage to the slow half. A reader gets real content in well under a second.
+  // Already answered? Then answer from what is stored rather than asking again.
+  // Same dream, same authority, same stated circumstances — nothing about the
+  // reply would differ, so there is nothing to buy by re-generating it.
+  if (!force) {
+    const cached = findCachedReading(dream, src, payloadContext(body));
+    if (cached) {
+      STATE.pending = null;
+      STATE.historyId = cached.id;
+      STATE.last = {
+        answer: cached.answer, symbols: cached.symbols,
+        adab_sources: cached.adab_sources, context: cached.context,
+        meta: cached.meta, dream: cached.dream, fromCache: true,
+      };
+      sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
+      location.hash = "#/result";
+      if (location.hash === "#/result") route();
+      return;
+    }
+  }
+
   // Drop the previous reading before anything else. Without this, any path that
   // renders before the new one arrives — a stale cached script, a hashchange
   // firing out of order — can put the last dream's answer back on screen.
@@ -930,6 +965,11 @@ function renderReading(d, prefix = "") {
   if (d.symbols?.length) h += citationsBlock(d.symbols);
   h += adabBlock(d);
 
+  if (d.fromCache) {
+    h += `<div class="note cached-note">${L.fromStorage}
+      <button class="btn ghost" onclick="reinterpret()">${L.askAgain}</button></div>`;
+  }
+
   h += `<div class="actions">
     <button class="btn ghost" id="copyBtn">${L.copy}</button>
     <button class="btn ghost" onclick="window.print()">${L.print}</button>
@@ -1059,6 +1099,25 @@ function updateHistoryEntry(id, patch) {
   return hsave(items);
 }
 
+/* Two readings are the same reading only if the dream, the authority and the
+ * stated circumstances all match — a different context is a different question,
+ * and the books answer it differently, so it must not be served from a cache.
+ */
+function readingKey(dream, source, context) {
+  const ctx = Object.entries(context || {}).filter(([, v]) => v)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([k, v]) => `${k}=${v}`).join("&");
+  return `${(dream || "").trim()}|${source || ""}|${ctx}`;
+}
+
+/* A dream already answered is answered. Re-asking it spends a model call to
+   produce what is already on disk, and makes the reader wait for it. */
+function findCachedReading(dream, source, context) {
+  const want = readingKey(dream, source, context);
+  return hload().find(x =>
+    x.answer && readingKey(x.dream, x.source, x.context) === want) || null;
+}
+
 function saveToHistory() {
   const d = STATE.last;
   if (!d) return false;
@@ -1155,14 +1214,31 @@ function clearHistory() {
 }
 
 /* ------------------------------------------------------------- symbols */
-function viewSymbols() {
-  const L = t(), n = STATE.stats?.symbols || 0;
+async function viewSymbols() {
+  const L = t();
+  if (!STATE.pages.symbols) {
+    chrome(`<div class="wrap page"><h1>${L.symbolsH1}</h1>
+      <div class="card"><div class="skel" style="width:45%"></div>
+        <div class="skel"></div><div class="skel" style="width:70%"></div></div></div>`);
+    try {
+      STATE.pages.symbols = await fetch(API + "/pages/symbols").then(r => r.json());
+    } catch (e) {
+      return chrome(`<div class="wrap page"><div class="card err">${esc(e.message)}</div></div>`);
+    }
+    if (!location.hash.startsWith("#/symbols")) return;
+  }
+
+  const list = STATE.pages.symbols.clusters;
+  // A grid of names, not a column of paragraphs: this is an index to be
+  // scanned, and sixty-six dream sentences stacked vertically is not scannable.
   chrome(`<div class="wrap page">
     <h1>${L.symbolsH1}</h1>
-    <p class="sub">${L.symbolsCount(num(n))}</p>
-    <div class="card empty">
-      <p>${L.symbolsSoon}</p>
-      <a class="btn btn-gold" href="#/">${L.nav.home}</a>
+    <p class="sub">${L.symbolsSub(num(list.length))}</p>
+    <div class="symbol-grid">
+      ${list.map(c => `<a class="sym-card" href="#/symbols/${esc(querySlug(c))}">
+        <b>${esc(c.title.ar)}</b>
+        <span class="sym-en">${esc(c.title.en)}</span>
+      </a>`).join("")}
     </div>
   </div>`);
 }
@@ -1216,5 +1292,15 @@ window.openSaved = openSaved;
 window.removeSaved = removeSaved;
 window.rerun = rerun;
 window.saveToHistory = saveToHistory;
+/* Ask the model again for a dream that was answered before — the reading is
+   probabilistic, so a reader may simply want another look at it. */
+window.reinterpret = () => {
+  const d = STATE.last;
+  if (!d) return;
+  const ctx = d.context || {};
+  const body = { dream: d.dream, ...(d.meta?.source ? { source: d.meta.source } : {}), ...ctx };
+  STATE.forcedBody = body;
+  submitDream(d.meta?.source || "", d.dream, true);
+};
 window.clearHistory = clearHistory;
 boot();
