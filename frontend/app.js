@@ -541,7 +541,9 @@ async function viewTopicReading(slug, qslug) {
   const d = STATE.cached[key];
   STATE.pending = null;
   STATE.last = { ...d, dream: d.dream, context: {} };
-  renderReading(STATE.last, `<a class="home-link" href="#/teeth">← ${L.nav.teeth}</a>`);
+  // Back to whichever index the reader came from, not always the teeth page.
+  const back = slug === "symbols" ? L.nav.symbols : L.nav.teeth;
+  renderReading(STATE.last, `<a class="home-link" href="#/${slug}">← ${esc(back)}</a>`);
 }
 
 /* Send one of the page's dreams through the normal flow — same endpoint, same
