@@ -532,7 +532,7 @@ async function viewTopicReading(slug, qslug) {
       if (!r.ok) throw new Error(String(r.status));
       STATE.cached[key] = await r.json();
     } catch {
-      location.hash = "#/teeth";
+      location.hash = `#/${slug}`;      // back to this section, not always teeth
       return;
     }
     if (!location.hash.includes(qslug)) return;
@@ -544,27 +544,6 @@ async function viewTopicReading(slug, qslug) {
   // Back to whichever index the reader came from, not always the teeth page.
   const back = slug === "symbols" ? L.nav.symbols : L.nav.teeth;
   renderReading(STATE.last, `<a class="home-link" href="#/${slug}">← ${esc(back)}</a>`);
-}
-
-/* Send one of the page's dreams through the normal flow — same endpoint, same
-   citations, so nothing here is a special case. */
-function runDream(i) {
-  const c = STATE.pages.teeth?.clusters[i];
-  if (!c) return;
-  const el = document.getElementById("dream");
-  if (el) el.value = c.dream_ar;
-  else {
-    // The form is further down the page; stage the text and submit directly.
-    STATE.stagedDream = c.dream_ar;
-  }
-  submitDream("", c.dream_ar);
-}
-
-/* A raw search phrase, run as itself. Someone who clicks their exact wording
-   expects to be answered on that wording, not on a tidied paraphrase of it. */
-function runQuery(ci, qi) {
-  const q = STATE.pages.teeth?.clusters[ci]?.queries[qi];
-  if (q) submitDream("", q.ar);
 }
 
 function viewInterpreters() {
@@ -1281,8 +1260,6 @@ console.info(`%cتأويل build ${BUILD}%c  API: ${API}`,
 
 window.setLang = setLang;
 window.submitDream = submitDream;
-window.runDream = runDream;
-window.runQuery = runQuery;
 /* The Arabic sits in a data attribute rather than inline in the handler: the
    text contains quotes and the attribute is quoted, so inlining it broke the
    markup silently — the button rendered and did nothing. */
