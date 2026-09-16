@@ -99,6 +99,9 @@ const T = {
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
     symbols: "رمزًا", passages: "نصًا", hadith: "حديثًا في آداب الرؤيا",
+    tahlil: "قراءة الرؤيا مشهدًا مشهدًا",
+    tahlilSub: "الرؤيا قصة لها أول وآخر، ومعنى المشهد يتغيّر بموضعه منها.",
+    rabt: "صلته بما حوله", mutakarrir: "ما تكرّر فيها",
     dreamLabel: "رؤياك",
     dreamHint: "اكتب رؤياك بالعربية — البحث يجري في كتب عربية.",
     placeholder: "رأيت في المنام…",
@@ -176,6 +179,9 @@ const T = {
     heroH1: "Write your dream — its symbols are looked up in the classical books",
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
     symbols: "symbols", passages: "passages", hadith: "hadith on dream etiquette",
+    tahlil: "The dream, scene by scene",
+    tahlilSub: "A dream is a story with a beginning and an end, and a scene means what its place in that story makes it mean.",
+    rabt: "How it connects", mutakarrir: "What recurs",
     dreamLabel: "Your dream",
     dreamHint: "Write your dream in Arabic — the search runs against Arabic books.",
     placeholder: "رأيت في المنام…",
@@ -856,6 +862,29 @@ function renderReading(d, prefix = "") {
       <h2>${L.mukhifah}</h2><div class="alert">${L.mukhifahNote}</div>
       <ul>${(a.adab || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul>
       ${a.dua ? `<div class="dua">${esc(a.dua)}</div>` : ""}</div>`;
+
+    // The story before the symbols. A reader recognises their own dream by its
+    // sequence, not by a list of nouns pulled out of it, and the pre-rendered
+    // pages written before this section existed simply skip it.
+    const tm = a.tahlil_mufassal;
+    if (tm && (tm.khayt || tm.mashahid?.length)) {
+      h += `<h2 class="section-label">${L.tahlil}</h2>`;
+      h += `<div class="card">
+        <p class="sub">${L.tahlilSub}</p>
+        ${tm.khayt ? `<div class="personal-note">${esc(tm.khayt)}</div>` : ""}
+        ${tm.mashahid?.length ? `<ol class="scenes">${tm.mashahid.map((s, i) => `
+          <li class="scene">
+            <div class="scene-n">${num(i + 1)}</div>
+            <div class="scene-body">
+              <blockquote class="scene-nass serif">${esc(s.nass || "")}</blockquote>
+              <p class="scene-maana">${esc(s.maana || "")}</p>
+              ${s.rabt ? `<p class="scene-rabt"><b>${L.rabt}:</b> ${esc(s.rabt)}</p>` : ""}
+            </div>
+          </li>`).join("")}</ol>` : ""}
+        ${tm.mutakarrir?.length ? `<div class="motifs"><b>${L.mutakarrir}:</b>
+          ${tm.mutakarrir.map(x => `<span class="motif">${esc(x)}</span>`).join("")}</div>` : ""}
+      </div>`;
+    }
 
     if (a.rumuz?.length) {
       h += `<h2 class="section-label">${L.rumuz}</h2>`;

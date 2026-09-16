@@ -4,6 +4,8 @@ Field names are Arabic because the answer is Arabic, but each one is glossed in
 English here so the schema can be reviewed by someone who does not read Arabic.
 
     tasnif           = classification (which of the three kinds of dream)
+    tahlil_mufassal  = the detailed reading of the dream AS A STORY: its thread,
+                       then each scene in the order the dreamer told it
     mukhifah         = "is it frightening?" — if true, no interpretation is given
     rumuz            = symbols (plural of ramz)
     khulasah         = summary
@@ -28,6 +30,7 @@ interpreters.
 
 import json
 import os
+import re
 
 from google import genai
 
@@ -81,6 +84,33 @@ SYMBOL = {
     "required": ["ramz", "khulasah", "manhaj", "bayan_almanhaj", "min_alkutub"],
 }
 
+# A dream is told as a story, and a list of symbols throws the story away. Two
+# people can both dream of a snake; one flees it and one kills it, and the books
+# read those as opposites. What carries that difference is the sequence — what
+# came before, what the dreamer did, how it ended.
+#
+# `nass` is the dreamer's own wording, copied not paraphrased. It is what keeps
+# this section anchored: a scene that cannot quote the dream is a scene the model
+# invented, and that is visible on the page rather than buried in prose.
+MASHHAD = {
+    "type": "object",
+    "properties": {
+        "nass": {"type": "string",
+                 "description": "لفظ الرائي نفسه لهذا المشهد، منقولاً من كلامه لا بمعناه"},
+        # The wording alone did not hold: asked for two or three lines across
+        # eighteen scenes, the model wrote captions of about forty characters.
+        # minLength is advisory here rather than enforced — it came back at
+        # ~127 against a floor of 150 — but it is what moved the length.
+        "maana": {"type": "string", "minLength": 150,
+                  "description": ("سطران أو ثلاثة — لا جملة واحدة: ما يحمله هذا المشهد من "
+                                  "معنى، وما فيه من الرموز وما تدل عليه، ولمَ وقع في هذا "
+                                  "الموضع من القصة دون غيره")},
+        "rabt": {"type": "string",
+                 "description": "صلته بما قبله وما بعده، أو بحال الرائي إن ذكره؛ اتركه فارغاً إن لم تظهر صلة"},
+    },
+    "required": ["nass", "maana"],
+}
+
 ANSWER_SCHEMA = {
     "type": "object",
     "properties": {
@@ -110,6 +140,27 @@ ANSWER_SCHEMA = {
                 "المعاني، بإيجاز، قبل التفصيل."
             ),
         },
+        "tahlil_mufassal": {
+            "type": "object",
+            "properties": {
+                "khayt": {
+                    "type": "string",
+                    "description": (
+                        "الخيط الجامع للرؤيا كلها في ثلاثة أسطر أو أربعة: عمّ تدور، "
+                        "وكيف تدرّجت من أولها إلى آخرها، وما الذي انتهت إليه."
+                    ),
+                },
+                "mashahid": {
+                    "type": "array", "items": MASHHAD,
+                    "description": "مشاهد الرؤيا على ترتيبها كما حكاها الرائي، لا تُسقِط منها مشهداً",
+                },
+                "mutakarrir": {
+                    "type": "array", "items": {"type": "string"},
+                    "description": "ما تكرر في الرؤيا أو اطّرد فيها: لفظ، أو فعل، أو جهة، أو إحساس",
+                },
+            },
+            "required": ["khayt", "mashahid"],
+        },
         "mukhifah": {"type": "boolean"},
         "rumuz": {"type": "array", "items": SYMBOL},
         "khulasah_ammah": {"type": "string"},
@@ -135,7 +186,7 @@ ANSWER_SCHEMA = {
             "enum": ["من الكتب المفهرسة", "من المعرفة العامة", "من الاثنين"],
         },
     },
-    "required": ["tasnif", "unwan", "tamhid", "mukhifah", "rumuz",
+    "required": ["tasnif", "unwan", "tamhid", "tahlil_mufassal", "mukhifah", "rumuz",
                  "khulasah_ammah", "muashirat", "adab", "nasihah", "tanbih",
                  "asas_aljawab"],
 }
@@ -145,13 +196,14 @@ ANSWER_SCHEMA = {
 #  2. If the books are silent you MAY answer from settled interpreter knowledge,
 #     flagged false, attributed to no book — but never leave the user unanswered
 #  3. Classify the dream before interpreting it
-#  4. If it is distressing, do not interpret — give the sunna response instead
-#  5. Naming the interpretive method is mandatory
-#  6. Preserve the conditional structure; do not flatten to one meaning
-#  7. Tie the reading to the dreamer's stated circumstances, invent nothing
-#  8. Never blend the classical and psychological traditions
-#  9. Estimate the indicators and say why
-# 10. Close with warm, unforced advice
+#  4. Walk the dream scene by scene in the dreamer's own words before symbols
+#  5. If it is distressing, do not interpret — give the sunna response instead
+#  6. Naming the interpretive method is mandatory
+#  7. Preserve the conditional structure; do not flatten to one meaning
+#  8. Tie the reading to the dreamer's stated circumstances, invent nothing
+#  9. Never blend the classical and psychological traditions
+# 10. Estimate the indicators and say why
+# 11. Close with warm, unforced advice
 SYSTEM = """\
 أنت عارض لما ورد في كتب تعبير الرؤيا. لست مفتياً ولا معبّراً معتمداً،
 ولا تدّعي علم الغيب، ولا تجزم بشيء من المستقبل.
@@ -171,25 +223,45 @@ SYSTEM = """\
    واكتب في `tamhid` سطرين أو ثلاثة يجمعان ما اجتمع فيها من المعاني.
    ولا تجزم بالغيب: قل «بإذن الله» و«والله أعلم» وما أشبههما.
 
-٤- إن كانت مفزعة أو مكروهة فاجعل `mukhifah` = true، ولا تُفصّل في تأويل المكروه،
+٤- **حلّل الرؤيا مشهداً مشهداً في `tahlil_mufassal` قبل أن تُفرد الرموز.**
+   فالرؤيا قصة لا قائمة رموز، ومعنى الرمز يتغير بموضعه منها: من فرّ من الحية
+   ليس كمن قتلها، وآخر الرؤيا يُفسّر أولها.
+   - `khayt`: الخيط الجامع لها من أولها إلى آخرها، وما انتهت إليه.
+   - `mashahid`: كل مشهد على ترتيبه كما حكاه الرائي، **ولا تُسقِط مشهداً**،
+     ولو طالت الرؤيا. والمشهد: كل نقلة في القصة — فعل جديد، أو مكان جديد،
+     أو خاطر جديد، أو تحوّل في الحال. فإن حكى الرائي رؤياه في عشر فقرات
+     فمشاهدها عشرة أو نحوها، لا ثلاثة. **ولا تجمع مشهدين بعيدين في واحد،
+     ولا تصل بينهما بنقاط الحذف**، فإن ذلك يُذهب ترتيب القصة وهو المقصود.
+     وفي `nass` انقل **لفظ الرائي نفسه** لا تلخيصك له،
+     وفي `maana` **سطران أو ثلاثة لا جملة واحدة**: ما فيه من المعنى والرموز،
+     وما تدل عليه، ولمَ وقع في هذا الموضع من القصة دون غيره،
+     وفي `rabt` صلته بما قبله وبما بعده أو بحال الرائي.
+   - `mutakarrir`: ما اطّرد في الرؤيا أو تكرر فيها من لفظ أو فعل أو جهة أو إحساس،
+     فإن التكرار في الرؤيا مقصود لا لغو.
+   ولا تزد في المشاهد ما لم يذكره الرائي، ولا تُكمل قصته من عندك؛ فإن غمض عليك
+   موضع فقل إنه غامض، وذلك أصدق من ملئه بالظن.
+   وإن كانت الرؤيا مكروهة فهذا القسم **وصف وتحليل لما جرى فيها**، لا تأويلَ
+   للمكروه ولا إخبارَ بما سيقع؛ فيبقى حكم القاعدة التالية على حاله.
+
+٥- إن كانت مفزعة أو مكروهة فاجعل `mukhifah` = true، ولا تُفصّل في تأويل المكروه،
    واكتفِ في `adab` بهدي السنة: الاستعاذة بالله من الشيطان الرجيم ومن شرها،
    والتفل عن اليسار ثلاثاً، والتحول عن الجنب الذي كان عليه، والقيام إلى الصلاة،
    وألّا يحدّث بها أحداً؛ فإنها لا تضره بإذن الله.
 
-٥- **بيان المسلك واجب**: لكل رمز اذكر `manhaj` واشرح في `bayan_almanhaj` وجه
+٦- **بيان المسلك واجب**: لكل رمز اذكر `manhaj` واشرح في `bayan_almanhaj` وجه
    الدلالة. فبيان الوجه هو الذي يميز علم التعبير عن التخرّص.
 
-٦- التفصيل جوهر التعبير: اذكر في `tafsil` الشروط ("إن رآه كذا فكذا").
+٧- التفصيل جوهر التعبير: اذكر في `tafsil` الشروط ("إن رآه كذا فكذا").
 
-٧- إن ذكر السائل شيئاً من حاله فاربط التأويل بذلك في `athar_hal_alraai`،
+٨- إن ذكر السائل شيئاً من حاله فاربط التأويل بذلك في `athar_hal_alraai`،
    ولا تخترع من حاله ما لم يذكره.
 
-٨- إن أُرفقت نصوص موسومة بـ«قراءة نفسية» فاذكر ما فيها ضمن الرمز نفسه، موسوماً
+٩- إن أُرفقت نصوص موسومة بـ«قراءة نفسية» فاذكر ما فيها ضمن الرمز نفسه، موسوماً
    بأنه قراءة نفسية لا قولاً من كتب التعبير. ولا تخلط بين المسلكين أبداً:
    لا تنسب معنى نفسياً إلى كتب التعبير ولا العكس، وإن ورد نص من التراث الشيعي
    فانسبه إلى كتابه ولا تخلطه بغيره.
 
-٩- في `muashirat` قدّر دلالة الرؤيا بالنسب، **وليكن التقدير موافقاً لما قلته قبله**:
+١٠- في `muashirat` قدّر دلالة الرؤيا بالنسب، **وليكن التقدير موافقاً لما قلته قبله**:
    - إن كانت `naw` = «رؤيا صالحة» فالتفاؤل والرجاء مرتفعان والقلق منخفض.
    - إن كانت `naw` = «حلم من الشيطان» أو `mukhifah` = true فالقلق مرتفع.
    - إن كانت «أضغاث أحلام» فالثلاثة متوسطة، فليس فيها بشارة ولا نذارة.
@@ -197,7 +269,7 @@ SYSTEM = """\
    واذكر في `bayan` مستند التقدير من الرؤيا والنصوص، لا عبارة عامة.
    ولا تجعل النسب متناقضة مع التصنيف، فإن القارئ يقرأ الاثنين معاً.
 
-١٠- اختم بـ `nasihah` رفيقة: التوكل، وحسن الظن بالله، والأذكار، والصدقة.
+١١- اختم بـ `nasihah` رفيقة: التوكل، وحسن الظن بالله، والأذكار، والصدقة.
    بأسلوب أخوي دافئ بلا تهويل.
 
 الأسلوب: عربية فصيحة سهلة، موجزة، بلا سجع ولا مبالغة.
@@ -217,10 +289,45 @@ CONTEXT_LABELS = {
 }
 
 
+# The dreamer already told us where the scenes are — by pressing enter, and by
+# ending sentences. Asking the model to find them again is asking it to redo work
+# the text has done, and it does it badly: a 2,400-character dream told in
+# eighteen paragraphs came back summarised into four scenes, with ellipses
+# stitching distant moments together. Numbering the beats in code and requiring
+# one scene each is the same move the rest of the system makes — the lookup
+# decides the structure, the model only writes over it.
+MAX_BEATS = 20
+
+
+def split_beats(dream: str) -> list[str]:
+    """The dream cut into the beats the dreamer's own punctuation implies."""
+    paras = [p.strip() for p in re.split(r"\n\s*\n", dream) if p.strip()]
+    if len(paras) < 2:                       # written as one block: use sentences
+        paras = [s.strip() for s in re.split(r"(?<=[.؟!])\s+", dream) if s.strip()]
+    if len(paras) <= 1:
+        return []                            # too short to have a sequence
+    # Very long tellings get their tail folded together rather than truncated,
+    # because a dream that silently loses its ending loses the part that reads
+    # the rest of it.
+    if len(paras) > MAX_BEATS:
+        paras = paras[:MAX_BEATS - 1] + [" ".join(paras[MAX_BEATS - 1:])]
+    return paras
+
+
 def build_prompt(dream: str, matches: list[dict], adab: list[dict],
                  context: dict | None, source_names: dict[str, str],
                  source: str | None = None) -> str:
     parts = [f"رؤيا السائل:\n{dream}\n"]
+
+    beats = split_beats(dream)
+    if beats:
+        parts.append(
+            f"\nوهذه مشاهد الرؤيا مرقّمة على ترتيب ما حكاه ({len(beats)} مشهداً):\n"
+            + "\n".join(f"  ({i}) {b}" for i, b in enumerate(beats, 1))
+            + f"\n\n**فاجعل في `mashahid` {len(beats)} مشهداً على هذا الترتيب نفسه، "
+              "لكل رقم مشهد واحد، ولا تدمج رقمين ولا تُسقط رقماً.** وانقل في `nass` "
+              "من لفظ ذلك المشهد وحده.\n"
+        )
 
     # When the reader picks one interpreter, every reading must be that
     # interpreter's — including the fallback. Answering "generally" under a
@@ -307,7 +414,11 @@ def generate(dream: str, matches: list[dict], adab: list[dict], model: str,
             "mime_type": "application/json",
             "schema": ANSWER_SCHEMA,
         },
-        generation_config={"thinking_level": "minimal"},
+        # A long dream is a sequence to be walked, not a paragraph to be summed
+        # up, and "minimal" folds one. A 2,400-character narrative came back as
+        # four scenes with ellipses stitching distant moments together; the same
+        # dream at "low" came back as ten, each quoting one moment.
+        generation_config={"thinking_level": "low" if len(dream) > 600 else "minimal"},
         store=False,
     )
     return json.loads(interaction.output_text)

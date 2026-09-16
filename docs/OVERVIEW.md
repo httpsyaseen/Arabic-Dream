@@ -168,6 +168,13 @@ For that dream, with context "male, unmarried, anxious, recurring":
 **Distressing:** yes → etiquette shown before any interpretation
 **Indicators:** optimism 40% · hope 50% · anxiety 75%, *with a stated reason*
 
+Before the symbols, the dream is read back as a story — one scene per beat, in
+the order it was told, each quoting the dreamer's own words. The beats are cut in
+code from the dreamer's paragraph breaks, not chosen by the model: asked to find
+them itself, it summarised an eighteen-paragraph dream into four scenes and
+stitched distant moments together with ellipses. Code decides the structure here
+for the same reason it decides the symbols.
+
 **Symbol: falling** — tagged **general knowledge**, no sources
 > may indicate a change of state or a transition from one condition to another
 
