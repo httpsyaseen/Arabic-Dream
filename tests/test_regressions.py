@@ -166,6 +166,22 @@ def bug9_short_symbols_do_not_match_common_words() -> None:
     check("قط as a genuine symbol still matches", "قط" in symbols_for("حلمت بقطة"))
 
 
+def bug11_abstract_nouns_do_not_become_symbols() -> None:
+    print("\nBug 11 — 'the way I did it' is not the road symbol")
+    # Normalisation folds ة to ه, and ه is a legitimate possessive suffix, so
+    # طريقة (method) reached طريق (road). A sleep-paralysis dream that never
+    # mentioned a road came back with seven citations about travel.
+    for sentence, absent in [("لأن طريقة إجبار نفسي كانت تنجح دائماً", "طريق"),
+                             ("عالجني بوسيلة غريبة", "وسيله"),
+                             ("كانت حالة غريبة جداً", "حال")]:
+        got = symbols_for(sentence)
+        check(f"{absent} not read out of: {sentence[:30]}", absent not in got,
+              f"got {got}")
+    # The real symbol is untouched.
+    check("طريق still matches a genuine road",
+          "طريق" in symbols_for("مشيت في طريق طويل مظلم"))
+
+
 def bug10_inline_headwords_extracted() -> None:
     print("\nBug 10 — the inline-headword book contributes symbols, not just prose")
     keys = {e["key"] for e in CORPUS.symbols}
@@ -192,7 +208,8 @@ def main() -> int:
                bug7_ba_preposition_allowed,
                bug8_modern_words_reach_classical_entries,
                bug9_short_symbols_do_not_match_common_words,
-               bug10_inline_headwords_extracted):
+               bug10_inline_headwords_extracted,
+               bug11_abstract_nouns_do_not_become_symbols):
         fn()
 
     print()

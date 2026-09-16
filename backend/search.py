@@ -53,6 +53,11 @@ COMMON_WORDS = {
     "جدا", "قليلا", "كثيرا", "دايما", "احيانا", "فجاه", "مباشره",
     "بعد", "قبل", "لكن", "لان", "حول", "امام", "خلف", "بجانب", "نحو",
     "اثناء", "خلال", "وسط", "جانب", "طرف", "جهه", "مره", "مرات",
+    # "the way I did X" is not the road symbol. Normalisation folds the ta
+    # marbuta, so طريقة reaches طريق through the ه suffix — the same shape as
+    # فقط reaching قط, and it produced seven citations about travel for a dream
+    # that never mentioned a road.
+    "طريقه", "بطريقه", "وسيله", "حاله", "حالات",
 }
 
 MAX_SYMBOLS = 6
