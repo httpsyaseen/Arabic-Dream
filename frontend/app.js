@@ -868,7 +868,9 @@ function renderReading(d, prefix = "") {
       h += `<h2 class="section-label">${L.tahlil}</h2>`;
       h += `<div class="card reading">
         ${tm.fusul.map(f => `
-          ${(f.faqarat || []).map(x => `<p class="faqrah">${esc(x)}</p>`).join("")}
+          ${(f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
+              .map(x => x.trim()).filter(Boolean)
+              .map(x => `<p class="faqrah">${esc(x)}</p>`).join("")}
           ${f.manhaj ? `<div class="manhaj-note">
             <span class="manhaj-label">${L.anAlmanhaj}</span>
             <p>${esc(f.manhaj.replace(/^\s*عن المنهج\s*[:：-]?\s*/, ""))}</p></div>` : ""}`).join("")}
