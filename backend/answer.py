@@ -84,31 +84,35 @@ SYMBOL = {
     "required": ["ramz", "khulasah", "manhaj", "bayan_almanhaj", "min_alkutub"],
 }
 
-# A dream is told as a story, and a list of symbols throws the story away. Two
-# people can both dream of a snake; one flees it and one kills it, and the books
-# read those as opposites. What carries that difference is the sequence — what
-# came before, what the dreamer did, how it ended.
+# A dream told to an interpreter does not come back line by line. The reader
+# already knows what they dreamt; what they came for is someone who takes the
+# whole of it and speaks to them about it — gathering what belongs together, the
+# posture with the posture, the sounds with the fear — rather than reciting their
+# own sentences back at them with a note under each.
 #
-# `nass` is the dreamer's own wording, copied not paraphrased. It is what keeps
-# this section anchored: a scene that cannot quote the dream is a scene the model
-# invented, and that is visible on the page rather than buried in prose.
-MASHHAD = {
+# So the unit here is a paragraph of flowing prose, not a scene. Paragraphs are
+# gathered into a few blocks, and each block says which interpretive method it
+# leaned on, because naming the method is what the tradition requires and what
+# separates this from a fortune-teller's monologue.
+FASL = {
     "type": "object",
     "properties": {
-        "nass": {"type": "string",
-                 "description": "لفظ الرائي نفسه لهذا المشهد، منقولاً من كلامه لا بمعناه"},
-        # The wording alone did not hold: asked for two or three lines across
-        # eighteen scenes, the model wrote captions of about forty characters.
-        # minLength is advisory here rather than enforced — it came back at
-        # ~127 against a floor of 150 — but it is what moved the length.
-        "maana": {"type": "string", "minLength": 150,
-                  "description": ("سطران أو ثلاثة — لا جملة واحدة: ما يحمله هذا المشهد من "
-                                  "معنى، وما فيه من الرموز وما تدل عليه، ولمَ وقع في هذا "
-                                  "الموضع من القصة دون غيره")},
-        "rabt": {"type": "string",
-                 "description": "صلته بما قبله وما بعده، أو بحال الرائي إن ذكره؛ اتركه فارغاً إن لم تظهر صلة"},
+        "faqarat": {
+            "type": "array", "minItems": 3,
+            "items": {"type": "string", "minLength": 220},
+            "description": (
+                "فقرات متصلة، كل فقرة تأخذ معنى واحداً من الرؤيا وتتكلم عليه كلاماً "
+                "تاماً: ما يرمز إليه، وما قاله فيه أهل التعبير، وما يعنيه لهذا الرائي. "
+                "خاطب الرائي بضمير المخاطب، ولا تسرد كلامه سطراً سطراً."
+            ),
+        },
+        "manhaj": {
+            "type": "string",
+            "description": ("سطر أو سطران في المسلك الذي بُني عليه كلام هذه الفقرات. "
+                            "ابدأ بالمقصود مباشرة ولا تُعِد عنوان «عن المنهج» داخل النص"),
+        },
     },
-    "required": ["nass", "maana"],
+    "required": ["faqarat"],
 }
 
 ANSWER_SCHEMA = {
@@ -143,23 +147,12 @@ ANSWER_SCHEMA = {
         "tahlil_mufassal": {
             "type": "object",
             "properties": {
-                "khayt": {
-                    "type": "string",
-                    "description": (
-                        "الخيط الجامع للرؤيا كلها في ثلاثة أسطر أو أربعة: عمّ تدور، "
-                        "وكيف تدرّجت من أولها إلى آخرها، وما الذي انتهت إليه."
-                    ),
-                },
-                "mashahid": {
-                    "type": "array", "items": MASHHAD,
-                    "description": "مشاهد الرؤيا على ترتيبها كما حكاها الرائي، لا تُسقِط منها مشهداً",
-                },
-                "mutakarrir": {
-                    "type": "array", "items": {"type": "string"},
-                    "description": "ما تكرر في الرؤيا أو اطّرد فيها: لفظ، أو فعل، أو جهة، أو إحساس",
+                "fusul": {
+                    "type": "array", "items": FASL, "minItems": 2,
+                    "description": "كتلتان إلى أربع، كل كتلة فقرات متصلة يتبعها بيان مسلكها",
                 },
             },
-            "required": ["khayt", "mashahid"],
+            "required": ["fusul"],
         },
         "mukhifah": {"type": "boolean"},
         "rumuz": {"type": "array", "items": SYMBOL},
@@ -223,24 +216,37 @@ SYSTEM = """\
    واكتب في `tamhid` سطرين أو ثلاثة يجمعان ما اجتمع فيها من المعاني.
    ولا تجزم بالغيب: قل «بإذن الله» و«والله أعلم» وما أشبههما.
 
-٤- **حلّل الرؤيا مشهداً مشهداً في `tahlil_mufassal` قبل أن تُفرد الرموز.**
-   فالرؤيا قصة لا قائمة رموز، ومعنى الرمز يتغير بموضعه منها: من فرّ من الحية
-   ليس كمن قتلها، وآخر الرؤيا يُفسّر أولها.
-   - `khayt`: الخيط الجامع لها من أولها إلى آخرها، وما انتهت إليه.
-   - `mashahid`: كل مشهد على ترتيبه كما حكاه الرائي، **ولا تُسقِط مشهداً**،
-     ولو طالت الرؤيا. والمشهد: كل نقلة في القصة — فعل جديد، أو مكان جديد،
-     أو خاطر جديد، أو تحوّل في الحال. فإن حكى الرائي رؤياه في عشر فقرات
-     فمشاهدها عشرة أو نحوها، لا ثلاثة. **ولا تجمع مشهدين بعيدين في واحد،
-     ولا تصل بينهما بنقاط الحذف**، فإن ذلك يُذهب ترتيب القصة وهو المقصود.
-     وفي `nass` انقل **لفظ الرائي نفسه** لا تلخيصك له،
-     وفي `maana` **سطران أو ثلاثة لا جملة واحدة**: ما فيه من المعنى والرموز،
-     وما تدل عليه، ولمَ وقع في هذا الموضع من القصة دون غيره،
-     وفي `rabt` صلته بما قبله وبما بعده أو بحال الرائي.
-   - `mutakarrir`: ما اطّرد في الرؤيا أو تكرر فيها من لفظ أو فعل أو جهة أو إحساس،
-     فإن التكرار في الرؤيا مقصود لا لغو.
-   ولا تزد في المشاهد ما لم يذكره الرائي، ولا تُكمل قصته من عندك؛ فإن غمض عليك
-   موضع فقل إنه غامض، وذلك أصدق من ملئه بالظن.
-   وإن كانت الرؤيا مكروهة فهذا القسم **وصف وتحليل لما جرى فيها**، لا تأويلَ
+٤- **تكلّم على الرؤيا كلاماً متصلاً في `tahlil_mufassal` قبل أن تُفرد الرموز.**
+   والسائل جاءك كما يجيء الرجل إلى المعبّر: قد حكى رؤياه وهو يعلمها، فلا تُعِدها
+   عليه سطراً سطراً ولا تضع تحت كل سطر تعليقاً؛ بل خذ رؤياه جملةً وحدّثه عنها.
+   - `fusul`: كتلتان إلى أربع، **وفي كل كتلة ثلاث فقرات أو أربع**، فيكون
+     مجموعها في الرؤيا الطويلة تسع فقرات أو نحوها، لا فقرتين.
+     و`faqarat`: فقرات متصلة، **كل فقرة تأخذ معنى واحداً من الرؤيا** فتذكر ما
+     يرمز إليه، وما قاله فيه أهل التعبير، وما يعنيه لهذا الرائي بعينه.
+     ولتكن كل فقرة تامة (ثلاثة أسطر أو أربعة)، لا سطراً مقتضباً.
+   - وصدّر كل معنى بدلالته في كتب التعبير ما وُجدت في النصوص المرفقة، **وسمِّ
+     الكتاب أو صاحبه في سياق الكلام في أكثر الفقرات** («عند ابن سيرين»،
+     «في تعبير ابن شاهين»، «في السنة النبوية»)، ثم أتبعها بما يخص هذا الرائي.
+     فإن السائل جاء ليعرف ما قالته الكتب لا ما يخطر لك. فإن لم يكن في النصوص شيء فقل ما استقر عند أهل التعبير
+     غير ناسب إلى كتاب بعينه. وما كان من القراءة النفسية فبيّن أنه كذلك.
+   - واجمع المتشابه في فقرة واحدة: الوضعية مع الوضعية، والأصوات مع الخوف،
+     والخواطر المتكررة بعضها مع بعض؛ فإن الرائي ذكرها متفرقة وهي معنى واحد.
+   - وخاطبه بضمير المخاطب: «استمرارك في العودة»، «الصرخات التي سمعتها»،
+     «شعورك بأنك عالق».
+   - ولا تنقل ألفاظه بين علامات اقتباس، وإنما أشِر إلى ما ذكره في سياق كلامك.
+   - `manhaj` في آخر كل كتلة: سطر أو سطران في المسلك الذي بُني عليه كلامها.
+     **ولا تذكر المسلك داخل `faqarat` البتة** — لا تقل «استند هذا التحليل إلى
+     كذا» في فقرة؛ فإن لذلك حقله وحده، وهو يُعرض تحتها في الصفحة، فذِكره مرتين
+     تكرار يقرؤه السائل مرتين.
+   - **ولا تُعِد معنى قد تكلمتَ عليه في فقرة أخرى**؛ فكل فقرة معنى جديد من
+     الرؤيا لم يسبق. وإن طالت الرؤيا فثلاث كتل أو أربع، لا كتلتان.
+   - ولا تجعل الكتلة الأخيرة نصائح مكرَّرة، فللنصيحة موضعها في `nasihah` وهي
+     تُقرأ بعد هذا. وإنما اجعل آخر فقرة فيها ما يُستبشر به إن كان في الرؤيا
+     وجهه — كانفراج الشدة، أو انقضاء الأمر — فقرةً واحدة لا ثلاثاً،
+     **في آخر كتلة وحدها**، ولا تُعِدها في كل كتلة.
+   ولا تزد على ما ذكره الرائي ولا تُكمل قصته من عندك؛ فإن غمض عليك موضع فقل
+   إنه غامض، وذلك أصدق من ملئه بالظن.
+   وإن كانت الرؤيا مكروهة فهذا القسم **بيان لمعاني ما جرى فيها**، لا تأويلَ
    للمكروه ولا إخبارَ بما سيقع؛ فيبقى حكم القاعدة التالية على حاله.
 
 ٥- إن كانت مفزعة أو مكروهة فاجعل `mukhifah` = true، ولا تُفصّل في تأويل المكروه،
@@ -289,13 +295,12 @@ CONTEXT_LABELS = {
 }
 
 
-# The dreamer already told us where the scenes are — by pressing enter, and by
-# ending sentences. Asking the model to find them again is asking it to redo work
-# the text has done, and it does it badly: a 2,400-character dream told in
-# eighteen paragraphs came back summarised into four scenes, with ellipses
-# stitching distant moments together. Numbering the beats in code and requiring
-# one scene each is the same move the rest of the system makes — the lookup
-# decides the structure, the model only writes over it.
+# The answer is flowing prose, but a long dream still loses pieces: told
+# eighteen paragraphs at once, the model writes about four of them and drops the
+# rest without saying so. Cutting the dream into its beats in code and listing
+# them gives it a checklist to cover — not an outline to recite. The numbering
+# exists so nothing goes missing, not so the reader gets their own sentences
+# read back to them.
 MAX_BEATS = 20
 
 
@@ -324,9 +329,9 @@ def build_prompt(dream: str, matches: list[dict], adab: list[dict],
         parts.append(
             f"\nوهذه مشاهد الرؤيا مرقّمة على ترتيب ما حكاه ({len(beats)} مشهداً):\n"
             + "\n".join(f"  ({i}) {b}" for i, b in enumerate(beats, 1))
-            + f"\n\n**فاجعل في `mashahid` {len(beats)} مشهداً على هذا الترتيب نفسه، "
-              "لكل رقم مشهد واحد، ولا تدمج رقمين ولا تُسقط رقماً.** وانقل في `nass` "
-              "من لفظ ذلك المشهد وحده.\n"
+            + "\n\n**وهذه للإحاطة لا للسرد**: لا تمشِ عليها واحداً واحداً، ولا "
+              "تجعل لكل رقم فقرة. بل اجمع ما تشابه منها في فقرة واحدة، **على ألّا "
+              "يسقط منها معنى دون أن تتكلم عليه في موضعه من الفقرات.**\n"
         )
 
     # When the reader picks one interpreter, every reading must be that

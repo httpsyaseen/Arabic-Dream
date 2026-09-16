@@ -168,12 +168,20 @@ For that dream, with context "male, unmarried, anxious, recurring":
 **Distressing:** yes → etiquette shown before any interpretation
 **Indicators:** optimism 40% · hope 50% · anxiety 75%, *with a stated reason*
 
-Before the symbols, the dream is read back as a story — one scene per beat, in
-the order it was told, each quoting the dreamer's own words. The beats are cut in
-code from the dreamer's paragraph breaks, not chosen by the model: asked to find
-them itself, it summarised an eighteen-paragraph dream into four scenes and
-stitched distant moments together with ellipses. Code decides the structure here
-for the same reason it decides the symbols.
+Before the symbols comes the reading itself: flowing paragraphs, addressed to
+the dreamer, the way an interpreter would speak to someone sitting in front of
+them. Each paragraph takes one meaning from the dream — the posture, the sounds,
+the recurring thought — says what the books hold on it, then what it means for
+this dreamer. Every few paragraphs a short note names the interpretive method
+they rest on.
+
+It deliberately does not recite the dream back line by line. The reader already
+knows what they dreamt; what they came for is someone who takes the whole of it
+and talks to them about it.
+
+The dream is still cut into its beats in code, but as a checklist rather than an
+outline — told eighteen paragraphs at once the model writes about four of them
+and drops the rest without saying so.
 
 **Symbol: falling** — tagged **general knowledge**, no sources
 > may indicate a change of state or a transition from one condition to another
