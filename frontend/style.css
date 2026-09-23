@@ -587,3 +587,13 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
 .reading .term{color:var(--gold-deep);font-weight:600;margin-inline:.15em;
   border-bottom:1px solid color-mix(in srgb, var(--gold) 45%, transparent)}
 .reading .opening .term{color:var(--teal);border-bottom-color:color-mix(in srgb, var(--teal) 45%, transparent)}
+
+/* A symbol named in the reading, linking to its card below. Dotted rather than
+   solid so it reads as a pointer, not as the emphasis a marked term carries. */
+.reading .symlink{color:inherit;text-decoration:none;
+  border-bottom:1px dashed color-mix(in srgb, var(--teal) 60%, transparent)}
+.reading .symlink:hover,.reading .symlink:focus-visible{color:var(--teal);
+  border-bottom-style:solid;background:color-mix(in srgb, var(--teal) 8%, transparent)}
+/* clears the sticky header when jumped to */
+.symbol-card{scroll-margin-top:5rem}
+.symbol-card:target{box-shadow:0 0 0 2px var(--teal)}

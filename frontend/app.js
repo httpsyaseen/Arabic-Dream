@@ -80,6 +80,35 @@ const marks = html => html
   .replace(/[“”«»]\s*([^“”«»]{2,60}?)\s*[“”«»]/g, '<b class="term">$1</b>')
   .replace(/'([^']{2,60}?)'/g, '<b class="term">$1</b>');
 
+/* The reading talks about the bed, the door, the bathroom — and the card
+   carrying what the books say about each one sits further down the page. A
+   reader should not have to scroll looking for it.
+
+   Which words to link is not guessed: they are the symbols the lookup already
+   matched, so a link only ever points at a card that exists. The affixes mirror
+   backend/search.py, because the reading writes سريرك where the symbol is سرير.
+
+   Only the first mention of each symbol is linked; marking every one turns the
+   paragraph into a list of links. */
+const symPattern = sym => {
+  const body = sym.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+                  .replace(/[اأإآ]/g, "[اأإآ]").replace(/[هة]/g, "[هة]")
+                  .replace(/[يى]/g, "[يى]");
+  return new RegExp(`(^|[^\\u0621-\\u064A])((?:وال|بال|كال|فال|لل|ال|و|ف|ب)?${body}` +
+                    `(?:ها|هم|هن|كم|كن|نا|ات|ين|ون|ان|ه|ي|ك|ا)?)(?![\\u0621-\\u064A])`);
+};
+
+function linkSymbols(html, symbols) {
+  let out = html;
+  (symbols || []).forEach((s, i) => {
+    const re = symPattern(s.symbol_ar || "");
+    if (!re.source || !re.test(out)) return;
+    out = out.replace(re, (m, pre, word) =>
+      `${pre}<a class="symlink" href="#sym-${i}">${word}</a>`);
+  });
+  return out;
+}
+
 let lang = localStorage.getItem("taweel_lang") || "ar";
 let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null, pages: {}, cached: {} };
 
@@ -334,6 +363,12 @@ let lastRoute = null;
 
 function route() {
   const h = location.hash || "#/";
+
+  // An in-page anchor is not a route. Every route here begins "#/", so a bare
+  // "#sym-3" would fall through to the home view and throw away the reading the
+  // link was pointing into — the browser scrolls to the element on its own.
+  if (h !== "#" && !h.startsWith("#/")) return;
+
   const moved = h !== lastRoute;
   if (h.startsWith("#/symbols/")) {
     viewTopicReading("symbols", decodeURIComponent(h.slice(10)));
@@ -880,7 +915,7 @@ function renderReading(d, prefix = "") {
         ${(tm?.fusul || []).map(f =>
           (f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
               .map(x => x.trim()).filter(Boolean)
-              .map(x => `<p class="faqrah">${marks(esc(x))}</p>`).join("")
+              .map(x => `<p class="faqrah">${linkSymbols(marks(esc(x)), d.symbols)}</p>`).join("")
         ).join("")}
         ${(() => {
           // One note, closing the reading. Older readings kept it per block.
@@ -911,7 +946,7 @@ function renderReading(d, prefix = "") {
             + (c.url ? ` · <a href="${esc(c.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : "");
         };
 
-        return `<div class="card symbol-card">
+        return `<div class="card symbol-card" id="sym-${i}">
           <div class="symbol-head">
             <div class="symbol-icon">${num(i + 1)}</div>
             <h3 class="symbol-name">${esc(r.ramz)}
