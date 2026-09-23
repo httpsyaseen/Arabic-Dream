@@ -867,13 +867,18 @@ function renderReading(d, prefix = "") {
       h += `<h2 class="section-label">${L.tahlil}</h2>`;
       h += `<div class="card reading">
         ${a.tamhid ? `<p class="opening">${esc(a.tamhid)}</p>` : ""}
-        ${(tm?.fusul || []).map(f => `
-          ${(f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
+        ${(tm?.fusul || []).map(f =>
+          (f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
               .map(x => x.trim()).filter(Boolean)
-              .map(x => `<p class="faqrah">${esc(x)}</p>`).join("")}
-          ${f.manhaj ? `<div class="manhaj-note">
+              .map(x => `<p class="faqrah">${esc(x)}</p>`).join("")
+        ).join("")}
+        ${(() => {
+          // One note, closing the reading. Older readings kept it per block.
+          const m = tm?.manhaj || (tm?.fusul || []).map(f => f.manhaj).filter(Boolean).join(" ");
+          return m ? `<div class="manhaj-note">
             <span class="manhaj-label">${L.anAlmanhaj}</span>
-            <p>${esc(f.manhaj.replace(/^\s*عن المنهج\s*[:：-]?\s*/, ""))}</p></div>` : ""}`).join("")}
+            <p>${esc(m.replace(/^\s*عن المنهج\s*[:：-]?\s*/, ""))}</p></div>` : "";
+        })()}
       </div>`;
     }
 

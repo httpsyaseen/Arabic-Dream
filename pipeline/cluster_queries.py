@@ -151,7 +151,7 @@ def models() -> list[str]:
     first = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     rest = [m.strip() for m in os.getenv(
         "GEMINI_FALLBACK_MODELS",
-        "gemini-3.5-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite").split(",") if m.strip()]
+        "gemini-3.7-flash,gemini-3.5-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite").split(",") if m.strip()]
     return [first] + [m for m in rest if m != first]
 
 
