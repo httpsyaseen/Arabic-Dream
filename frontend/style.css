@@ -581,3 +581,9 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
 .reading .opening{margin:0 0 var(--s5);padding-bottom:var(--s4);
   border-bottom:1px solid var(--line-soft);font-size:1.12rem;line-height:2;
   color:var(--ink);max-width:var(--measure);text-wrap:pretty}
+
+/* The named meaning the reading arrives at. Weight and colour only — a filled
+   highlight at this density would stripe the whole paragraph. */
+.reading .term{color:var(--gold-deep);font-weight:600;margin-inline:.15em;
+  border-bottom:1px solid color-mix(in srgb, var(--gold) 45%, transparent)}
+.reading .opening .term{color:var(--teal);border-bottom-color:color-mix(in srgb, var(--teal) 45%, transparent)}

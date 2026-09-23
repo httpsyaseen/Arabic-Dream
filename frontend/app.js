@@ -70,6 +70,16 @@ const HADITH = { ar: ["حديثٌ واحد", "حديثان", "أحاديث", "ح
 const DREAMS = { ar: ["رؤيا واحدة", "رؤيان", "رؤى", "رؤيا"], one: "dream", many: "dreams" };
 const esc = s => (s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+/* The reading names the meaning it has arrived at and puts it in quotes —
+   "an inner struggle", "fear of the unknown". Those names are what a reader
+   carries away, so they are marked rather than left to sit flat in the line.
+
+   Runs on already-escaped text and inserts only its own tags, so nothing from
+   the model can become markup. */
+const marks = html => html
+  .replace(/[“”«»]\s*([^“”«»]{2,60}?)\s*[“”«»]/g, '<b class="term">$1</b>')
+  .replace(/'([^']{2,60}?)'/g, '<b class="term">$1</b>');
+
 let lang = localStorage.getItem("taweel_lang") || "ar";
 let STATE = { stats: null, options: null, sources: [], nonSources: [], last: null, pages: {}, cached: {} };
 
@@ -866,11 +876,11 @@ function renderReading(d, prefix = "") {
     if (a.tamhid || tm?.fusul?.length) {
       h += `<h2 class="section-label">${L.tahlil}</h2>`;
       h += `<div class="card reading">
-        ${a.tamhid ? `<p class="opening">${esc(a.tamhid)}</p>` : ""}
+        ${a.tamhid ? `<p class="opening">${marks(esc(a.tamhid))}</p>` : ""}
         ${(tm?.fusul || []).map(f =>
           (f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
               .map(x => x.trim()).filter(Boolean)
-              .map(x => `<p class="faqrah">${esc(x)}</p>`).join("")
+              .map(x => `<p class="faqrah">${marks(esc(x))}</p>`).join("")
         ).join("")}
         ${(() => {
           // One note, closing the reading. Older readings kept it per block.
