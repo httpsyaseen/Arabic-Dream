@@ -846,7 +846,6 @@ function renderReading(d, prefix = "") {
         <span class="verdict-dash">—</span>
         ${esc(a.unwan || "")}
       </h2>
-      ${a.tamhid ? `<p class="verdict-sub">${esc(a.tamhid)}</p>` : ""}
       ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}</p>` : ""}
     </div>`;
 
@@ -864,10 +863,11 @@ function renderReading(d, prefix = "") {
     // their own sentences back at them. Readings written before this section
     // existed simply have no fusul and skip it.
     const tm = a.tahlil_mufassal;
-    if (tm?.fusul?.length) {
+    if (a.tamhid || tm?.fusul?.length) {
       h += `<h2 class="section-label">${L.tahlil}</h2>`;
       h += `<div class="card reading">
-        ${tm.fusul.map(f => `
+        ${a.tamhid ? `<p class="opening">${esc(a.tamhid)}</p>` : ""}
+        ${(tm?.fusul || []).map(f => `
           ${(f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
               .map(x => x.trim()).filter(Boolean)
               .map(x => `<p class="faqrah">${esc(x)}</p>`).join("")}

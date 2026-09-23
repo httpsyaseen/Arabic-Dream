@@ -11,12 +11,12 @@ API_PREFIX = "/api/v1"
 # Free-tier quota is metered per model, not per key: one model can be exhausted
 # while another still answers. So the server falls through this list rather than
 # failing, and reports which model actually produced the answer.
-MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 FALLBACKS = [
     m.strip()
     for m in os.getenv(
         "GEMINI_FALLBACK_MODELS",
-        "gemini-3.5-flash,gemini-3.1-flash-lite,gemini-3.6-flash",
+        "gemini-3.5-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite",
     ).split(",")
     if m.strip()
 ]

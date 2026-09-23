@@ -575,3 +575,9 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
 .manhaj-label{display:block;font-size:.8rem;letter-spacing:.04em;font-weight:700;
   color:var(--teal);margin-bottom:.3rem}
 .manhaj-note p{margin:0;font-size:.97rem;line-height:1.85;color:var(--ink-soft)}
+
+/* The interpreter's opening address. Set apart from the paragraphs that follow
+   because it speaks to the reader before it speaks about the dream. */
+.reading .opening{margin:0 0 var(--s5);padding-bottom:var(--s4);
+  border-bottom:1px solid var(--line-soft);font-size:1.12rem;line-height:2;
+  color:var(--ink);max-width:var(--measure);text-wrap:pretty}
