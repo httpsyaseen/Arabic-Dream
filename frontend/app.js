@@ -137,7 +137,6 @@ const T = {
     readReading: "اقرأ التفسير",
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
-    symbols: "رمزًا", passages: "نصًا", hadith: "حديثًا في آداب الرؤيا",
     tahlil: "قراءة الرؤيا", anAlmanhaj: "عن المنهج",
     altLens: "قراءة نفسية إضافية (اختيارية)", chapter: "الفصل",
     frightening: "مخيفة", arabicLabel: "التصنيف بالعربية",
@@ -153,8 +152,6 @@ const T = {
     foundSymbols: "الرموز التي عُثر عليها",
     empty: "اكتب رؤياك أولاً.",
     yourDream: "رؤياك", changeDream: "تعديل الرؤيا",
-    verdictPill: (kind, n) => `${kind} · مبنيّ على ${count(n, TEXTS)} من الكتب`,
-    verdictPillNoText: kind => `${kind} · لا نصّ له في كتبنا`,
     basedOn: "اعتماداً على",
     plusPsych: "مع قراءة نفسية مضافة",
     givenSituation: "بحسب حالك",
@@ -162,7 +159,6 @@ const T = {
     fromSource: "من",
     tasnif: "تصنيف الرؤيا", basis: "أساس الجواب",
     mukhifah: "رؤيا مكروهة — هدي السنة",
-    mukhifahNote: "هذه الرؤيا فيها ما يُكره، ومن هدي النبي ﷺ ألّا تُفسَّر، وأن يفعل الرائي ما يلي.",
     rumuz: "الرموز ودلالاتها",
     khulasah: "الخلاصة", adab: "آداب الرؤيا", nasihah: "ماذا تفعل الآن",
     nasihahSub: "خطواتٌ عملية بحسب رؤياك وحالك",
@@ -181,7 +177,7 @@ const T = {
     interpretersSub: "لكلٍّ مسلكه. اختر مرجعية لتقرأ عنها، أو لتُفسَّر رؤياك على مسلكها وحدها.",
     otherAuthorities: "مرجعيات أخرى",
     notSourceH: "توضيح", readMore: "اقرأ عنه ←",
-    interpretWith: "فسّر رؤياك على مسلك", role: "الدور",
+    role: "الدور",
     aboutH1: "من أين تأتي تفسيراتنا؟",
     aboutSub: "كل قول تقرؤه هنا إمّا منقول من كتاب بعينه مع صفحته، أو موسوم بأنه من المعروف المستقر لا من نصّ. لا ثالث لهما.",
     faqH1: "أسئلة شائعة",
@@ -216,7 +212,6 @@ const T = {
     readReading: "Read the reading",
     heroH1: "Write your dream — its symbols are looked up in the classical books",
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
-    symbols: "symbols", passages: "passages", hadith: "hadith on dream etiquette",
     tahlil: "Reading the dream", anAlmanhaj: "About the method",
     altLens: "Alternative psychological lens (optional)", chapter: "Chapter",
     frightening: "frightening", arabicLabel: "Arabic label",
@@ -232,8 +227,6 @@ const T = {
     foundSymbols: "Symbols found",
     empty: "Write your dream first.",
     yourDream: "Your dream", changeDream: "Edit dream",
-    verdictPill: (kind, n) => `${kind} · built on ${n} original ${n === 1 ? "text" : "texts"}`,
-    verdictPillNoText: kind => `${kind} · no text for it in our books`,
     basedOn: "Based on",
     plusPsych: "plus an added psychological reading",
     givenSituation: "Given your situation",
@@ -241,7 +234,6 @@ const T = {
     fromSource: "From",
     tasnif: "Classification", basis: "Basis of the answer",
     mukhifah: "A distressing dream — the sunna response",
-    mukhifahNote: "This dream contains what is disliked. The Prophet ﷺ taught that such a dream is not interpreted; the dreamer does the following instead.",
     rumuz: "Symbols and their meanings",
     khulasah: "Summary", adab: "Etiquette of dreams", nasihah: "What to do now",
     nasihahSub: "Practical steps, given your dream and your situation",
@@ -260,7 +252,7 @@ const T = {
     interpretersSub: "Each has its own method. Pick one to read about it, or to have your dream read on its approach alone.",
     otherAuthorities: "Other authorities",
     notSourceH: "Clarification", readMore: "Read more →",
-    interpretWith: "Interpret your dream with", role: "Role",
+    role: "Role",
     aboutH1: "Where do our interpretations come from?",
     aboutSub: "Every statement here is either quoted from a named book with its page, or marked as settled interpreter knowledge rather than a text. There is no third category.",
     faqH1: "Frequently asked questions",
@@ -623,23 +615,26 @@ function viewLens(slug) {
   const s = STATE.sources.find(x => x.slug === slug);
   if (!s) return viewInterpreters();
   const isHadith = s.role === "hadith";
+  // Someone arriving here came to have a dream read by this interpreter, so the
+  // form is the page. Title, author, dates, role and library link pushed the
+  // tool below the fold to restate what the form's own header already says.
+  //
+  // The hadith source has no form — no dream is answered from it — so there the
+  // description stays, or the page would be blank.
   chrome(`
     <div class="wrap page">
-      <a class="home-link" href="#/interpreters">← ${L.nav.interpreters}</a>
-      <h1>${esc(s.display[lang])}</h1>
-      <p class="sub">«${esc(s.name[lang])}» · ${esc(s.author[lang])}${s.died ? ` · ${esc(s.died[lang])}` : ""}</p>
+      <a class="home-link" href="#/interpreters">\u2190 ${L.nav.interpreters}</a>
 
-      <div class="card meta-card">
-        <div class="meta-row"><span>${L.role}</span><b>${L.kinds[s.kind] || s.kind} · ${L.roles[s.role] || s.role}</b></div>
-        ${s.source_url ? `<div class="meta-row"><span>${L.sourceLink}</span>
-          <a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source_url)}</a></div>` : ""}
-      </div>
+      ${isHadith ? `
+        <h1>${esc(s.display[lang])}</h1>
+        <p class="sub">\u00AB${esc(s.name[lang])}\u00BB \u00B7 ${esc(s.author[lang])}${s.died ? ` \u00B7 ${esc(s.died[lang])}` : ""}</p>
+        <div class="card meta-card">
+          <div class="meta-row"><span>${L.role}</span><b>${L.kinds[s.kind] || s.kind} \u00B7 ${L.roles[s.role] || s.role}</b></div>
+          ${s.source_url ? `<div class="meta-row"><span>${L.sourceLink}</span>
+            <a href="${esc(s.source_url)}" target="_blank" rel="noopener">${esc(s.source_url)}</a></div>` : ""}
+        </div>` : dreamForm(s.slug)}
 
       ${s.note ? `<div class="note caution"><b>${L.notSourceH}:</b> ${esc(s.note[lang])}</div>` : ""}
-
-      ${isHadith ? "" : `
-        <h2 class="section-label">${L.interpretWith} ${esc(s.display[lang])}</h2>
-        ${dreamForm(s.slug)}`}
       <div id="pending"></div>
     </div>`);
 }
