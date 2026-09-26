@@ -138,6 +138,8 @@ const T = {
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
     tahlil: "قراءة الرؤيا", anAlmanhaj: "عن المنهج",
+    errUnreachable: "تعذّر الوصول إلى الخادم",
+    errNotJson: "جاء من الخادم ردٌّ غير متوقَّع",
     altLens: "قراءة نفسية إضافية (اختيارية)", chapter: "الفصل",
     frightening: "مخيفة", arabicLabel: "التصنيف بالعربية",
     dreamLabel: "رؤياك",
@@ -213,6 +215,8 @@ const T = {
     heroH1: "Write your dream — its symbols are looked up in the classical books",
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
     tahlil: "Reading the dream", anAlmanhaj: "About the method",
+    errUnreachable: "Could not reach the server",
+    errNotJson: "The server sent something unexpected",
     altLens: "Alternative psychological lens (optional)", chapter: "Chapter",
     frightening: "frightening", arabicLabel: "Arabic label",
     dreamLabel: "Your dream",
@@ -265,22 +269,51 @@ const T = {
              both: "supplies both symbols and passages", hadith: "hadith for etiquette and classification" },
   },
 };
+/* Every call to the API goes through here.
+ *
+ * fetch() only rejects on a network failure. A 502 from nginx, a proxy that
+ * answers /api/ with index.html, a backend that went away mid-session — all of
+ * those resolve successfully with an HTML body, and .json() then throws
+ * "Unexpected token '<'", which is shown to the reader as-is. That is a real
+ * failure reported in a way that tells them nothing and tells us nothing.
+ *
+ * So the status and the content type are checked before parsing, and what is
+ * thrown names which call failed and what came back instead.
+ *
+ * The 4xx and 5xx bodies this API returns are JSON on purpose — a 429 carries
+ * its limit, a 503 carries the citations — so those are parsed and returned
+ * rather than thrown. Only a body that is not JSON at all is an error here. */
+async function getJSON(url, init) {
+  const where = String(url).replace(API, "");
+  let res;
+  try {
+    res = await fetch(url, init);
+  } catch (e) {
+    throw new Error(`${t().errUnreachable} (${where}: ${e.message})`);
+  }
+  if (!(res.headers.get("content-type") || "").includes("json")) {
+    const body = (await res.text()).trim().slice(0, 80);
+    throw new Error(`${t().errNotJson} (${where} \u2192 HTTP ${res.status}: ${body}\u2026)`);
+  }
+  return res.json();
+}
+
 const t = () => T[lang];
 
 /* ------------------------------------------------------------------ boot */
 async function boot() {
   try {
     const [h, o, s] = await Promise.all([
-      fetch(API + "/health").then(r => r.json()),
-      fetch(API + "/options").then(r => r.json()),
-      fetch(API + "/sources").then(r => r.json()),
+      getJSON(API + "/health"),
+      getJSON(API + "/options"),
+      getJSON(API + "/sources"),
     ]);
     STATE.stats = h.counts;
     STATE.options = o;
     STATE.sources = s.sources;
     STATE.nonSources = s.not_sources;
   } catch (e) {
-    document.body.innerHTML = `<div class="wrap"><div class="card err">API unreachable at ${esc(API)} — ${esc(e.message)}</div></div>`;
+    document.body.innerHTML = `<div class="wrap"><div class="card err">${esc(e.message)}<br><small>${esc(API)}</small></div></div>`;
     return;
   }
   window.addEventListener("hashchange", route);
@@ -528,7 +561,7 @@ async function viewTeeth() {
       <div class="card"><div class="skel" style="width:45%"></div>
         <div class="skel"></div><div class="skel" style="width:75%"></div></div></div>`);
     try {
-      STATE.pages.teeth = await fetch(API + "/pages/teeth").then(r => r.json());
+      STATE.pages.teeth = await getJSON(API + "/pages/teeth");
     } catch (e) {
       return chrome(`<div class="wrap page"><div class="card err">${esc(e.message)}</div></div>`);
     }
@@ -569,9 +602,7 @@ async function viewTopicReading(slug, qslug) {
     chrome(`<div class="wrap page"><div class="card">
       <div class="skel" style="width:50%"></div><div class="skel"></div></div></div>`);
     try {
-      const r = await fetch(`${API}/pages/${slug}/${qslug}`);
-      if (!r.ok) throw new Error(String(r.status));
-      STATE.cached[key] = await r.json();
+      STATE.cached[key] = await getJSON(`${API}/pages/${slug}/${qslug}`);
     } catch {
       location.hash = `#/${slug}`;      // back to this section, not always teeth
       return;
@@ -763,9 +794,9 @@ async function submitDream(fixedSource, explicitDream, force = false) {
   route();
 
   try {
-    const m = await fetch(API + "/match", {
+    const m = await getJSON(API + "/match", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
-    }).then(r => r.json());
+    });
     if (STATE.pending?.dream !== dream) return;      // a newer dream took over
     STATE.pending.match = m;
     STATE.pending.phase = "interpreting";
@@ -775,11 +806,11 @@ async function submitDream(fixedSource, explicitDream, force = false) {
   } catch { /* fall through to the full call */ }
 
   try {
-    const r = await fetch(API + "/interpret", {
+    const answer = await getJSON(API + "/interpret", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
     });
     if (STATE.pending?.dream !== dream) return;
-    STATE.last = await r.json();
+    STATE.last = answer;
     STATE.last.dream = dream;
     STATE.pending = null;
     sessionStorage.setItem("taweel_last", JSON.stringify(STATE.last));
@@ -1261,7 +1292,7 @@ async function viewSymbols() {
       <div class="card"><div class="skel" style="width:45%"></div>
         <div class="skel"></div><div class="skel" style="width:70%"></div></div></div>`);
     try {
-      STATE.pages.symbols = await fetch(API + "/pages/symbols").then(r => r.json());
+      STATE.pages.symbols = await getJSON(API + "/pages/symbols");
     } catch (e) {
       return chrome(`<div class="wrap page"><div class="card err">${esc(e.message)}</div></div>`);
     }
@@ -1310,7 +1341,7 @@ window.TAWEEL = {
   },
   async ping() {
     const t0 = performance.now();
-    const r = await fetch(API + "/health").then(r => r.json());
+    const r = await getJSON(API + "/health");
     return { ok: true, ms: Math.round(performance.now() - t0), symbols: r.counts.symbols };
   },
 };
