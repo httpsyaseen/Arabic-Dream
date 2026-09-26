@@ -11,16 +11,6 @@
   --purple:#6B4E8F; --grey:#8C8A83;
   --radius:16px;
 }
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg-page:#0F1E1D; --bg-parchment:#172E2B; --white:#152B28;
-    --ink:#EFE8D8; --ink-soft:#A3B0A8;
-    --line:#28423D; --line-soft:#203733;
-    --gold:#D2A24F; --gold-deep:#E0B76B; --teal:#63AE9C; --caution:#C98A6E;
-    --purple:#A98BC9; --grey:#7C8A84;
-  }
-}
-
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
