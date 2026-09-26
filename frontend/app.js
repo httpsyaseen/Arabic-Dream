@@ -138,6 +138,10 @@ const T = {
     heroH1: "اكتب رؤياك، فيُبحث عن رموزها في كتب أهل التعبير",
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
     tahlil: "قراءة الرؤيا", anAlmanhaj: "عن المنهج",
+    micStart: "أملِ رؤياك بصوتك", micStop: "إيقاف الإملاء",
+    micListening: "يستمع… تكلّم بوضوح، ويمكنك تصحيح النصّ بعدها.",
+    micDenied: "لم يُسمح باستخدام الميكروفون. اسمح به من إعدادات المتصفّح.",
+    micError: "تعذّر الإملاء. اكتب رؤياك، أو أعد المحاولة.",
     altLens: "قراءة نفسية إضافية (اختيارية)", chapter: "الفصل",
     frightening: "مخيفة", arabicLabel: "التصنيف بالعربية",
     dreamLabel: "رؤياك",
@@ -213,6 +217,10 @@ const T = {
     heroH1: "Write your dream — its symbols are looked up in the classical books",
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
     tahlil: "Reading the dream", anAlmanhaj: "About the method",
+    micStart: "Dictate your dream", micStop: "Stop dictating",
+    micListening: "Listening… speak clearly; you can correct the text afterwards.",
+    micDenied: "Microphone access was refused. Allow it in your browser settings.",
+    micError: "Dictation failed. Type your dream, or try again.",
     altLens: "Alternative psychological lens (optional)", chapter: "Chapter",
     frightening: "frightening", arabicLabel: "Arabic label",
     dreamLabel: "Your dream",
@@ -357,6 +365,10 @@ let lastRoute = null;
 
 function route() {
   const h = location.hash || "#/";
+  // Navigating away must release the microphone; the recogniser outlives the
+  // form that started it, and a page with no mic button still listening is
+  // both a privacy problem and a confusing one.
+  stopDictation();
 
   // An in-page anchor is not a route. Every route here begins "#/", so a bare
   // "#sym-3" would fall through to the home view and throw away the reading the
@@ -394,6 +406,95 @@ function route() {
 }
 
 /* ------------------------------------------------------------ components */
+/* ------------------------------------------------------------- dictation
+ * Speaking a dream is easier than typing it, especially in Arabic on a phone,
+ * and the people most likely to use this site are not the people most likely
+ * to enjoy an Arabic keyboard.
+ *
+ * The browser's own recogniser does the work: no key, no cost, nothing of ours
+ * in the path. Firefox has never implemented it, so the button only appears
+ * where it will work rather than failing when pressed.
+ *
+ * What comes back is put in the textarea and left there to be edited. It is a
+ * draft, not a submission — recognisers mishear, and Arabic dictated in dialect
+ * comes back in dialect while the books are indexed in the written language.
+ * The reader is the one who can tell the difference, so the reader gets the
+ * last word before anything is sent. */
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let REC = null;              // the live recogniser, if one is running
+let recBase = "";            // what was in the box before dictation started
+
+function stopDictation() {
+  if (!REC) return;
+  const r = REC;
+  REC = null;                // cleared first, so onend knows this was deliberate
+  try { r.stop(); } catch { /* already stopped */ }
+  paintMic(false);
+}
+
+function paintMic(on, note) {
+  const btn = $("#mic");
+  if (btn) {
+    btn.classList.toggle("rec", on);
+    btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? t().micStop : t().micStart);
+  }
+  const hint = $("#micState");
+  if (hint) hint.textContent = note || (on ? t().micListening : "");
+}
+
+window.toggleDictation = () => {
+  const L = t();
+  if (REC) return stopDictation();
+
+  const box = $("#dream");
+  if (!box || !Recognition) return;
+
+  const r = new Recognition();
+  r.lang = "ar-SA";          // the dream is written in Arabic whatever the UI language
+  r.continuous = true;       // a dream is several sentences, not a search query
+  r.interimResults = true;   // words appear as they are spoken, so it reads as alive
+
+  recBase = box.value.trim();
+  let settled = "";          // everything the recogniser has committed to
+
+  r.onresult = e => {
+    let pending = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const chunk = e.results[i][0].transcript;
+      if (e.results[i].isFinal) settled += chunk; else pending += chunk;
+    }
+    box.value = [recBase, (settled + pending).trim()].filter(Boolean).join(" ");
+    box.scrollTop = box.scrollHeight;
+  };
+
+  r.onerror = e => {
+    // "no-speech" and "aborted" are ordinary: someone pressed the button and
+    // said nothing, or pressed it again. Only the rest are worth reporting.
+    const msg = e.error === "not-allowed" || e.error === "service-not-allowed" ? L.micDenied
+              : e.error === "no-speech" || e.error === "aborted" ? ""
+              : L.micError;
+    stopDictation();
+    if (msg) paintMic(false, msg);
+  };
+
+  r.onend = () => {
+    // Chrome ends the session after a pause even with continuous set. If the
+    // reader has not pressed stop, carry on — otherwise dictating a long dream
+    // means pressing the button every few sentences.
+    if (REC !== r) return;
+    try { r.start(); } catch { stopDictation(); }
+  };
+
+  try {
+    r.start();
+    REC = r;
+    paintMic(true);
+  } catch {
+    paintMic(false, L.micError);
+  }
+};
+
 function dreamForm(fixedSource) {
   const L = t(), o = STATE.options;
   const fixed = fixedSource ? STATE.sources.find(s => s.slug === fixedSource) : null;
@@ -456,9 +557,20 @@ function dreamForm(fixedSource) {
     <div class="card form-card">
       <label class="field">
         <span>${L.dreamLabel}</span>
-        <textarea id="dream" dir="rtl" lang="ar" rows="5"
-          placeholder="${L.placeholder}" aria-describedby="dreamHint"></textarea>
+        <div class="dream-wrap">
+          <textarea id="dream" dir="rtl" lang="ar" rows="5"
+            placeholder="${L.placeholder}" aria-describedby="dreamHint micState"></textarea>
+          ${Recognition ? `<button type="button" id="mic" class="mic"
+            onclick="toggleDictation()" aria-pressed="false"
+            aria-label="${L.micStart}" title="${L.micStart}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20">
+              <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/>
+              <path fill="currentColor" d="M17.3 11a.9.9 0 0 0-1.8 0 3.5 3.5 0 0 1-7 0 .9.9 0 0 0-1.8 0 5.3 5.3 0 0 0 4.4 5.2V19H9.6a.9.9 0 0 0 0 1.8h4.8a.9.9 0 0 0 0-1.8h-1.5v-2.8A5.3 5.3 0 0 0 17.3 11Z"/>
+            </svg>
+          </button>` : ""}
+        </div>
         <small id="dreamHint">${L.dreamHint}</small>
+        <small id="micState" class="mic-state" aria-live="polite"></small>
       </label>
 
       ${picker}

@@ -623,3 +623,26 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
   border-top:1px dashed var(--line);font-size:.9rem;font-style:italic;
   color:var(--ink-soft);max-width:var(--measure)}
 @media (max-width:520px){ .chapter{padding:var(--s4)} }
+
+/* ── dictation ─────────────────────────────────────────────────────────────
+   The button sits inside the field, on the side the text starts from, so it
+   never covers what is being written in either direction. */
+.dream-wrap{position:relative}
+.mic{position:absolute;inset-block-end:.6rem;inset-inline-end:.6rem;
+  width:2.4rem;height:2.4rem;display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:50%;background:var(--white);
+  color:var(--ink-soft);cursor:pointer;transition:.15s}
+.mic:hover{color:var(--teal);border-color:var(--teal)}
+.mic:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+/* Recording is a state worth being unmistakable about — a microphone that is
+   on without the reader realising is the failure to avoid. */
+.mic.rec{background:var(--caution);border-color:var(--caution);color:#fff;
+  animation:mic-pulse 1.6s ease-in-out infinite}
+@keyframes mic-pulse{
+  0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--caution) 55%, transparent)}
+  50%    {box-shadow:0 0 0 .45rem color-mix(in srgb, var(--caution) 0%, transparent)}
+}
+@media (prefers-reduced-motion:reduce){ .mic.rec{animation:none} }
+.mic-state{display:block;color:var(--caution);min-height:1.2em}
+/* Keep dictated text clear of the button. */
+.dream-wrap textarea{padding-inline-end:3.4rem}
