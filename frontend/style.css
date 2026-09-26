@@ -215,9 +215,6 @@ summary{cursor:pointer;font-weight:700}
 .verdict-warn .verdict-pill{color:#E0A98F;border-color:rgba(224,169,143,.35)}
 
 /* Shown when the reader restricted the reading to one interpreter. */
-.lens-banner{background:var(--bg-parchment);border:1px solid var(--gold);
-  border-radius:12px;padding:.95rem 1.2rem;margin-top:1rem;
-  color:var(--gold-deep);font-size:.9rem;line-height:1.8;text-align:center}
 
 /* ------------------------------------------------------- symbol cards */
 .symbol-card{padding:1.3rem 1.45rem}
@@ -331,8 +328,7 @@ h1{margin:0 0 var(--s2)}
 
 /* Give the eye a rest between the reading and the evidence beneath it. */
 .verdict{padding:var(--s7) var(--s6) var(--s5);margin-top:var(--s5)}
-.verdict + .card,.verdict + .lens-banner{margin-top:var(--s4)}
-.lens-banner{padding:var(--s3) var(--s5);margin-top:var(--s4)}
+.verdict + .card{margin-top:var(--s4)}
 
 /* --- the form ------------------------------------------------------------ */
 .form-card{padding:var(--s5) var(--s5) var(--s5)}
@@ -606,12 +602,6 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
 .ctx{margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line-soft)}
 .ctx-head{margin:0;font-size:1.05rem;color:var(--gold-deep)}
 .ctx .why{margin:var(--s1) 0 var(--s4)}
-/* The four the tradition itself weighs carry a mark, so they read as worth
-   answering rather than as more of the same. */
-.ctx-grid label.weighed{background:var(--bg-parchment);border:1px solid var(--gold);
-  border-radius:10px;padding:var(--s2) var(--s3)}
-.ctx-grid label.weighed > span{color:var(--gold-deep);font-weight:600}
-.star{font-style:normal;color:var(--gold);margin-inline-end:.35em}
 
 /* ── the sunna response ────────────────────────────────────────────────────
    Steps to carry out in order, so they are numbered rather than bulleted. */

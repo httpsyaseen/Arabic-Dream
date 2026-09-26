@@ -157,7 +157,6 @@ const T = {
     verdictPillNoText: kind => `${kind} · لا نصّ له في كتبنا`,
     basedOn: "اعتماداً على",
     plusPsych: "مع قراءة نفسية مضافة",
-    lensOnly: name => `أنت تطالع تفسيراً مقصوراً على مسلك ${name} وحده. والرمز الذي لا نصّ له عند هذا المفسّر في فهرسنا يُوسَم بذلك، ولا يُؤخذ من مصدر آخر.`,
     givenSituation: "بحسب حالك",
     addedPsych: "قراءة نفسية مضافة",
     fromSource: "من",
@@ -237,7 +236,6 @@ const T = {
     verdictPillNoText: kind => `${kind} · no text for it in our books`,
     basedOn: "Based on",
     plusPsych: "plus an added psychological reading",
-    lensOnly: name => `You are viewing a reading restricted to ${name}'s method only. Symbols with no direct text from this interpreter in our database are flagged as such, instead of pulling from another source.`,
     givenSituation: "Given your situation",
     addedPsych: "Added psychological reading",
     fromSource: "From",
@@ -478,8 +476,7 @@ function dreamForm(fixedSource) {
         <p class="why">${L.ctxWhy}</p>
         <div class="ctx-grid">
           ${o.fields.map(f => `
-            <label class="${f.weighed ? "weighed" : ""}">
-              <span>${f.weighed ? '<i class="star">✦</i>' : ""}${esc(f.label[lang])}</span>
+            <label><span>${esc(f.label[lang])}</span>
               <select id="f-${f.key}"><option value="">—</option>
                 ${f.values.map(v => `<option value="${esc(v.ar)}">${esc(v[lang])}</option>`).join("")}
               </select></label>`).join("")}
@@ -910,10 +907,6 @@ function renderReading(d, prefix = "") {
       ${a.tamhid ? `<blockquote class="verdict-lede">${marks(esc(a.tamhid))}</blockquote>` : ""}
       ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}${citedCount ? ` · ${count(citedCount, TEXTS)}` : ""}</p>` : ""}
     </div>`;
-
-    if (meta.source && srcName) {
-      h += `<div class="lens-banner">${L.lensOnly(esc(srcName))}</div>`;
-    }
 
     // The steps are a sequence to be carried out, so they are numbered. The
     // heading says why they come before any reading, which is the part a
