@@ -33,6 +33,9 @@ import os
 import re
 
 from google import genai
+from google.genai import types
+
+from . import config
 
 # The seven reasoning principles of classical dream interpretation. Naming which
 # one was used is what separates the discipline from fortune-telling, so it is a
@@ -530,7 +533,13 @@ def client() -> genai.Client:
     key = os.getenv("GEMINI_API_KEY")
     if not key:
         raise RuntimeError("GEMINI_API_KEY is not set")
-    return genai.Client(api_key=key)
+    # The SDK takes milliseconds. Without this a hung call means the other
+    # models never get their turn, which is the opposite of what the fallback
+    # chain is for.
+    return genai.Client(
+        api_key=key,
+        http_options=types.HttpOptions(timeout=config.MODEL_TIMEOUT_SECONDS * 1000),
+    )
 
 
 def generate(dream: str, matches: list[dict], adab: list[dict], model: str,

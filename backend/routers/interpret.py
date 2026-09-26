@@ -169,6 +169,13 @@ def interpret(payload: DreamRequest):
 
     last_error = None
     for model in config.MODELS:
+        # Each attempt is capped, but five in a row could still outlast both the
+        # proxy and the reader. Once the budget is gone, stop and return the
+        # citations rather than starting a call nobody will be there to read.
+        if time.time() - started > config.REQUEST_TIMEOUT_SECONDS:
+            last_error = last_error or TimeoutError(
+                f"request budget of {config.REQUEST_TIMEOUT_SECONDS}s spent")
+            break
         try:
             result = _coherent(answer_mod.generate(
                 dream, matches, adab, model, context, source_names_ar(),

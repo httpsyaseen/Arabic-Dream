@@ -27,3 +27,17 @@ MODELS = [MODEL] + [m for m in FALLBACKS if m != MODEL]
 CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "*").split(",") if o.strip()]
 
 HAS_KEY = bool(os.getenv("GEMINI_API_KEY"))
+
+# How long one model attempt may run before it is abandoned and the next model
+# in the chain is tried. Without a ceiling a single call holds the connection
+# for as long as the endpoint feels like — 473 and 530 second calls were
+# measured against a congested free tier — and the proxy in front gives up
+# first, answering the browser with an HTML error page it cannot parse.
+MODEL_TIMEOUT_SECONDS = int(os.getenv("MODEL_TIMEOUT_SECONDS", "45"))
+
+# The budget for the whole request across every model in the chain. When it is
+# spent the citations are returned without an interpretation, which is a real
+# answer, rather than leaving the caller waiting for one that will not arrive.
+# Keep this BELOW nginx's proxy_read_timeout so the backend always wins the
+# race and the reader gets JSON instead of the proxy's error page.
+REQUEST_TIMEOUT_SECONDS = int(os.getenv("REQUEST_TIMEOUT_SECONDS", "100"))
