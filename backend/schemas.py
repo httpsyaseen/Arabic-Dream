@@ -29,13 +29,24 @@ class DreamRequest(BaseModel):
     takrar: str | None = Field(None, max_length=20, description="does it recur — نعم / لا")
     waqt: str | None = Field(None, max_length=30, description="time of the dream")
 
+    # The tradition weighs each of these. Istikhara makes a dream answerable
+    # rather than incidental; a dream remembered clearly is treated differently
+    # from a half-recalled one; the state one fell asleep in bears on whether a
+    # dream is adghath; and a familiar place reads as the dreamer's own
+    # circumstances where a strange one reads as what is coming to him.
+    istikhara: str | None = Field(None, max_length=20, description="istikhara prayer beforehand")
+    wuduh: str | None = Field(None, max_length=30, description="clarity of the details")
+    qabl: str | None = Field(None, max_length=40, description="state before sleeping")
+    makan: str | None = Field(None, max_length=30, description="was the place familiar")
+
     # Which interpreter to answer as. Omit for all sources together. When set,
     # only that source's text is shown and the fallback answers in its manner.
     source: str | None = Field(None, max_length=40,
                                description="lens slug, e.g. ibn_sirin — see GET /sources")
 
     def context(self) -> dict[str, str]:
-        keys = ("jins", "hala", "umr", "shuur", "alam", "takrar", "waqt")
+        keys = ("jins", "hala", "umr", "shuur", "alam", "takrar", "waqt",
+                "istikhara", "wuduh", "qabl", "makan")
         return {k: v for k in keys if (v := getattr(self, k))}
 
 

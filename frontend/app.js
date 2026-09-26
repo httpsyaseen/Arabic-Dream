@@ -139,6 +139,8 @@ const T = {
     heroSub: "تفسير مبني على نصوص أصلية لا على تخمين — ويُعرض لك ما ورد فيها بنصّه ومصدره وصفحته.",
     symbols: "رمزًا", passages: "نصًا", hadith: "حديثًا في آداب الرؤيا",
     tahlil: "قراءة الرؤيا", anAlmanhaj: "عن المنهج",
+    altLens: "قراءة نفسية إضافية (اختيارية)", chapter: "الفصل",
+    frightening: "مخيفة", arabicLabel: "التصنيف بالعربية",
     dreamLabel: "رؤياك",
     dreamHint: "اكتب رؤياك بالعربية — البحث يجري في كتب عربية.",
     placeholder: "رأيت في المنام…",
@@ -217,6 +219,8 @@ const T = {
     heroSub: "Interpretation built on original texts, not guesswork. You are shown what they say, with the book, the author and the printed page.",
     symbols: "symbols", passages: "passages", hadith: "hadith on dream etiquette",
     tahlil: "Reading the dream", anAlmanhaj: "About the method",
+    altLens: "Alternative psychological lens (optional)", chapter: "Chapter",
+    frightening: "frightening", arabicLabel: "Arabic label",
     dreamLabel: "Your dream",
     dreamHint: "Write your dream in Arabic — the search runs against Arabic books.",
     placeholder: "رأيت في المنام…",
@@ -425,7 +429,8 @@ function dreamForm(fixedSource) {
         </span>
       </label>
       <div class="picker-grid" role="radiogroup">
-        ${STATE.sources.filter(s => s.role !== "hadith").map(s => `
+        ${STATE.sources.filter(s => s.role !== "hadith" && s.kind !== "psychological")
+          .map(s => `
         <label class="pick">
           <input type="radio" name="src" value="${s.slug}">
           <span class="pick-body">
@@ -435,6 +440,26 @@ function dreamForm(fixedSource) {
         </label>`).join("")}
       </div>
       <p class="picker-hint">${L.sourceHint}</p>
+
+      ${(() => {
+        // A psychoanalyst is not a sixth peer of the classical interpreters.
+        // Sitting in the same grid he reads as equally authoritative on the
+        // tradition, which he is not — and for a reader who came for the
+        // tradition, that undercuts the whole row. Set apart and marked
+        // optional, he is an addition rather than a rival.
+        const psych = STATE.sources.filter(s => s.kind === "psychological");
+        return psych.length ? `<div class="picker-alt" role="radiogroup">
+          <span class="alt-label">${L.altLens}</span>
+          ${psych.map(s => `
+            <label class="pick pick-alt">
+              <input type="radio" name="src" value="${s.slug}">
+              <span class="pick-body">
+                <b><span class="dot dot-${s.color}"></span>${esc(s.display[lang])}</b>
+                <span class="why">${esc(s.author[lang])}</span>
+              </span>
+            </label>`).join("")}
+        </div>` : "";
+      })()}
     </fieldset>`;
 
   return `
@@ -448,28 +473,24 @@ function dreamForm(fixedSource) {
 
       ${picker}
 
-      <details class="ctx">
-        <summary>${L.ctxToggle}</summary>
+      <section class="ctx">
+        <h3 class="ctx-head">${L.ctxToggle}</h3>
         <p class="why">${L.ctxWhy}</p>
         <div class="ctx-grid">
           ${o.fields.map(f => `
-            <label><span>${esc(f.label[lang])}</span>
+            <label class="${f.weighed ? "weighed" : ""}">
+              <span>${f.weighed ? '<i class="star">✦</i>' : ""}${esc(f.label[lang])}</span>
               <select id="f-${f.key}"><option value="">—</option>
                 ${f.values.map(v => `<option value="${esc(v.ar)}">${esc(v[lang])}</option>`).join("")}
               </select></label>`).join("")}
         </div>
-      </details>
+      </section>
 
       <div class="row submit-row">
         <button class="btn btn-gold" onclick="submitDream('${fixedSource || ""}')">${L.go}</button>
         <button class="btn ghost" onclick="document.getElementById('dream').value=''">${L.clear}</button>
       </div>
 
-      <div class="examples">
-        ${o.examples.map(e => `<button type="button" class="ex"
-          data-dream="${esc(e.ar)}" onclick="useExample(this)"
-          >${esc(e[lang] || e.ar)}</button>`).join("")}
-      </div>
     </div>`;
 }
 
@@ -883,24 +904,23 @@ function renderReading(d, prefix = "") {
                : a.tasnif.naw === "حلم من الشيطان" ? "warn" : "neutral";
 
     h += `<div class="verdict verdict-${tone}">
-      <span class="verdict-pill">${citedCount
-        ? L.verdictPill(esc(a.tasnif.naw), citedCount)
-        : L.verdictPillNoText(esc(a.tasnif.naw))}</span>
-      <h2 class="verdict-title serif">
-        <span class="verdict-kind">${esc(a.tasnif.naw)}</span>
-        <span class="verdict-dash">—</span>
-        ${esc(a.unwan || "")}
-      </h2>
-      ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}</p>` : ""}
+      <span class="verdict-pill">${esc(a.tasnif.naw)}${a.mukhifah ? ` — ${L.frightening}` : ""}</span>
+      ${lang === "en" ? `<p class="verdict-arabic"><i>${L.arabicLabel}:</i> ${esc(a.tasnif.naw)}</p>` : ""}
+      <h2 class="verdict-title serif">${esc(a.unwan || "")}</h2>
+      ${a.tamhid ? `<blockquote class="verdict-lede">${marks(esc(a.tamhid))}</blockquote>` : ""}
+      ${classicalNames.length ? `<p class="verdict-foot">${L.basedOn} ${classicalNames.map(esc).join("، ")}${hasPsych ? ` — ${L.plusPsych}` : ""}${citedCount ? ` · ${count(citedCount, TEXTS)}` : ""}</p>` : ""}
     </div>`;
 
     if (meta.source && srcName) {
       h += `<div class="lens-banner">${L.lensOnly(esc(srcName))}</div>`;
     }
 
-    if (a.mukhifah) h += `<div class="card">
-      <h2>${L.mukhifah}</h2><div class="alert">${L.mukhifahNote}</div>
-      <ul>${(a.adab || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    // The steps are a sequence to be carried out, so they are numbered. The
+    // heading says why they come before any reading, which is the part a
+    // reader would otherwise take as the site declining to answer.
+    if (a.mukhifah) h += `<div class="card sunna">
+      <h3 class="sunna-head">${L.mukhifah}</h3>
+      <ol class="sunna-steps">${(a.adab || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol>
       ${a.dua ? `<div class="dua">${esc(a.dua)}</div>` : ""}</div>`;
 
     // The reading before the symbols. Flowing prose, the way it would be said
@@ -910,13 +930,17 @@ function renderReading(d, prefix = "") {
     const tm = a.tahlil_mufassal;
     if (a.tamhid || tm?.fusul?.length) {
       h += `<h2 class="section-label">${L.tahlil}</h2>`;
-      h += `<div class="card reading">
-        ${a.tamhid ? `<p class="opening">${marks(esc(a.tamhid))}</p>` : ""}
-        ${(tm?.fusul || []).map(f =>
-          (f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
-              .map(x => x.trim()).filter(Boolean)
-              .map(x => `<p class="faqrah">${linkSymbols(marks(esc(x)), d.symbols)}</p>`).join("")
-        ).join("")}
+      h += `<div class="reading">
+        ${(tm?.fusul || []).map((f, i) => `
+          <section class="chapter">
+            <h3 class="chapter-head">${f.unwan
+              ? `${L.chapter} ${num(i + 1)} — ${esc(f.unwan)}`
+              : `${L.chapter} ${num(i + 1)}`}</h3>
+            ${(f.faqarat || []).flatMap(x => String(x).split(/\n{2,}/))
+                .map(x => x.trim()).filter(Boolean)
+                .map(x => `<p class="faqrah">${linkSymbols(marks(esc(x)), d.symbols)}</p>`).join("")}
+            ${f.masdar ? `<p class="chapter-src">${esc(f.masdar)}</p>` : ""}
+          </section>`).join("")}
         ${(() => {
           // One note, closing the reading. Older readings kept it per block.
           const m = tm?.manhaj || (tm?.fusul || []).map(f => f.manhaj).filter(Boolean).join(" ");
@@ -1050,13 +1074,6 @@ function citationsBlock(symbols) {
 function adabBlock(d) {
   const L = t();
   let h = "";
-  if (d.adab_sources?.length) h += `<div class="card"><details class="fold"><summary><h2>${L.ahadith}</h2>
-      <span class="badge">${count(Math.min(d.adab_sources.length, 4), HADITH)}</span></summary>` +
-    d.adab_sources.slice(0, 4).map(x => `<div class="cite">
-      <div class="txt serif">${esc(x.text_ar)}</div>
-      <div class="meta">${esc(x.chapter_ar || "")}${x.printed_page ? ` (${L.page} ${num(x.printed_page)})` : ""}
-        ${x.url ? `· <a href="${esc(x.url)}" target="_blank" rel="noopener">${L.sourceLink}</a>` : ""}</div>
-    </div>`).join("") + `</details></div>`;
   return h;
 }
 
@@ -1314,13 +1331,6 @@ console.info(`%cتأويل build ${BUILD}%c  API: ${API}`,
 
 window.setLang = setLang;
 window.submitDream = submitDream;
-/* The Arabic sits in a data attribute rather than inline in the handler: the
-   text contains quotes and the attribute is quoted, so inlining it broke the
-   markup silently — the button rendered and did nothing. */
-window.useExample = el => {
-  const box = document.getElementById("dream");
-  if (box) { box.value = el.dataset.dream || ""; box.focus(); }
-};
 window.openSaved = openSaved;
 window.removeSaved = removeSaved;
 window.rerun = rerun;

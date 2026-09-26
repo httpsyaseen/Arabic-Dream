@@ -209,7 +209,7 @@ summary{cursor:pointer;font-weight:700}
 .verdict-title{font-size:1.7rem;line-height:1.55;margin:0 0 .9rem;color:#F9F1DE;
   max-width:34ch;margin-inline:auto}
 .verdict-sub{color:#C6BCA4;font-size:.98rem;line-height:1.85;margin:0 auto;max-width:52ch}
-.verdict-foot{color:#958C76;font-size:.82rem;margin:1.2rem 0 0;
+.verdict-foot{color:#A89D85;font-size:.82rem;margin:1.2rem 0 0;
   border-top:1px solid rgba(255,255,255,.10);padding-top:.9rem}
 .verdict-good .verdict-pill{color:#A7D8BE;border-color:rgba(167,216,190,.35)}
 .verdict-warn .verdict-pill{color:#E0A98F;border-color:rgba(224,169,143,.35)}
@@ -566,11 +566,13 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
   color:var(--teal);margin-bottom:.3rem}
 .manhaj-note p{margin:0;font-size:.97rem;line-height:1.85;color:var(--ink-soft)}
 
-/* The interpreter's opening address. Set apart from the paragraphs that follow
-   because it speaks to the reader before it speaks about the dream. */
-.reading .opening{margin:0 0 var(--s5);padding-bottom:var(--s4);
-  border-bottom:1px solid var(--line-soft);font-size:1.12rem;line-height:2;
-  color:var(--ink);max-width:var(--measure);text-wrap:pretty}
+/* The interpreter's opening now leads the verdict, quoted, because it is the
+   first thing said rather than a caption under a label. */
+.verdict-lede{margin:var(--s4) auto 0;padding-inline-start:var(--s4);
+  border-inline-start:3px solid var(--gold);font-size:1rem;line-height:1.95;
+  color:#C6BCA4;max-width:var(--measure);text-align:start;text-wrap:pretty}
+.verdict-arabic{margin:var(--s2) 0 0;font-size:.88rem;color:#A99E85}
+.verdict-arabic i{color:#8A8069}
 
 /* The named meaning the reading arrives at. Weight and colour only — a filled
    highlight at this density would stripe the whole paragraph. */
@@ -587,3 +589,47 @@ html[dir=ltr] .sym-card b{font-family:"Lora",serif}
 /* clears the sticky header when jumped to */
 .symbol-card{scroll-margin-top:5rem}
 .symbol-card:target{box-shadow:0 0 0 2px var(--teal)}
+
+/* ── the psychological lens, set apart ─────────────────────────────────────
+   A psychoanalyst listed beside Ibn Sirin reads as an equal authority on the
+   tradition. The dashed rule and the label say what he is: an addition a
+   reader may want, not a sixth interpreter of the same kind. */
+.picker-alt{margin-top:var(--s4);padding:var(--s3) var(--s4);
+  border:1px dashed var(--line);border-radius:12px;background:transparent}
+.alt-label{display:block;font-size:.85rem;color:var(--ink-soft);margin-bottom:var(--s2)}
+.pick-alt{max-width:22rem}
+
+/* ── about you ─────────────────────────────────────────────────────────────
+   Open, not folded behind a summary. Folded, almost nobody opened it, and the
+   answers are what let the books read a symbol for this dreamer rather than in
+   general — which is the difference the whole method rests on. */
+.ctx{margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line-soft)}
+.ctx-head{margin:0;font-size:1.05rem;color:var(--gold-deep)}
+.ctx .why{margin:var(--s1) 0 var(--s4)}
+/* The four the tradition itself weighs carry a mark, so they read as worth
+   answering rather than as more of the same. */
+.ctx-grid label.weighed{background:var(--bg-parchment);border:1px solid var(--gold);
+  border-radius:10px;padding:var(--s2) var(--s3)}
+.ctx-grid label.weighed > span{color:var(--gold-deep);font-weight:600}
+.star{font-style:normal;color:var(--gold);margin-inline-end:.35em}
+
+/* ── the sunna response ────────────────────────────────────────────────────
+   Steps to carry out in order, so they are numbered rather than bulleted. */
+.card.sunna{border-color:var(--teal);background:var(--bg-parchment)}
+.sunna-head{margin:0 0 var(--s3);color:var(--teal-deep);font-size:1.05rem;line-height:1.7}
+.sunna-steps{margin:0;padding-inline-start:1.5em}
+.sunna-steps li{margin-bottom:var(--s2);line-height:1.9}
+.sunna-steps li:last-child{margin-bottom:0}
+
+/* ── chapters ──────────────────────────────────────────────────────────────
+   A titled chapter can be scanned for; a run of paragraphs cannot. The source
+   line is separated by a rule because it speaks about the chapter rather than
+   continuing it, and it is the line that distinguishes this from any chatbot. */
+.chapter{background:var(--white);border:1px solid var(--line-soft);
+  border-radius:var(--radius);padding:var(--s4) var(--s5);margin-bottom:var(--s4)}
+.chapter:last-child{margin-bottom:0}
+.chapter-head{margin:0 0 var(--s3);color:var(--gold-deep);font-size:1.05rem}
+.chapter-src{margin:var(--s4) 0 0;padding-top:var(--s3);
+  border-top:1px dashed var(--line);font-size:.9rem;font-style:italic;
+  color:var(--ink-soft);max-width:var(--measure)}
+@media (max-width:520px){ .chapter{padding:var(--s4)} }

@@ -97,6 +97,13 @@ SYMBOL = {
 FASL = {
     "type": "object",
     "properties": {
+        # A titled chapter rather than a loose run of paragraphs. The reader
+        # scanning for the part about the bed can find it, and a chapter that
+        # names what it is about cannot wander into three subjects at once.
+        "unwan": {
+            "type": "string",
+            "description": "عنوان الفصل: ما يدور عليه، في ثلاث أو أربع كلمات، بلا ترقيم",
+        },
         "faqarat": {
             "type": "array", "minItems": 3,
             "items": {"type": "string", "minLength": 170},
@@ -106,8 +113,19 @@ FASL = {
                 "تصف له ما جرى في منامه، ولا تردّ الرؤيا إلى سبب بدني فتُبطلها."
             ),
         },
+        # What this chapter rests on, shown under it. Either a book and page
+        # from the attached texts, or an honest statement that the books were
+        # silent and the chapter rests on the general method — which is the
+        # same distinction min_alkutub draws for a symbol.
+        "masdar": {
+            "type": "string",
+            "description": ("سطر واحد أسفل الفصل: «المصدر: ابن سيرين — منتخب الكلام، "
+                            "ص ٣٨، رمز السرير» إن قام على نصّ مرفق؛ وإلا فبيّن ذلك "
+                            "صراحة: «المنهج: ابن سيرين — تصنيف عام، ولا نصّ في الكتب "
+                            "المفهرسة على هذا»"),
+        },
     },
-    "required": ["faqarat"],
+    "required": ["unwan", "faqarat", "masdar"],
 }
 
 ANSWER_SCHEMA = {
@@ -246,7 +264,17 @@ SYSTEM = """\
 ٤- **تكلّم على الرؤيا كلاماً متصلاً في `tahlil_mufassal` قبل أن تُفرد الرموز.**
    والسائل جاءك كما يجيء الرجل إلى المعبّر: قد حكى رؤياه وهو يعلمها، فلا تُعِدها
    عليه سطراً سطراً ولا تضع تحت كل سطر تعليقاً؛ بل خذ رؤياه جملةً وحدّثه عنها.
-   - `fusul`: ثلاث كتل إلى خمس، **وفي كل كتلة ثلاث فقرات أو أربع**.
+   - `fusul`: **فصول** ثلاثة إلى خمسة، كل فصل في معنى من معاني الرؤيا:
+     - `unwan`: عنوانه في ثلاث كلمات أو أربع، يدل على ما يدور عليه
+       («الاستيقاظ الكاذب والشلل»، «السرير والمكان»، «الصوت المقترب»).
+       ولا تكتب فيه رقماً، فالترقيم يُضاف في الصفحة.
+     - `faqarat`: ثلاث فقرات أو أربع.
+     - `masdar`: سطر واحد يُذكر أسفل الفصل، وهو **الفيصل بين جوابك وجواب غيرك**:
+       فإن قام الفصل على نصّ مرفق فسمِّ الكتاب والصفحة والرمز
+       («المصدر: ابن سيرين — منتخب الكلام، ص ٣٨، رمز السرير»).
+       وإن لم يكن في النصوص ما يخصّه فقل ذلك صراحةً ولا تُوهِم
+       («المنهج: ابن سيرين — تصنيف عام، ولا نصّ في الكتب المفهرسة على هذا»).
+       فالتصريح بأن الكتب سكتت أصدق من عزوٍ لا أصل له.
    - **واستوعب رؤياه كلها.** فكل ما ذكره له معنى يُتكلم عليه: ما رآه، وما
      فعله، وما خطر له، وما قاله في نفسه، ومن سمّاه من الناس، والجهة التي
      التفت إليها، وما شعر به في كل موضع. فإن ترك السائل موضعاً بلا كلام
@@ -371,6 +399,10 @@ CONTEXT_LABELS = {
     "alam":   ("هل كان في الرؤيا ألم أو أذى", "pain or harm in the dream"),
     "takrar": ("هل تتكرر الرؤيا", "does the dream recur"),
     "waqt":   ("وقت الرؤيا", "time of the dream"),
+    "istikhara": ("هل صلّى الاستخارة قبلها", "istikhara prayer beforehand"),
+    "wuduh":  ("وضوح التفاصيل", "clarity of the details"),
+    "qabl":   ("حاله قبل النوم", "state before sleeping"),
+    "makan":  ("هل كان المكان مألوفاً", "was the place familiar"),
 }
 
 
